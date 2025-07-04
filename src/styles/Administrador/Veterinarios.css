@@ -1,0 +1,516 @@
+/* Variables CSS para el tema azul oscuro - Consistente con los otros componentes */
+:root {
+  --primary-color: #1e3a8a;
+  --primary-hover: #1e40af;
+  --primary-light: #3b82f6;
+  --secondary-color: #64748b;
+  --background-color: #f8fafc;
+  --card-background: #ffffff;
+  --border-color: #e2e8f0;
+  --text-primary: #1e293b;
+  --text-secondary: #64748b;
+  --success-color: #10b981;
+  --error-color: #ef4444;
+  --warning-color: #f59e0b;
+  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --border-radius: 12px;
+  --border-radius-sm: 8px;
+  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Container principal */
+.veterinarios {
+  min-height: 100vh;
+  background: linear-gradient(135deg, var(--background-color) 0%, #e0f2fe 100%);
+  padding: 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+/* Título principal */
+.veterinarios h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--primary-color);
+  margin-bottom: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.veterinarios h1::before {
+  content: '👩‍⚕️';
+  font-size: 2rem;
+}
+
+/* Notificaciones */
+.notificacion {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: var(--border-radius);
+  margin-bottom: 1.5rem;
+  font-weight: 500;
+  box-shadow: var(--shadow-md);
+  animation: slideInDown 0.4s ease-out;
+}
+
+.notificacion.exito {
+  background: linear-gradient(135deg, #dcfce7 0%, #bbf7d0 100%);
+  color: #166534;
+  border-left: 4px solid var(--success-color);
+}
+
+.notificacion.error {
+  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+  color: #991b1b;
+  border-left: 4px solid var(--error-color);
+}
+
+/* Controles superiores */
+.controles-superiores {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 2rem;
+  flex-wrap: wrap;
+  align-items: center;
+}
+
+.busqueda-container {
+  position: relative;
+  flex: 1;
+  min-width: 300px;
+}
+
+.busqueda-container input {
+  width: 100%;
+  padding: 1rem 1rem 1rem 3rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  font-size: 1rem;
+  background: var(--card-background);
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+}
+
+.busqueda-container input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgb(30 58 138 / 0.1);
+}
+
+.icono-busqueda {
+  position: absolute;
+  left: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+}
+
+.filtro-especialidad {
+  padding: 1rem 1.5rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius);
+  background: var(--card-background);
+  color: var(--text-primary);
+  font-size: 1rem;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-sm);
+  min-width: 200px;
+}
+
+.filtro-especialidad:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgb(30 58 138 / 0.1);
+}
+
+/* Formulario */
+.formulario-veterinario {
+  background: var(--card-background);
+  padding: 2rem;
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  margin-bottom: 2rem;
+  border: 1px solid var(--border-color);
+  animation: slideInUp 0.4s ease-out;
+}
+
+.formulario-veterinario h2 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--primary-color);
+  margin: 0 0 1.5rem 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.formulario-veterinario h2::before {
+  content: '📝';
+  font-size: 1.25rem;
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  font-weight: 600;
+  color: var(--text-primary);
+  font-size: 0.95rem;
+}
+
+.form-group input,
+.form-group select {
+  padding: 1rem;
+  border: 2px solid var(--border-color);
+  border-radius: var(--border-radius-sm);
+  font-size: 1rem;
+  transition: var(--transition);
+  background: var(--card-background);
+}
+
+.form-group input:focus,
+.form-group select:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 3px rgb(30 58 138 / 0.1);
+}
+
+/* Ocultar elementos de imagen para mantener consistencia */
+.form-group input[type="file"],
+.preview-image,
+.foto-veterinario {
+  display: none !important;
+}
+
+/* Botones del formulario */
+.form-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: flex-end;
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--border-color);
+}
+
+.btn-guardar {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-guardar:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lg);
+}
+
+.btn-cancelar {
+  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+  color: var(--text-primary);
+  border: 2px solid var(--border-color);
+  padding: 1rem 2rem;
+  border-radius: var(--border-radius-sm);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transition);
+}
+
+.btn-cancelar:hover {
+  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
+  transform: translateY(-2px);
+}
+
+/* Tabla */
+.tabla-container {
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-lg);
+  overflow: hidden;
+  border: 1px solid var(--border-color);
+}
+
+.tabla-veterinarios {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tabla-veterinarios thead {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+  color: white;
+}
+
+.tabla-veterinarios th {
+  padding: 1.5rem 1rem;
+  text-align: left;
+  font-weight: 600;
+  font-size: 0.95rem;
+  letter-spacing: 0.025em;
+}
+
+/* Ocultar columna de foto en la tabla */
+.tabla-veterinarios th:first-child,
+.tabla-veterinarios td:first-child {
+  display: none;
+}
+
+.tabla-veterinarios td {
+  padding: 1.25rem 1rem;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-primary);
+}
+
+.tabla-veterinarios tbody tr {
+  transition: var(--transition);
+}
+
+.tabla-veterinarios tbody tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Especialidades con colores distintivos */
+.tabla-veterinarios td:nth-child(2) {
+  font-weight: 600;
+}
+
+.tabla-veterinarios td:nth-child(2):contains("Cirugía") {
+  color: var(--error-color);
+}
+
+.tabla-veterinarios td:nth-child(2):contains("Dermatología") {
+  color: var(--warning-color);
+}
+
+.tabla-veterinarios td:nth-child(2):contains("Odontología") {
+  color: var(--primary-color);
+}
+
+.tabla-veterinarios td:nth-child(2):contains("Medicina interna") {
+  color: var(--success-color);
+}
+
+/* Acciones de tabla */
+.acciones-tabla {
+  display: flex;
+  gap: 0.5rem;
+  justify-content: center;
+}
+
+.btn-editar,
+.btn-eliminar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.5rem;
+  height: 2.5rem;
+  border: none;
+  border-radius: var(--border-radius-sm);
+  cursor: pointer;
+  transition: var(--transition);
+  font-size: 1rem;
+}
+
+.btn-editar {
+  background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary-color) 100%);
+  color: white;
+}
+
+.btn-editar:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+.btn-eliminar {
+  background: linear-gradient(135deg, var(--error-color) 0%, #dc2626 100%);
+  color: white;
+}
+
+.btn-eliminar:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-md);
+}
+
+/* Sin resultados */
+.sin-resultados {
+  text-align: center;
+  padding: 3rem;
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  background: var(--card-background);
+  border-radius: var(--border-radius);
+  box-shadow: var(--shadow-md);
+  border: 1px solid var(--border-color);
+}
+
+/* Animaciones */
+@keyframes slideInDown {
+  from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .veterinarios {
+    padding: 1rem;
+  }
+  
+  .veterinarios h1 {
+    font-size: 2rem;
+  }
+  
+  .controles-superiores {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .busqueda-container {
+    min-width: auto;
+  }
+  
+  .form-row {
+    grid-template-columns: 1fr;
+  }
+  
+  .form-buttons {
+    flex-direction: column;
+  }
+  
+  .tabla-container {
+    overflow-x: auto;
+  }
+  
+  .tabla-veterinarios {
+    min-width: 600px;
+  }
+}
+
+@media (max-width: 480px) {
+  .veterinarios h1 {
+    font-size: 1.75rem;
+  }
+  
+  .formulario-veterinario {
+    padding: 1.5rem;
+  }
+  
+  .form-buttons {
+    gap: 0.75rem;
+  }
+  
+  .btn-guardar,
+  .btn-cancelar {
+    padding: 0.875rem 1.5rem;
+  }
+}
+
+/* Mejoras de accesibilidad */
+button:focus,
+input:focus,
+select:focus {
+  outline: 2px solid var(--primary-color);
+  outline-offset: 2px;
+}
+
+/* Efectos hover mejorados */
+.tabla-veterinarios tbody tr:hover .btn-editar,
+.tabla-veterinarios tbody tr:hover .btn-eliminar {
+  transform: scale(1.05);
+}
+
+/* Transiciones suaves para todos los elementos interactivos */
+* {
+  transition: var(--transition);
+}
+
+/* Scrollbar personalizado para la tabla */
+.tabla-container::-webkit-scrollbar {
+  height: 8px;
+}
+
+.tabla-container::-webkit-scrollbar-track {
+  background: var(--background-color);
+  border-radius: var(--border-radius-sm);
+}
+
+.tabla-container::-webkit-scrollbar-thumb {
+  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+  border-radius: var(--border-radius-sm);
+}
+
+.tabla-container::-webkit-scrollbar-thumb:hover {
+  background: linear-gradient(135deg, var(--primary-hover) 0%, var(--primary-color) 100%);
+}
+
+.controles-superiores {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.controles-superiores input {
+  padding: 10px 12px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 260px;
+  transition: border-color 0.3s;
+}
+
+.controles-superiores input:focus {
+  outline: none;
+  border-color: #007bff;
+}
+.controles-superiores {
+  display: flex;
+  justify-content: flex-end;
+  margin-bottom: 20px;
+}
+
+.controles-superiores input {
+  padding: 8px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  width: 250px;
+  transition: border-color 0.3s;
+}
+
+.controles-superiores input:focus {
+  outline: none;
+  border-color: #007bff;
+}

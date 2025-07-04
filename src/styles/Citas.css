@@ -1,0 +1,418 @@
+/* Base styles and variables */
+:root {
+    --primary: #4f46e5;
+    --primary-light: #818cf8;
+    --primary-dark: #3730a3;
+    --success: #10b981;
+    --error: #ef4444;
+    --warning: #f59e0b;
+    --text: #1f2937;
+    --text-light: #6b7280;
+    --background: #f9fafb;
+    --card: #ffffff;
+    --border: #e5e7eb;
+    --border-focus: #a5b4fc;
+    --shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+    --radius: 0.5rem;
+    --transition: all 0.2s ease-in-out;
+  }
+  
+  /* Main container */
+  .cita-contenedor {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--background);
+    padding: 2rem 1rem;
+    font-family: "Inter", system-ui, -apple-system, sans-serif;
+  }
+  
+  .cita-formulario-contenedor {
+    width: 100%;
+    max-width: 800px;
+    margin: 0 auto;
+  }
+  
+  .cita-formulario {
+    background-color: var(--card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow);
+    padding: 2rem;
+    overflow: hidden;
+    position: relative;
+  }
+  
+  /* Typography */
+  .cita-titulo {
+    color: var(--primary-dark);
+    font-size: 1.875rem;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    text-align: center;
+    position: relative;
+  }
+  
+  .cita-titulo::after {
+    content: "";
+    position: absolute;
+    bottom: -0.5rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background-color: var(--primary);
+    border-radius: 2px;
+  }
+  
+  .cita-subtitulo {
+    color: var(--primary);
+    font-size: 1.25rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cita-subtitulo::before {
+    content: "";
+    display: inline-block;
+    width: 8px;
+    height: 20px;
+    background-color: var(--primary);
+    margin-right: 0.75rem;
+    border-radius: 4px;
+  }
+  
+  /* Form sections */
+  .cita-secciones {
+    display: grid;
+    gap: 2rem;
+  }
+  
+  .cita-seccion {
+    background-color: var(--card);
+    border-radius: var(--radius);
+    padding: 1.5rem;
+    border: 1px solid var(--border);
+    transition: var(--transition);
+  }
+  
+  .cita-seccion:hover {
+    box-shadow: var(--shadow);
+    transform: translateY(-2px);
+  }
+  
+  /* Form controls */
+  .cita-label {
+    display: block;
+    font-weight: 500;
+    margin-bottom: 0.5rem;
+    color: var(--text);
+  }
+  
+  .cita-input,
+  .cita-textarea {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 1rem;
+    transition: var(--transition);
+    background-color: var(--background);
+    color: var(--text);
+  }
+  
+  .cita-input:focus,
+  .cita-textarea:focus {
+    outline: none;
+    border-color: var(--border-focus);
+    box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.3);
+  }
+  
+  .cita-input::placeholder,
+  .cita-textarea::placeholder {
+    color: var(--text-light);
+  }
+  
+  .input-error {
+    border-color: var(--error);
+  }
+  
+  .error-text {
+    color: var(--error);
+    font-size: 0.875rem;
+    margin-top: 0.25rem;
+    animation: shake 0.5s ease-in-out;
+  }
+  
+  @keyframes shake {
+    0%,
+    100% {
+      transform: translateX(0);
+    }
+    20%,
+    60% {
+      transform: translateX(-5px);
+    }
+    40%,
+    80% {
+      transform: translateX(5px);
+    }
+  }
+  
+  /* Service options */
+  .cita-opciones-servicio {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin-top: 0.5rem;
+  }
+  
+  .cita-opcion-servicio {
+    cursor: pointer;
+    border: 2px solid var(--border);
+    border-radius: var(--radius);
+    padding: 1rem;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cita-opcion-servicio:hover {
+    border-color: var(--primary-light);
+    transform: translateY(-2px);
+  }
+  
+  .cita-seleccionado {
+    border-color: var(--primary);
+    background-color: rgba(79, 70, 229, 0.05);
+  }
+  
+  .cita-seleccionado::before {
+    content: "✓";
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    background-color: var(--primary);
+    color: white;
+    width: 1.5rem;
+    height: 1.5rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.875rem;
+    font-weight: bold;
+  }
+  
+  .cita-servicio-contenido {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+  
+  .cita-servicio-nombre {
+    font-weight: 600;
+    color: var(--text);
+    margin: 0;
+  }
+  
+  .cita-servicio-duracion {
+    color: var(--text-light);
+    font-size: 0.875rem;
+    margin: 0;
+    display: flex;
+    align-items: center;
+  }
+  
+  .cita-servicio-duracion::before {
+    content: "⏱️";
+    margin-right: 0.5rem;
+  }
+  
+  /* Date and time selection */
+  .cita-seleccion-fecha,
+  .cita-seleccion-hora {
+    margin-bottom: 1rem;
+  }
+  
+  /* Reminder checkbox */
+  .cita-recordatorio-contenedor {
+    margin-top: 1rem;
+  }
+  
+  .cita-recordatorio {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+  }
+  
+  .cita-recordatorio-input {
+    appearance: none;
+    width: 1.25rem;
+    height: 1.25rem;
+    border: 2px solid var(--border);
+    border-radius: 0.25rem;
+    position: relative;
+    cursor: pointer;
+    transition: var(--transition);
+  }
+  
+  .cita-recordatorio-input:checked {
+    background-color: var(--primary);
+    border-color: var(--primary);
+  }
+  
+  .cita-recordatorio-input:checked::after {
+    content: "✓";
+    position: absolute;
+    color: white;
+    font-size: 0.75rem;
+    font-weight: bold;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  .cita-recordatorio-texto {
+    font-size: 0.875rem;
+    color: var(--text);
+    cursor: pointer;
+  }
+  
+  /* Submit button */
+  .cita-boton-enviar {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    margin-top: 2rem;
+    background-color: var(--primary);
+    color: white;
+    border: none;
+    border-radius: var(--radius);
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: var(--transition);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  .cita-boton-enviar:hover {
+    background-color: var(--primary-dark);
+    transform: translateY(-2px);
+  }
+  
+  .cita-boton-enviar:active {
+    transform: translateY(1px);
+  }
+  
+  .cita-boton-enviar::after {
+    content: "";
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: -100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: 0.5s;
+  }
+  
+  .cita-boton-enviar:hover::after {
+    left: 100%;
+  }
+  
+  /* Responsive adjustments */
+  @media (min-width: 768px) {
+    .cita-seleccion-fecha,
+    .cita-seleccion-hora {
+      display: inline-block;
+      width: 48%;
+    }
+  
+    .cita-seleccion-fecha {
+      margin-right: 4%;
+    }
+  }
+  
+  @media (max-width: 767px) {
+    .cita-formulario {
+      padding: 1.5rem;
+    }
+  
+    .cita-opciones-servicio {
+      grid-template-columns: 1fr;
+    }
+  
+    .cita-titulo {
+      font-size: 1.5rem;
+    }
+  
+    .cita-subtitulo {
+      font-size: 1.125rem;
+    }
+  }
+  
+  /* Animations */
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translateY(10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+  
+  .cita-seccion {
+    animation: fadeIn 0.5s ease-out forwards;
+  }
+  
+  .cita-seccion:nth-child(1) {
+    animation-delay: 0.1s;
+  }
+  .cita-seccion:nth-child(2) {
+    animation-delay: 0.2s;
+  }
+  .cita-seccion:nth-child(3) {
+    animation-delay: 0.3s;
+  }
+  .cita-seccion:nth-child(4) {
+    animation-delay: 0.4s;
+  }
+  .cita-seccion:nth-child(5) {
+    animation-delay: 0.5s;
+  }
+  .cita-seccion:nth-child(6) {
+    animation-delay: 0.6s;
+  }
+  
+  /* Pet-themed decorative elements */
+  .cita-formulario::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 150px;
+    height: 150px;
+    background-image: radial-gradient(circle, var(--primary-light) 10%, transparent 10%);
+    background-size: 20px 20px;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  
+  .cita-formulario::after {
+    content: "";
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 150px;
+    height: 150px;
+    background-image: radial-gradient(circle, var(--primary-light) 10%, transparent 10%);
+    background-size: 20px 20px;
+    opacity: 0.1;
+    pointer-events: none;
+  }
+  

@@ -1,0 +1,87 @@
+/* Estilos para botón de activar/desactivar */
+.btn-toggle {
+    padding: 6px 12px;
+    border: none;
+    border-radius: var(--border-radius);
+    cursor: pointer;
+    font-weight: 500;
+    transition: var(--transition);
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    font-size: 0.85rem;
+  }
+  
+  .btn-toggle.active {
+    background-color: var(--success-color);
+    color: white;
+  }
+  
+  .btn-toggle.inactive {
+    background-color: #95a5a6;
+    color: white;
+  }
+  
+  .btn-toggle:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+  }
+  
+  /* Estilos para mensajes de confirmación */
+  .confirmation-message {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 15px 25px;
+    border-radius: var(--border-radius);
+    color: white;
+    font-weight: 500;
+    box-shadow: var(--box-shadow);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
+  }
+  
+  .confirmation-message.success {
+    background-color: var(--success-color);
+  }
+  
+  .confirmation-message.error {
+    background-color: var(--accent-color);
+  }
+  
+  .confirmation-message i {
+    font-size: 1.2rem;
+  }
+  
+  @keyframes slideIn {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+  
+  @keyframes fadeOut {
+    from {
+      opacity: 1;
+    }
+    to {
+      opacity: 0;
+    }
+  }
+  
+  /* Añadir al media query para responsive */
+  @media (max-width: 768px) {
+    .confirmation-message {
+      top: 10px;
+      right: 10px;
+      left: 10px;
+      max-width: calc(100% - 20px);
+    }
+  }

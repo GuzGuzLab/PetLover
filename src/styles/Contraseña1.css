@@ -1,0 +1,112 @@
+.recuperar-container {
+    min-height: calc(60vh - 50px); 
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 3rem;
+    background-color: #f8fafc;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', 'Roboto', sans-serif;
+  }
+  
+  
+  .recuperar-form-wrapper {
+    background-color: #ffffff;
+    padding: 3rem;
+    border-radius: 12px;
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.06);
+    width: 100%;
+    max-width: 450px;
+    text-align: center;
+  }
+  
+
+  .recuperar-titulo {
+    color: #2C6EAB;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+  }
+  
+  
+  .recuperar-form {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    width: 100%;
+  }
+  
+  /* Inputs */
+  .recuperar-form input {
+    padding: 0.75rem 1rem;
+    border: 1px solid #cbd5e0;
+    border-radius: 8px;
+    font-size: 0.95rem;
+    background-color: #f1f5f9;
+    transition: border-color 0.3s, background-color 0.3s;
+  }
+  
+  .recuperar-form input:focus {
+    border-color: #2C6EAB;
+    background-color: #fff;
+    outline: none;
+    box-shadow: 0 0 0 3px rgba(44, 110, 171, 0.1);
+  }
+  
+  /* Botón */
+  .recuperar-form button {
+    padding: 0.75rem;
+    font-size: 1rem;
+    background-color: #2C6EAB;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    font-weight: 600;
+  }
+  
+  .recuperar-form button:hover {
+    background-color: #1e4e7f;
+  }
+  
+  /* Mensajes */
+  .recuperar-mensaje,
+  .recuperar-confirmacion {
+    font-size: 0.95rem;
+    color: #333;
+    margin-top: 1rem;
+  }
+  
+  /* Error */
+  .recuperar-error {
+    color: #e53e3e;
+    font-size: 0.85rem;
+    margin-top: 0.5rem;
+  }
+  
+  .recuperar-input-error {
+    border-color: #e53e3e !important;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .recuperar-form-wrapper {
+      padding: 1.5rem;
+      margin: 1rem;
+    }
+  
+    .recuperar-titulo {
+      font-size: 1.2rem;
+    }
+  
+    .recuperar-form input,
+    .recuperar-form button {
+      font-size: 0.95rem;
+    }
+  }
+  
+  
+
+
+

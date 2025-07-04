@@ -1,0 +1,85 @@
+/* Estilos_F/Ayuda.css */
+
+.ayuda {
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f8ff; /* azul muy claro */
+    color: #003366;
+  }
+  
+  .ayuda-titulo {
+    font-size: 2.2rem;
+    margin-bottom: 0.5rem;
+    text-align: center;
+    color: #005b96; /* azul medio */
+  }
+  
+  .ayuda-subtitulo {
+    font-size: 1.2rem;
+    text-align: center;
+    color: #336b87;
+    margin-bottom: 2rem;
+  }
+  
+  .ayuda-columnas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 2rem;
+    justify-content: center;
+  }
+  
+  .ayuda-columna {
+    flex: 1;
+    min-width: 280px;
+    max-width: 480px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 1.5rem;
+    box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
+    border: 1px solid #cce7ff;
+  }
+  
+  .ayuda-seccion h2 {
+    display: flex;
+    align-items: center;
+    font-size: 1.4rem;
+    color: #004080;
+    margin-bottom: 1rem;
+  }
+  
+  .ayuda-seccion h2 .icono {
+    margin-right: 0.5rem;
+    color: #007acc;
+  }
+  
+  .ayuda-seccion ul {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  .ayuda-seccion ul li {
+    margin-bottom: 0.75rem;
+  }
+  
+  .ayuda-seccion ul li a {
+    color: #005b96;
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  
+  .ayuda-seccion ul li a:hover {
+    color: #003366;
+    text-decoration: underline;
+  }
+  
+  .contacto-info p {
+    margin: 0.5rem 0;
+    display: flex;
+    align-items: center;
+    color: #003366;
+  }
+  
+  .contacto-info .icono {
+    margin-right: 0.5rem;
+    color: #007acc;
+  }

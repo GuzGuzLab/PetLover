@@ -1,0 +1,351 @@
+/* Estilos base */
+.registro-container {
+  max-width: 800px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #f8fafc; /* blanco azulado */
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(44, 110, 171, 0.12); /* sombra azul suave */
+  font-family: 'Segoe UI', 'Roboto', sans-serif;
+}
+
+/* Barra de progreso */
+.progress-tracker {
+  height: 24px;
+  background-color: #477bbb; /* azul grisáceo claro */
+  border-radius: 12px;
+  margin-bottom: 2rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.progress-bar {
+  height: 100%;
+  background-color: #2C6EAB; /* azul */
+  transition: width 0.5s ease;
+}
+
+.progress-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: white;
+  font-weight: bold;
+  font-size: 0.8rem;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* Encabezado */
+.registro-header {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.registro-header h1 {
+  color: #2C6EAB; /* azul */
+  font-size: 1.8rem;
+  margin: 0.5rem 0;
+}
+
+.registro-header p {
+  color: #1E3A8A; /* azul más oscuro */
+  font-size: 0.9rem;
+  margin: 0;
+}
+
+.icon-container {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 0.5rem;
+}
+
+.icon-paw {
+  color: #2C6EAB; /* azul */
+  width: 2.5rem;
+  height: 2.5rem;
+  stroke-width: 1.5;
+}
+
+/* Formulario */
+.registro-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+/* Secciones del formulario */
+.form-section {
+  background: white;
+  padding: 1.5rem 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(44, 110, 171, 0.06);
+  border-left: 4px solid #2C6EAB;
+}
+
+.form-section legend {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: #1E3A8A; /* azul oscuro */
+  padding: 0 0.5rem;
+  display: flex;
+  align-items: center;
+}
+
+/* Grupos de inputs */
+.input-group {
+  margin-bottom: 1.5rem;
+}
+
+.label-container {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-bottom: 0.5rem;
+}
+
+.input-group label {
+  font-size: 0.95rem;
+  color: #1E3A8A; /* azul oscuro */
+  font-weight: 500;
+}
+
+.icon-small {
+  color: #2C6EAB;
+  width: 1rem;
+  height: 1rem;
+  stroke-width: 2;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #cbd5e1;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  background-color: #f8fafc;
+  transition: all 0.2s;
+}
+
+.input-group input:focus,
+.input-group select:focus {
+  outline: none;
+  border-color: #2C6EAB;
+  box-shadow: 0 0 0 3px rgba(44, 110, 171, 0.2);
+  background-color: white;
+}
+
+/* Estilo para select */
+.input-group select {
+  appearance: none;
+  background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%232C6EAB' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+  background-repeat: no-repeat;
+  background-position: right 0.75rem center;
+  background-size: 1rem;
+  padding-right: 2.5rem;
+}
+
+/* Términos y condiciones */
+.terms-group {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  margin-top: 1.5rem;
+}
+
+.terms-group input[type="checkbox"] {
+  margin-top: 0.25rem;
+  accent-color: #2C6EAB; /* azul para checkbox */
+}
+
+.terms-group label {
+  font-size: 0.9rem;
+  line-height: 1.4;
+  color: #1E3A8A;
+}
+
+.terms-group a {
+  color: #2C6EAB;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.terms-group a:hover {
+  text-decoration: underline;
+}
+
+/* Mensajes de error */
+.error-message {
+  color: #e53e3e; /* rojo */
+  font-size: 0.8rem;
+  margin-top: 0.25rem;
+  display: block;
+}
+
+.input-group .error,
+.terms-group .error {
+  border-color: #e53e3e;
+}
+
+/* Botones */
+.form-navigation {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 1rem;
+  gap: 1rem;
+}
+
+.nav-btn {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: none;
+  font-size: 0.95rem;
+}
+
+.prev-btn {
+  background-color: white;
+  color: #2C6EAB;
+  border: 1px solid #2C6EAB;
+}
+
+.prev-btn:hover {
+  background-color: #ebf4ff;
+}
+
+.next-btn {
+  background-color: #2C6EAB;
+  color: white;
+}
+
+.next-btn:hover {
+  background-color: #1E4E7F;
+}
+
+.submit-btn {
+  width: 100%;
+  padding: 0.85rem;
+  background-color: #2C6EAB; /* azul */
+  color: white;
+  border: none;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  margin-top: 0.5rem;
+}
+
+.submit-btn:hover {
+  background-color: #1E4E7F;
+}
+
+/* Enlace de login */
+.login-link {
+  text-align: center;
+  margin-top: 1.5rem;
+  font-size: 0.9rem;
+  color: #1E3A8A;
+}
+
+.login-link a {
+  color: #2C6EAB;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+.login-link a:hover {
+  text-decoration: underline;
+}
+/* Contenedor del input con el icono de ojo */
+.password-wrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+/* Estilo del input de contraseña */
+.password-wrapper input {
+  width: 100%;
+  padding-right: 2.5rem; /* espacio para el botón */
+  font-size: 1rem;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
+
+/* Botón para mostrar/ocultar contraseña */
+.toggle-password {
+  position: absolute;
+  right: 0.5rem;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #666;
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+/* Cambia color al pasar el mouse */
+.toggle-password:hover {
+  color: #333;
+}
+
+/* Opcional: cambia color si el input tiene error */
+input.error {
+  border-color: #e74c3c;
+}
+
+/* Mensajes de error */
+.error-message {
+  color: #e74c3c;
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* Para que el icono no afecte al tabulado del teclado */
+.toggle-password:focus {
+  outline: none;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .registro-container {
+    padding: 1.5rem;
+    margin: 1rem;
+  }
+  
+  .form-section {
+    padding: 1.25rem;
+  }
+  
+  .form-navigation {
+    flex-direction: column;
+  }
+  
+  .nav-btn {
+    width: 100%;
+    justify-content: center;
+  }
+  
+  .prev-btn {
+    order: 2;
+    margin-top: 0.5rem;
+  }
+  
+  .next-btn {
+    order: 1;
+  }
+}
+

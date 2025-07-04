@@ -1,0 +1,94 @@
+/* Fondo oscuro detrás del banner */
+.cookie-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.5); /* oscurece el fondo */
+    z-index: 999;
+  }
+  
+  /* Banner principal */
+  .cookie-banner {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 95%;
+    max-width: 600px;
+    background-color: #ffffff;
+    border: 2px solid #6cc5ee;
+    border-radius: 1.25rem;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    padding: 2rem;
+    z-index: 1000;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+  }
+  
+  /* Texto del banner */
+  .cookie-text {
+    color: #1f2937;
+    font-size: 1rem;
+    text-align: center;
+    line-height: 1.6;
+  }
+  
+  .highlight {
+    font-weight: bold;
+    color: #6cc5ee;
+  }
+  
+  /* Acciones (botones) */
+  .cookie-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    justify-content: center;
+  }
+  
+  .cookie-button {
+    padding: 0.75rem 1.5rem;
+    border-radius: 0.75rem;
+    font-weight: 600;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    min-height: 48px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  /* Botón Aceptar */
+  .cookie-button.accept {
+    background-color: #6cc5ee;
+    color: white;
+  }
+  
+  .cookie-button.accept:hover {
+    background-color: #6cc5ee;
+  }
+  
+  /* Botón Rechazar */
+  .cookie-button.reject {
+    background-color: #6b7280;
+    color: white;
+  }
+  
+  .cookie-button.reject:hover {
+    background-color: #4b5563;
+  }
+  
+  /* Botón Más información */
+  .cookie-button.info {
+    background-color: #10b981;
+    color: white;
+  }
+  
+  .cookie-button.info:hover {
+    background-color: #059669;
+  }
+  

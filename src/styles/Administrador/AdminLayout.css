@@ -1,0 +1,285 @@
+/* Variables CSS únicas para admin layout */
+:root {
+  --admin-layout-primary-color: #1e3a8a;
+  --admin-layout-primary-hover: #1e40af;
+  --admin-layout-primary-light: #3b82f6;
+  --admin-layout-secondary-color: #64748b;
+  --admin-layout-background-color: #f8fafc;
+  --admin-layout-card-background: #ffffff;
+  --admin-layout-border-color: #e2e8f0;
+  --admin-layout-text-primary: #1e293b;
+  --admin-layout-text-secondary: #64748b;
+  --admin-layout-success-color: #10b981;
+  --admin-layout-error-color: #ef4444;
+  --admin-layout-warning-color: #f59e0b;
+  --admin-layout-shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+  --admin-layout-shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
+  --admin-layout-shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
+  --admin-layout-border-radius: 12px;
+  --admin-layout-border-radius-sm: 8px;
+  --admin-layout-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  --admin-layout-sidebar-width: 280px;
+  --admin-layout-header-height: 70px;
+}
+
+/* ================================================== */
+/* --- AJUSTES PARA EL LAYOUT PRINCIPAL (HEADER + BODY) --- */
+/* ================================================== */
+
+/* Contenedor de TODA la aplicación (nuevo) */
+.admin-app-container {
+  display: flex;
+  flex-direction: column; /* Apila los hijos (header y body) verticalmente */
+  min-height: 100vh;
+  background: var(--admin-layout-background-color);
+}
+
+/* Contenedor del cuerpo (menú + contenido) */
+.admin-layout-body {
+  display: flex; /* <-- El flexbox para poner menú y contenido en fila vive aquí */
+  flex-grow: 1;  /* Asegura que ocupe el resto de la altura disponible */
+}
+
+/* --- ESTILOS PARA EL NUEVO MENÚ LATERAL --- */
+/* Asegúrate que tu componente MenuAdmin tenga la clase 'menu-admin-container' */
+.menu-admin-container { 
+  flex-shrink: 0; /* Evita que el menú se encoja si no hay espacio */
+  width: var(--admin-layout-sidebar-width); /* ¡Usa la variable que ya definiste (280px)! */
+  background: var(--admin-layout-card-background);
+  box-shadow: var(--admin-layout-shadow-lg);
+  z-index: 10;
+  /* Puedes añadir más estilos para tu menú aquí, como padding, etc. */
+}
+
+/* Wrapper del contenido único (con ajuste de flex-grow) */
+.admin-content-wrapper {
+  flex-grow: 1; /* <-- Hace que el contenido se estire para ocupar el resto del espacio. */
+  padding: 2rem;
+  overflow-y: auto; /* Permite scroll solo en el contenido si es muy largo */
+  animation: adminLayoutFadeIn 0.6s ease-out;
+  background: #f1f5f9;
+}
+
+
+/* ================================================== */
+/* --- TUS ESTILOS ORIGINALES (NO NECESITAN CAMBIOS) --- */
+/* ================================================== */
+
+/* Animaciones únicas */
+@keyframes adminLayoutFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Estilos globales únicos para formularios */
+.admin-content-wrapper .admin-form-container,
+.admin-content-wrapper .admin-table-container,
+.admin-content-wrapper .admin-card-container {
+  background: var(--admin-layout-card-background);
+  border-radius: var(--admin-layout-border-radius);
+  box-shadow: var(--admin-layout-shadow-lg);
+  border: 1px solid var(--admin-layout-border-color);
+  overflow: hidden;
+}
+
+/* Estilos únicos para títulos */
+.admin-content-wrapper h1 {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: var(--admin-layout-primary-color);
+  margin-bottom: 2rem;
+  text-align: center;
+}
+
+/* ... (El resto de tus estilos para h2, h3, p, a, botones, tablas, etc. se quedan exactamente igual) ... */
+/* ... (Y tus media queries también se quedan igual) ... */
+
+.admin-content-wrapper h2 {
+  font-size: 2rem;
+  font-weight: 600;
+  color: var(--admin-layout-primary-color);
+  margin-bottom: 1.5rem;
+}
+
+.admin-content-wrapper h3 {
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--admin-layout-text-primary);
+  margin-bottom: 1rem;
+}
+
+/* Estilos únicos para párrafos */
+.admin-content-wrapper p {
+  color: var(--admin-layout-text-secondary);
+  margin-bottom: 1rem;
+  line-height: 1.7;
+}
+
+/* Estilos únicos para enlaces */
+.admin-content-wrapper a {
+  color: var(--admin-layout-primary-color);
+  text-decoration: none;
+  transition: var(--admin-layout-transition);
+}
+
+.admin-content-wrapper a:hover {
+  color: var(--admin-layout-primary-hover);
+  text-decoration: underline;
+}
+
+/* Estilos únicos para botones */
+.admin-content-wrapper .admin-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1.5rem;
+  border-radius: var(--admin-layout-border-radius-sm);
+  font-weight: 500;
+  cursor: pointer;
+  transition: var(--admin-layout-transition);
+  border: none;
+  text-decoration: none;
+}
+
+.admin-content-wrapper .admin-btn-primary {
+  background: linear-gradient(135deg, var(--admin-layout-primary-color) 0%, var(--admin-layout-primary-hover) 100%);
+  color: white;
+  box-shadow: var(--admin-layout-shadow-md);
+}
+
+.admin-content-wrapper .admin-btn-primary:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--admin-layout-shadow-lg);
+}
+
+.admin-content-wrapper .admin-btn-secondary {
+  background: var(--admin-layout-card-background);
+  color: var(--admin-layout-text-primary);
+  border: 2px solid var(--admin-layout-border-color);
+}
+
+.admin-content-wrapper .admin-btn-secondary:hover {
+  background: var(--admin-layout-background-color);
+  border-color: var(--admin-layout-primary-color);
+}
+
+/* Estilos únicos para tablas */
+.admin-content-wrapper table {
+  width: 100%;
+  border-collapse: collapse;
+  background: var(--admin-layout-card-background);
+}
+
+.admin-content-wrapper table th {
+  background: linear-gradient(135deg, var(--admin-layout-primary-color) 0%, var(--admin-layout-primary-hover) 100%);
+  color: white;
+  padding: 1rem;
+  text-align: left;
+  font-weight: 600;
+}
+
+.admin-content-wrapper table td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--admin-layout-border-color);
+  color: var(--admin-layout-text-primary);
+}
+
+.admin-content-wrapper table tbody tr:hover {
+  background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+}
+
+/* Estilos únicos para formularios */
+.admin-content-wrapper .admin-form-group {
+  margin-bottom: 1.5rem;
+}
+
+.admin-content-wrapper .admin-form-group label {
+  display: block;
+  font-weight: 600;
+  color: var(--admin-layout-text-primary);
+  margin-bottom: 0.5rem;
+}
+
+.admin-content-wrapper .admin-form-control {
+  width: 100%;
+  padding: 0.75rem;
+  border: 2px solid var(--admin-layout-border-color);
+  border-radius: var(--admin-layout-border-radius-sm);
+  font-size: 1rem;
+  transition: var(--admin-layout-transition);
+  background: var(--admin-layout-card-background);
+}
+
+.admin-content-wrapper .admin-form-control:focus {
+  outline: none;
+  border-color: var(--admin-layout-primary-color);
+  box-shadow: 0 0 0 3px rgb(30 58 138 / 0.1);
+}
+
+/* Responsive Design único */
+@media (max-width: 768px) {
+  .admin-content-wrapper {
+    padding: 1rem;
+  }
+  
+  .admin-content-wrapper h1 {
+    font-size: 2rem;
+  }
+  
+  .admin-content-wrapper h2 {
+    font-size: 1.75rem;
+  }
+  
+  .admin-content-wrapper h3 {
+    font-size: 1.25rem;
+  }
+  
+  .admin-content-wrapper table {
+    font-size: 0.9rem;
+  }
+  
+  .admin-content-wrapper table th,
+  .admin-content-wrapper table td {
+    padding: 0.75rem 0.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .admin-content-wrapper {
+    padding: 0.75rem;
+  }
+  
+  .admin-content-wrapper h1 {
+    font-size: 1.75rem;
+  }
+  
+  .admin-content-wrapper .admin-btn {
+    padding: 0.625rem 1.25rem;
+    font-size: 0.9rem;
+  }
+  
+  .admin-content-wrapper .admin-table-container {
+    overflow-x: auto;
+  }
+  
+  .admin-content-wrapper table {
+    min-width: 600px;
+  }
+}
+
+/* Mejoras de accesibilidad únicas */
+.admin-content-wrapper *:focus {
+  outline: 2px solid var(--admin-layout-primary-color);
+  outline-offset: 2px;
+}
+
+/* Transiciones suaves únicas */
+.admin-content-wrapper * {
+  transition: var(--admin-layout-transition);
+}

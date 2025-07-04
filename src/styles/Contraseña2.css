@@ -1,0 +1,105 @@
+.fondo-formulario { 
+    display: flex; 
+    flex-direction: column; 
+    align-items: center; 
+    justify-content: center; 
+    min-height: 80vh; 
+    font-family: 'Arial', sans-serif; 
+    background-color: #F8F8F8; 
+    padding: 2rem; 
+  } 
+   
+  .formulario-restablecer { 
+    width: 100%; 
+    max-width: 400px; 
+    background: white; 
+    padding: 2.5rem; 
+    border-radius: 12px; 
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1); 
+  } 
+   
+  .formulario-restablecer h1 { 
+    text-align: center; 
+    color: #2C6EAB; 
+    margin-bottom: 2rem; 
+    font-size: 2rem; 
+  } 
+   
+  .formulario-restablecer form { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 1.5rem; 
+  } 
+   
+  .formulario-restablecer form > div { 
+    display: flex; 
+    flex-direction: column; 
+    gap: 0.5rem; 
+  } 
+  
+  .formulario-restablecer label { 
+    font-weight: 600; 
+    color: #2D3142; 
+    font-size: 1rem; 
+  } 
+  
+  .formulario-restablecer input { 
+    padding: 12px 16px; 
+    border: 2px solid #e0e0e0; 
+    border-radius: 8px; 
+    font-size: 1rem; 
+    transition: all 0.3s ease; 
+  } 
+   
+  .formulario-restablecer input:focus { 
+    outline: none; 
+    border-color: #2C6EAB; 
+    box-shadow: 0 0 0 3px rgba(44, 110, 171, 0.2); 
+  } 
+   
+  .formulario-restablecer input::placeholder { 
+    color: #aaa; 
+  } 
+   
+  .formulario-restablecer p { 
+    padding: 0.8rem; 
+    border-radius: 8px; 
+    font-size: 0.95rem; 
+    text-align: center; 
+    margin-top: -0.5rem; 
+  }
+  
+  .formulario-restablecer p[style*="red"] {
+    background-color: rgba(255, 0, 0, 0.05);
+  }
+  
+  .formulario-restablecer p[style*="green"] {
+    background-color: rgba(0, 128, 0, 0.05);
+  }
+  
+  .formulario-restablecer button { 
+    background-color: #2C6EAB; 
+    color: white; 
+    border: none; 
+    padding: 14px; 
+    border-radius: 8px; 
+    font-size: 1.1rem; 
+    font-weight: 600; 
+    cursor: pointer; 
+    transition: all 0.3s ease; 
+    margin-top: 1rem; 
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); 
+  } 
+   
+  .formulario-restablecer button:hover { 
+    background-color: #245a8f; 
+    transform: translateY(-2px); 
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15); 
+  } 
+  
+  @media (max-width: 480px) { 
+    .formulario-restablecer { 
+      padding: 1.5rem; 
+    } 
+  }
+  

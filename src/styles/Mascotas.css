@@ -1,0 +1,505 @@
+
+:root {
+  --primary: #6cc5ee;
+  --primary-dark: #5ab0d9;
+  --secondary: #8fd9f7; /* reemplazado el naranja por azul claro */
+  --text-dark: #333333;
+  --text-medium: #666666;
+  --text-light: #ffffff;
+  --bg-light: #f8f8f8;
+  --error: #ff4444;
+}
+
+
+/* ===== ESTRUCTURA PRINCIPAL ===== */
+.mascota-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 0 1rem;
+  font-family: 'Montserrat', sans-serif;
+  box-sizing: border-box;
+}
+
+.mascota-header {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.mascota-header h1 {
+  color: var(--primary-dark);
+  font-size: 2.2rem;
+  margin-bottom: 0.5rem;
+  font-size: clamp(1.8rem, 5vw, 2.2rem);
+}
+
+/* ===== BARRA DE PROGRESO ===== */
+.progress-tracker {
+  height: 8px;
+  background: var(--bg-light);
+  border-radius: 10px;
+  margin: 1.5rem 0;
+  overflow: hidden;
+  position: relative;
+}
+
+.progress-bar {
+  background: linear-gradient(90deg, var(--primary), var(--secondary)); /* azul-azul claro */
+}
+
+.step-indicator span.active:after {
+  background: var(--secondary); /* azul claro */
+}
+
+.progress-text {
+  position: absolute;
+  right: 10px;
+  top: -25px;
+  font-size: 0.85rem;
+  font-weight: bold;
+  color: var(--primary);
+  background: white;
+  padding: 2px 8px;
+  border-radius: 10px;
+  box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+}
+
+.step-indicator {
+  display: flex;
+  justify-content: space-between;
+  margin: 1rem 0 2rem;
+  font-size: 0.9rem;
+}
+
+.step-indicator span {
+  color: #ccc;
+  position: relative;
+  padding-bottom: 5px;
+  transition: all 0.3s;
+}
+
+.step-indicator span.active {
+  color: var(--primary);
+  font-weight: 600;
+}
+
+/* ===== FORMULARIO ===== */
+.mascota-form {
+  background: white;
+  padding: clamp(1rem, 3vw, 2rem);
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 15px rgba(0,0,0,0.1);
+}
+
+.form-section {
+  border: 1px solid #eee;
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  animation: fadeIn 0.4s ease-out forwards;
+}
+
+.form-section legend {
+  padding: 0 1rem;
+  font-weight: bold;
+  color: var(--primary-dark);
+  font-size: 1.1rem;
+}
+
+/* ===== GRUPOS DE FORMULARIO ===== */
+.form-row {
+  display: flex;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.form-row .form-group {
+  flex: 1;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 1rem;
+  transition: all 0.3s;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+  box-shadow: 0 0 0 3px rgba(108, 197, 238, 0.1);
+}
+
+/* ===== SUBIDA DE FOTO ===== */
+.photo-upload {
+  margin-bottom: 2rem;
+}
+
+.upload-container {
+  position: relative;
+}
+
+.upload-container input[type="file"] {
+  position: absolute;
+  opacity: 0;
+  width: 0.1px;
+  height: 0.1px;
+}
+
+.upload-btn {
+  display: block;
+  padding: 1.5rem;
+  background: #f9f9f9;
+  border: 2px dashed #ddd;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.upload-btn:hover {
+  border-color: var(--primary);
+  background: rgba(108, 197, 238, 0.05);
+}
+
+.upload-btn span {
+  font-size: 1.5rem;
+  color: var(--primary);
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+/* ===== INPUT DE PESO ===== */
+.weight-input {
+  position: relative;
+}
+
+.weight-input span {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-medium);
+}
+
+/* ===== BOTONES ===== */
+.form-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 2rem;
+  gap: 1rem;
+}
+
+.cancel-btn,
+.submit-btn {
+  padding: 0.8rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s;
+  border: none;
+}
+
+.cancel-btn {
+  background: var(--bg-light);
+  color: var(--text-medium);
+  text-decoration: none;
+  text-align: center;
+}
+
+.cancel-btn:hover {
+  background: #eee;
+}
+
+.submit-btn {
+  background: linear-gradient(90deg, var(--primary), var(--primary-dark));
+  color: white;
+  flex: 1;
+}
+
+.submit-btn:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
+}
+
+/* ===== VALIDACIÓN ===== */
+.error {
+  border-color: var(--error) !important;
+}
+
+.error-message {
+  color: var(--error);
+  font-size: 0.85rem;
+  margin-top: 0.5rem;
+  display: block;
+}
+
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+
+@media (max-width: 768px) {
+  .form-row {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .mascota-form {
+    padding: 1.5rem;
+  }
+  
+  .step-indicator span {
+    font-size: 0.8rem;
+  }
+  
+  .progress-text {
+    font-size: 0.8rem;
+    top: -22px;
+  }
+}
+
+@media (max-width: 480px) {
+  .form-actions {
+    flex-direction: column;
+  }
+  
+  .submit-btn,
+  .cancel-btn {
+    width: 100%;
+  }
+}
+
+/* responsiva a todo tipo de pantalla */
+
+
+@media (max-width: 992px) {
+  .mascota-container {
+    margin: 1.5rem auto;
+  }
+  
+  .mascota-header h1 {
+    font-size: 2rem;
+  }
+  
+  .form-section {
+    padding: 1.25rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.7rem;
+  }
+  
+  .upload-btn {
+    padding: 1.25rem;
+  }
+}
+
+
+@media (max-width: 768px) {
+  .mascota-container {
+    margin: 1rem auto;
+    padding: 0 0.75rem;
+  }
+  
+  .mascota-header h1 {
+    font-size: 1.8rem;
+  }
+  
+  .progress-tracker {
+    height: 6px;
+    margin: 1.25rem 0;
+  }
+  
+  .step-indicator {
+    font-size: 0.85rem;
+    margin: 0.75rem 0 1.5rem;
+  }
+  
+  .mascota-form {
+    padding: 1.25rem;
+  }
+  
+  .form-section {
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+  }
+  
+  .form-section legend {
+    font-size: 1rem;
+  }
+  
+  .form-row {
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  
+  .form-group {
+    margin-bottom: 1rem;
+  }
+  
+  .form-group label {
+    font-size: 0.95rem;
+    margin-bottom: 0.4rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.65rem;
+    font-size: 0.95rem;
+  }
+  
+  .upload-btn {
+    padding: 1rem;
+  }
+  
+  .upload-btn span {
+    font-size: 1.3rem;
+  }
+  
+  .form-actions {
+    margin-top: 1.5rem;
+  }
+  
+  .cancel-btn,
+  .submit-btn {
+    padding: 0.75rem 1.25rem;
+    font-size: 0.95rem;
+  }
+}
+
+
+@media (max-width: 576px) {
+  .mascota-header h1 {
+    font-size: 1.6rem;
+  }
+  
+  .progress-text {
+    font-size: 0.75rem;
+    top: -20px;
+    right: 5px;
+  }
+  
+  .step-indicator {
+    font-size: 0.8rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.5rem 1.5rem;
+  }
+  
+  .step-indicator span {
+    padding-bottom: 3px;
+  }
+  
+  .mascota-form {
+    padding: 1rem;
+  }
+  
+  .form-section {
+    padding: 0.75rem;
+  }
+  
+  .form-row {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    padding: 0.6rem;
+  }
+  
+  .upload-btn span {
+    font-size: 1.2rem;
+  }
+  
+  .form-actions {
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+  
+  .cancel-btn,
+  .submit-btn {
+    width: 100%;
+    padding: 0.7rem;
+  }
+  
+  .error-message {
+    font-size: 0.8rem;
+  }
+}
+
+
+@media (max-width: 400px) {
+  .mascota-header h1 {
+    font-size: 1.4rem;
+  }
+  
+  .step-indicator {
+    font-size: 0.75rem;
+    gap: 0.5rem 1rem;
+  }
+  
+  .form-group label {
+    font-size: 0.9rem;
+  }
+  
+  .form-group input,
+  .form-group select,
+  .form-group textarea {
+    font-size: 0.9rem;
+  }
+  
+  .cancel-btn,
+  .submit-btn {
+    font-size: 0.9rem;
+  }
+}
+
+
+@media (min-width: 1200px) {
+  .mascota-container {
+    max-width: 1000px;
+  }
+}
+
+
+@media (max-width: 768px) and (orientation: landscape) {
+  .mascota-container {
+    margin: 0.5rem auto;
+  }
+  
+  .form-row {
+    flex-direction: row;
+    flex-wrap: wrap;
+  }
+  
+  .form-row .form-group {
+    flex: 1 1 45%;
+    min-width: 0;
+  }
+}

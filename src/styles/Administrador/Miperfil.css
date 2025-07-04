@@ -1,0 +1,239 @@
+.perfil-admin-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  background: #fff;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-admin-container h2 {
+  text-align: center;
+  margin-bottom: 1.5rem;
+  color: #2c3e50;
+}
+
+.perfil-form label {
+  display: block;
+  margin-top: 1rem;
+  font-weight: 600;
+  color: #34495e;
+}
+
+.perfil-form input {
+  width: 100%;
+  padding: 0.5rem;
+  margin-top: 0.3rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.perfil-botones {
+  margin-top: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+}
+
+.perfil-botones button {
+  padding: 0.6rem 1.2rem;
+  border: none;
+  border-radius: 6px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.perfil-botones button:hover {
+  opacity: 0.9;
+}
+
+.perfil-botones button:first-child {
+  background-color: #27ae60;
+  color: white;
+}
+
+.perfil-botones .cancelar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* Estilos generales */
+.perfil-admin-container {
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 1rem;
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+.perfil-header {
+  display: flex;
+  align-items: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.perfil-header h2 {
+  margin: 0 auto;
+  color: #2c3e50;
+  font-size: 1.8rem;
+}
+
+.btn-volver {
+  background-color: #3498db;
+  color: white;
+  border: none;
+  padding: 0.6rem 1.2rem;
+  border-radius: 5px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 500;
+  transition: background-color 0.3s;
+}
+
+.btn-volver:hover {
+  background-color: #2980b9;
+}
+
+.perfil-content {
+  display: flex;
+  gap: 2rem;
+  background: white;
+  padding: 2rem;
+  border-radius: 10px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+.perfil-avatar {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 1rem;
+}
+
+.avatar-placeholder {
+  width: 120px;
+  height: 120px;
+  background-color: #3498db;
+  color: white;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 3rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.perfil-avatar h3 {
+  margin: 0.5rem 0 0;
+  color: #2c3e50;
+}
+
+.perfil-avatar p {
+  color: #7f8c8d;
+  margin: 0;
+}
+
+.perfil-form {
+  flex: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.form-group label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #2c3e50;
+  font-weight: 500;
+}
+
+.form-group input {
+  padding: 0.8rem;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s;
+}
+
+.form-group input:disabled {
+  background-color: #f5f5f5;
+  color: #555;
+}
+
+.form-group input:focus {
+  outline: none;
+  border-color: #3498db;
+}
+
+.perfil-botones {
+  display: flex;
+  gap: 1rem;
+  margin-top: 1rem;
+}
+
+.btn-editar, .btn-guardar, .btn-cancelar {
+  padding: 0.8rem 1.5rem;
+  border: none;
+  border-radius: 5px;
+  font-weight: 500;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  transition: all 0.3s;
+}
+
+.btn-editar {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-editar:hover {
+  background-color: #2980b9;
+}
+
+.btn-guardar {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.btn-guardar:hover {
+  background-color: #27ae60;
+}
+
+.btn-cancelar {
+  background-color: #e74c3c;
+  color: white;
+}
+
+.btn-cancelar:hover {
+  background-color: #c0392b;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .perfil-content {
+    flex-direction: column;
+  }
+  
+  .perfil-header {
+    flex-direction: column;
+    gap: 1rem;
+    text-align: center;
+  }
+  
+  .btn-volver {
+    align-self: flex-start;
+  }
+}

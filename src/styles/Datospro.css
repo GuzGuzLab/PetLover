@@ -1,0 +1,69 @@
+.datospro-container {
+    padding: 2rem;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f8ff; /* Azul claro */
+    color: #003366;
+    max-width: 700px;
+    margin: 0 auto;
+    border-radius: 12px;
+    box-shadow: 0 4px 12px rgba(0, 91, 150, 0.1);
+    border: 1px solid #cce7ff;
+}
+  
+.datospro-container h2 {
+    font-size: 2rem;
+    text-align: center;
+    margin-bottom: 1.5rem;
+    color: #005b96;
+}
+  
+.datospro-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1.2rem 1.5rem;
+}
+  
+.datospro-form label {
+    font-weight: 600;
+    color: #004080;
+    margin-bottom: 0.25rem;
+    display: block;
+}
+  
+.datospro-form input {
+    width: 100%;
+    padding: 0.6rem;
+    border-radius: 8px;
+    border: 1px solid #bcdfff;
+    background: #ffffff;
+    color: #003366;
+    font-size: 1rem;
+    box-shadow: inset 0 1px 2px rgba(0, 91, 150, 0.05);
+}
+  
+.datospro-form input[readonly] {
+    background-color: #f5faff;
+    cursor: not-allowed;
+}
+
+.btn-actualizar {
+    margin-top: 1.5rem;
+    padding: 0.75rem 1.5rem;
+    background-color: #3e9bda;
+    color: white;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    max-width: 300px;
+    text-align: center;
+    margin-left: auto;
+    margin-right: auto; 
+}
+  
+.btn-actualizar:hover {
+    background-color: #4f96dd;
+}

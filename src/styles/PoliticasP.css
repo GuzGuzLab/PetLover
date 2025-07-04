@@ -1,0 +1,188 @@
+/* Estilos profesionales para Pet Care - Políticas de servicio con huellas */
+
+.politicas-container {
+    max-width: 1000px;
+    margin: 0 auto;
+    padding: 3rem 2rem;
+    font-family: 'Segoe UI', 'Roboto', 'Helvetica Neue', Arial, sans-serif;
+    color: #2d3748;
+    line-height: 1.7;
+    background-color: #f8fafc;
+    border-radius: 12px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* Fondo con huellas de mascotas */
+  .politicas-container::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url("https://thumbs.dreamstime.com/b/huellas-de-mascotas-patr%C3%B3n-transparente-fondo-lindo-para-perro-o-gato-cachorro-pie-paro-forma-silueta-negra-mascota-espacio-%E1%B5%89%CA%B3-195422065.jpg");
+    z-index: 0;
+    opacity: 0.15;
+    background-blend-mode: overlay;
+    background-color: rgba(248, 250, 252, 0.7);
+  }
+  
+  .politicas-header,
+  .politicas-card,
+  .politicas-section,
+  .contact-section {
+    position: relative;
+    z-index: 1;
+    background-color: rgba(255, 255, 255, 0.9);
+  }
+  
+  .politicas-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 2px solid #3182ce;
+    background-color: white;
+    border-radius: 8px;
+    padding: 2rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  }
+  
+  .politicas-title {
+    color: #1a365d;
+    font-size: 2.4rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.5px;
+  }
+  
+  .politicas-fecha {
+    color: #718096;
+    font-size: 1rem;
+    font-style: italic;
+    font-weight: 500;
+  }
+  
+  .politicas-card {
+    border-radius: 8px;
+    padding: 2rem;
+    margin-bottom: 3rem;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border-left: 4px solid #3182ce;
+  }
+  
+  .politicas-text {
+    font-size: 1.1rem;
+    color: #4a5568;
+    text-align: justify;
+    margin: 0;
+    line-height: 1.8;
+  }
+  
+  .politicas-section {
+    margin-bottom: 3rem;
+  }
+  
+  .section-title {
+    color: #2b6cb0;
+    font-size: 1.8rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    padding-bottom: 0.75rem;
+    border-bottom: 1px solid #e2e8f0;
+    letter-spacing: -0.25px;
+  }
+  
+  .section-content {
+    padding: 2rem;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #edf2f7;
+    margin-top: 1rem;
+  }
+  
+  .section-content.warning {
+    border-left: 4px solid #90cdf4;
+    background-color: #90cef48e;
+  }
+  
+  .subsection-title {
+    color: #2c5282;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+  
+  .features-list {
+    padding-left: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  
+  .features-list li {
+    margin-bottom: 0.75rem;
+    color: #4a5568;
+    position: relative;
+    padding-left: 1.5rem;
+  }
+  
+  .features-list li:before {
+    content: "•";
+    color: #3182ce;
+    font-weight: bold;
+    font-size: 1.2rem;
+    position: absolute;
+    left: 0;
+    top: -1px;
+  }
+  
+  .contact-section {
+    text-align: center;
+    margin-top: 4rem;
+    padding: 2rem;
+    background-color: rgba(235, 248, 255, 0.9);
+    border-radius: 8px;
+    border-top: 2px solid #90cdf4;
+  }
+  
+  .contact-section h3 {
+    color: #2b6cb0;
+    font-size: 1.4rem;
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  .contact-link {
+    color: #3182ce;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.2s ease;
+    display: inline-block;
+    margin: 0.5rem 0;
+  }
+  
+  .contact-link:hover {
+    color: #2c5282;
+    text-decoration: underline;
+  }
+  
+  @media (max-width: 768px) {
+    .politicas-container {
+        padding: 2rem 1.5rem;
+        border-radius: 0;
+    }
+    
+    .politicas-title {
+        font-size: 2rem;
+    }
+    
+    .section-title {
+        font-size: 1.5rem;
+    }
+    
+    .politicas-card, 
+    .section-content {
+        padding: 1.5rem;
+    }
+  }
