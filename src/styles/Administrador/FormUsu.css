@@ -1,406 +1,510 @@
-/* Variables CSS para el tema azul oscuro - Consistente con los otros componentes */
-:root {
-  --primary-color: #1e3a8a;
-  --primary-hover: #1e40af;
-  --primary-light: #3b82f6;
-  --secondary-color: #64748b;
-  --background-color: #f8fafc;
-  --card-background: #ffffff;
-  --border-color: #e2e8f0;
-  --text-primary: #1e293b;
-  --text-secondary: #64748b;
-  --success-color: #10b981;
-  --error-color: #ef4444;
-  --warning-color: #f59e0b;
-  --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
-  --shadow-md: 0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1);
-  --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1);
-  --border-radius: 12px;
-  --border-radius-sm: 8px;
-  --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-/* Container principal */
-.registro-container {
-  min-height: 100vh;
-  background: linear-gradient(135deg, var(--background-color) 0%, #e0f2fe 100%);
-  padding: 2rem;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  animation: fadeIn 0.6s ease-out;
-}
-
-/* Título principal */
-.titulo-formulario {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: var(--primary-color);
-  margin-bottom: 2rem;
-  text-align: center;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 1rem;
-}
-
-.titulo-formulario::before {
-  content: '👤';
-  font-size: 2rem;
-}
-
-/* Formulario */
-.formulario-registro {
-  background: var(--card-background);
-  padding: 2.5rem;
-  border-radius: var(--border-radius);
-  box-shadow: var(--shadow-lg);
-  border: 1px solid var(--border-color);
+/* Estilo Premium para Formulario de Registro */
+.admin-registration-container {
   max-width: 900px;
-  margin: 0 auto;
-  animation: slideInUp 0.5s ease-out;
+  margin: 2rem auto;
+  padding: 2.5rem;
+  background: #ffffff;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.08);
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
-/* Mensaje de error general */
-.error-message {
-  background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
-  color: #991b1b;
-  padding: 1rem 1.5rem;
-  border-radius: var(--border-radius-sm);
-  margin-bottom: 1.5rem;
-  font-weight: 500;
-  border-left: 4px solid var(--error-color);
-  animation: shake 0.5s ease-in-out;
+/* Efecto de borde degradado */
+.admin-registration-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
 }
 
-/* Filas del formulario */
-.form-row {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 1.5rem;
-  margin-bottom: 1.5rem;
+/* Título con efecto moderno */
+.admin-registration-title {
+  color: var(--primary-color);
+  text-align: center;
+  margin-bottom: 2.5rem;
+  font-weight: 700;
+  font-size: 2.2rem;
+  position: relative;
+  padding-bottom: 1rem;
+  letter-spacing: -0.5px;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
 }
 
-/* Grupos de formulario */
-.form-group {
+.admin-registration-title::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 100px;
+  height: 4px;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+  border-radius: 2px;
+}
+
+/* Formulario - Diseño minimalista */
+.admin-registration-form {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  margin-bottom: 1.5rem;
+  gap: 2rem;
 }
 
-.form-group:last-child {
-  margin-bottom: 0;
-}
-
-.form-group label {
-  font-weight: 600;
-  color: var(--text-primary);
-  font-size: 0.95rem;
+/* Grupos de campos */
+.admin-form-row {
   display: flex;
-  align-items: center;
-  gap: 0.5rem;
+  gap: 2rem;
 }
 
-.form-group label::after {
-  content: '';
-  width: 4px;
-  height: 4px;
-  background-color: var(--error-color);
-  border-radius: 50%;
-  display: inline-block;
+.admin-form-row > .admin-form-field {
+  flex: 1;
 }
 
-/* Campos de formulario */
-.form-control {
-  padding: 1rem;
-  border: 2px solid var(--border-color);
-  border-radius: var(--border-radius-sm);
-  font-size: 1rem;
-  background: var(--card-background);
-  transition: var(--transition);
-  color: var(--text-primary);
-}
-
-.form-control:focus {
-  outline: none;
-  border-color: var(--primary-color);
-  box-shadow: 0 0 0 3px rgb(30 58 138 / 0.1);
-}
-
-/* Select */
-select.form-control {
-  appearance: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%231e293b' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-  background-repeat: no-repeat;
-  background-position: right 1rem center;
-  padding-right: 2.5rem;
-}
-
-/* Input con icono */
-.input-with-icon {
+/* Campos del formulario - Estilo premium */
+.admin-form-field {
+  margin-bottom: 1.5rem;
   position: relative;
 }
 
-.input-icon {
+.admin-form-field label {
+  display: block;
+  margin-bottom: 0.8rem;
+  color: var(--text-primary);
+  font-weight: 600;
+  font-size: 0.95rem;
+  transition: var(--transition);
+}
+
+.admin-form-input {
+  width: 100%;
+  padding: 1.1rem 1.3rem;
+  border: 2px solid #e9ecef;
+  border-radius: 10px;
+  font-size: 1rem;
+  transition: var(--transition);
+  background-color: white;
+  color: var(--text-primary);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+}
+
+.admin-form-input::placeholder {
+  color: var(--text-secondary);
+  opacity: 0.6;
+}
+
+.admin-form-input:focus {
+  outline: none;
+  border-color: var(--primary-color);
+  box-shadow: 0 0 0 4px rgba(30, 58, 138, 0.15);
+  background-color: white;
+}
+
+/* Select personalizado */
+select.admin-form-input {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' fill='%2364748b' viewBox='0 0 16 16'%3E%3Cpath d='M7.247 11.14 2.451 5.658C1.885 5.013 2.345 4 3.204 4h9.592a1 1 0 0 1 .753 1.659l-4.796 5.48a1 1 0 0 1-1.506 0z'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1.2rem center;
+  background-size: 14px;
+  padding-right: 3rem;
+}
+
+/* Campos con iconos - Estilo premium */
+.admin-input-with-icon {
+  position: relative;
+}
+
+.admin-input-with-icon .admin-input-icon {
   position: absolute;
-  right: 1rem;
+  right: 1.3rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
   pointer-events: none;
+  font-size: 1.1rem;
 }
 
-/* Input de contraseña */
-.password-input-container {
+/* Campo de contraseña - Diseño interactivo */
+.admin-password-field {
   position: relative;
 }
 
-.password-toggle-icon {
+.admin-password-toggle {
   position: absolute;
-  right: 1rem;
+  right: 1.3rem;
   top: 50%;
   transform: translateY(-50%);
   color: var(--text-secondary);
   cursor: pointer;
   transition: var(--transition);
+  font-size: 1.2rem;
+  background: none;
+  border: none;
+  padding: 0.5rem;
 }
 
-.password-toggle-icon:hover {
+.admin-password-toggle:hover {
   color: var(--primary-color);
+  transform: translateY(-50%) scale(1.1);
 }
 
-/* Errores de validación */
-.has-error .form-control {
-  border-color: var(--error-color);
-  background-color: rgba(239, 68, 68, 0.05);
-}
-
-.error-text {
-  color: var(--error-color);
-  font-size: 0.875rem;
-  margin-top: 0.25rem;
-  animation: fadeIn 0.3s ease-out;
-}
-
-/* Botones de acción */
-.form-actions {
+/* Botones - Efecto 3D moderno */
+.admin-form-actions {
   display: flex;
-  gap: 1rem;
-  margin-top: 2rem;
-  padding-top: 1.5rem;
-  border-top: 1px solid var(--border-color);
+  justify-content: flex-end;
+  gap: 1.5rem;
+  margin-top: 2.5rem;
+  padding-top: 2rem;
+  border-top: 1px solid rgba(0, 0, 0, 0.05);
 }
 
-.btn {
-  display: flex;
+.admin-form-button {
+  display: inline-flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 1rem 2rem;
-  border-radius: var(--border-radius-sm);
+  justify-content: center;
+  gap: 0.8rem;
+  padding: 1.1rem 2.2rem;
+  border-radius: 10px;
   font-weight: 600;
+  font-size: 1rem;
   cursor: pointer;
   transition: var(--transition);
   border: none;
-  font-size: 1rem;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
 }
 
-.btn-primary {
-  background: linear-gradient(135deg, var(--primary-color) 0%, var(--primary-hover) 100%);
+.admin-form-button::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1;
+  transition: var(--transition);
+}
+
+.admin-primary-button {
+  background: var(--primary-color);
   color: white;
-  box-shadow: var(--shadow-md);
+  box-shadow: 0 4px 15px rgba(30, 58, 138, 0.3);
 }
 
-.btn-primary:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-lg);
+.admin-primary-button::before {
+  background: linear-gradient(135deg, var(--primary-color), var(--primary-hover));
 }
 
-.btn-primary:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
+.admin-primary-button:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(30, 58, 138, 0.4);
+}
+
+.admin-primary-button:hover::before {
+  opacity: 0.9;
+}
+
+.admin-primary-button:active {
+  transform: translateY(1px);
+}
+
+.admin-primary-button:disabled {
+  background: #adb5bd;
   transform: none;
+  box-shadow: none;
+  cursor: not-allowed;
 }
 
-.btn-secondary {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  color: var(--text-primary);
-  border: 2px solid var(--border-color);
+.admin-primary-button:disabled::before {
+  opacity: 1;
 }
 
-.btn-secondary:hover {
-  background: linear-gradient(135deg, #e2e8f0 0%, #cbd5e1 100%);
-  transform: translateY(-2px);
+.admin-secondary-button {
+  background: white;
+  color: var(--primary-color);
+  border: 2px solid var(--primary-color);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
 }
 
-/* Animaciones */
+.admin-secondary-button:hover {
+  background: rgba(30, 58, 138, 0.05);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+}
+
+/* Mensajes de error - Estilo moderno */
+.admin-field-error {
+  display: block;
+  margin-top: 0.6rem;
+  color: var(--error-color);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding-left: 0.6rem;
+  border-left: 3px solid var(--error-color);
+}
+
+.has-error .admin-form-input {
+  border-color: var(--error-color);
+  background-color: rgba(239, 68, 68, 0.03);
+}
+
+.has-error .admin-form-input:focus {
+  box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+}
+
+.admin-form-error {
+  padding: 1.3rem;
+  background-color: rgba(239, 68, 68, 0.08);
+  color: var(--error-color);
+  border-radius: 10px;
+  margin-bottom: 2rem;
+  font-weight: 600;
+  border-left: 4px solid var(--error-color);
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.admin-form-error::before {
+  content: '!';
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 26px;
+  height: 26px;
+  background-color: var(--error-color);
+  color: white;
+  border-radius: 50%;
+  font-weight: bold;
+  font-size: 0.9rem;
+}
+
+/* Efectos de carga */
+@keyframes pulse {
+  0% { opacity: 0.6; }
+  50% { opacity: 1; }
+  100% { opacity: 0.6; }
+}
+
+.admin-primary-button:disabled::after {
+  content: '';
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 50%;
+  border-top-color: white;
+  animation: spin 1s ease-in-out infinite;
+  margin-left: 10px;
+}
+
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+/* Animaciones sutiles */
+.admin-form-field {
+  animation: fadeIn 0.5s ease-out forwards;
+  opacity: 0;
+  animation-delay: calc(var(--order) * 0.1s);
+}
+
 @keyframes fadeIn {
-  from {
-    opacity: 0;
-  }
-  to {
-    opacity: 1;
-  }
+  to { opacity: 1; }
 }
 
-@keyframes slideInUp {
-  from {
-    opacity: 0;
-    transform: translateY(20px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes shake {
-  0%, 100% {
-    transform: translateX(0);
-  }
-  10%, 30%, 50%, 70%, 90% {
-    transform: translateX(-5px);
-  }
-  20%, 40%, 60%, 80% {
-    transform: translateX(5px);
-  }
-}
-
-/* Responsive Design */
+/* Responsive - Diseño adaptativo */
 @media (max-width: 768px) {
-  .registro-container {
-    padding: 1rem;
+  .admin-registration-container {
+    padding: 1.8rem;
+    margin: 1rem;
   }
   
-  .titulo-formulario {
-    font-size: 2rem;
-  }
-  
-  .formulario-registro {
-    padding: 1.5rem;
-  }
-  
-  .form-row {
-    grid-template-columns: 1fr;
-  }
-  
-  .form-actions {
+  .admin-form-row {
     flex-direction: column;
+    gap: 1.5rem;
   }
   
-  .btn {
+  .admin-form-actions {
+    flex-direction: column-reverse;
+    gap: 1rem;
+  }
+  
+  .admin-form-button {
     width: 100%;
-    justify-content: center;
-  }
-}
-
-@media (max-width: 480px) {
-  .titulo-formulario {
-    font-size: 1.75rem;
-    flex-direction: column;
   }
   
-  .form-group label {
-    font-size: 0.9rem;
-  }
-  
-  .form-control {
-    padding: 0.875rem;
-  }
-  
-  .btn {
-    padding: 0.875rem 1.5rem;
+  .admin-registration-title {
+    font-size: 1.8rem;
   }
 }
 
 /* Mejoras de accesibilidad */
-.form-control:focus,
-.btn:focus {
-  outline: 2px solid var(--primary-color);
+.admin-form-input:focus,
+.admin-form-button:focus {
+  outline: 2px solid var(--primary-light);
   outline-offset: 2px;
 }
 
-/* Efectos adicionales */
-.form-control:hover:not(:focus) {
-  border-color: var(--secondary-color);
-}
-
-/* Transiciones suaves para todos los elementos interactivos */
-button, input, select {
-  transition: var(--transition);
-}
-
-/* Mejoras para campos de fecha */
-input[type="date"] {
-  position: relative;
-}
-
-input[type="date"]::-webkit-calendar-picker-indicator {
-  opacity: 0;
-  width: 100%;
-  height: 100%;
-  position: absolute;
-  top: 0;
-  left: 0;
-  cursor: pointer;
-}
-
-/* Mejoras para campos de tipo teléfono */
-input[type="tel"]:focus:valid {
-  border-color: var(--success-color);
-}
-
-/* Mejoras para campos de tipo email */
-input[type="email"]:focus:valid {
-  border-color: var(--success-color);
-}
-
-/* Mejoras para el campo de contraseña */
-.password-strength {
+/* Indicador visual de fortaleza de contraseña */
+.password-strength-indicator {
   height: 4px;
   margin-top: 0.5rem;
   border-radius: 2px;
-  background: linear-gradient(to right, var(--error-color) 0%, var(--warning-color) 50%, var(--success-color) 100%);
-  transform-origin: left;
-  transform: scaleX(0);
-  transition: transform 0.3s ease;
+  background: #e2e8f0;
+  overflow: hidden;
 }
 
-.password-input-container:focus-within + .password-strength {
-  transform: scaleX(1);
+.password-strength-meter {
+  height: 100%;
+  width: 0%;
+  background: var(--error-color);
+  transition: width 0.3s ease, background 0.3s ease;
 }
 
-/* Mensaje de éxito */
-.success-message-container {
+.password-input-container:focus-within ~ .password-strength-indicator .password-strength-meter {
+  width: 100%;
+  background: linear-gradient(90deg, var(--error-color), var(--warning-color), var(--success-color));
+}
+/* Estilo Premium para Mensaje de Éxito */
+.admin-registration-success {
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 80vh;
-  background-color: #f8f9fa;
+  min-height: 80vh;
+  background: linear-gradient(135deg, #f8fafc 0%, #e0f2fe 100%);
+  padding: 2rem;
+  animation: fadeIn 0.6s ease-out;
 }
 
-.success-message-box {
+.admin-success-card {
   text-align: center;
-  padding: 2rem;
   background: white;
-  border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 3.5rem;
+  border-radius: 16px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
   max-width: 500px;
   width: 100%;
-  border: 2px solid #28a745;
+  position: relative;
+  overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transform-style: preserve-3d;
+  perspective: 1000px;
 }
 
-.success-icon {
-  font-size: 4rem;
-  color: #28a745;
-  margin-bottom: 1rem;
+.admin-success-card::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 6px;
+  background: linear-gradient(90deg, var(--success-color), #34d399);
 }
 
-.success-message-box h2 {
-  color: #28a745;
-  margin-bottom: 1rem;
-  font-size: 1.8rem;
+.admin-success-icon {
+  font-size: 5rem;
+  color: var(--success-color);
+  margin-bottom: 1.5rem;
+  filter: drop-shadow(0 4px 8px rgba(16, 185, 129, 0.3));
+  animation: bounceIn 0.6s ease-out;
 }
 
-.success-message-box p {
+.admin-success-card h2 {
+  color: var(--success-color);
+  margin-bottom: 1.5rem;
+  font-weight: 700;
+  font-size: 2rem;
+  letter-spacing: -0.5px;
+}
+
+.admin-success-card p {
+  color: var(--text-primary);
+  margin-bottom: 0.8rem;
+  line-height: 1.7;
   font-size: 1.1rem;
-  margin: 0.5rem 0;
+}
+
+.admin-success-card strong {
+  color: var(--primary-color);
+  font-weight: 700;
+  background: linear-gradient(90deg, var(--primary-color), var(--primary-hover));
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes bounceIn {
+  0% {
+    opacity: 0;
+    transform: scale(0.3) translateY(40px);
+  }
+  50% {
+    opacity: 0.9;
+    transform: scale(1.05) translateY(-10px);
+  }
+  80% {
+    opacity: 1;
+    transform: scale(0.95) translateY(5px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* Efecto de conteo regresivo */
+.countdown-bar {
+  height: 4px;
+  background: rgba(16, 185, 129, 0.2);
+  margin-top: 2rem;
+  border-radius: 2px;
+  overflow: hidden;
+}
+
+.countdown-progress {
+  height: 100%;
+  width: 100%;
+  background: linear-gradient(90deg, var(--success-color), #34d399);
+  animation: countdown 3s linear forwards;
+}
+
+@keyframes countdown {
+  from { width: 100%; }
+  to { width: 0%; }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .admin-registration-success {
+    padding: 1rem;
+  }
+  
+  .admin-success-card {
+    padding: 2.5rem 1.5rem;
+  }
+  
+  .admin-success-icon {
+    font-size: 4rem;
+  }
+  
+  .admin-success-card h2 {
+    font-size: 1.8rem;
+  }
+  
+  .admin-success-card p {
+    font-size: 1rem;
+  }
 }

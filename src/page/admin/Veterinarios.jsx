@@ -37,7 +37,6 @@ function Veterinarios() {
           especialidad: vet.especialidad,
           email: vet.email,
           telefono: vet.tel,
-          foto: "", // Puedes agregar lógica para manejar fotos si las tienes
         }));
 
         setVeterinarios(veterinariosFormateados);

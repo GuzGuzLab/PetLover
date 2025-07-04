@@ -208,9 +208,9 @@ export default function RegistroUsu() {
   if (registrationSuccess.show) {
     return (
       <AdminLayout>
-        <div className="success-message-container">
-          <div className="success-message-box">
-            <FontAwesomeIcon icon={faCheckCircle} className="success-icon" />
+        <div className="admin-registration-success">
+          <div className="admin-success-card">
+            <FontAwesomeIcon icon={faCheckCircle} className="admin-success-icon" />
             <h2>{registrationSuccess.message}</h2>
             <p>El usuario <strong>{registrationSuccess.userName}</strong> se ha registrado correctamente.</p>
             <p>Serás redirigido automáticamente...</p>
@@ -222,149 +222,149 @@ export default function RegistroUsu() {
 
   return (
     <AdminLayout>
-      <div className="registro-container">
-        <h2 className="titulo-formulario">Registro de usuarios</h2>
+      <div className="admin-registration-container">
+        <h2 className="admin-registration-title">Registro de usuarios</h2>
 
-        <form onSubmit={handleSubmit} className="formulario-registro">
-          {errors.submit && <div className="error-message">{errors.submit}</div>}
+        <form onSubmit={handleSubmit} className="admin-registration-form">
+          {errors.submit && <div className="admin-form-error">{errors.submit}</div>}
 
-          <div className="form-row">
-            <div className={`form-group ${errors.tipo_Doc ? "has-error" : ""}`}>
+          <div className="admin-form-row">
+            <div className={`admin-form-field ${errors.tipo_Doc ? "has-error" : ""}`}>
               <label>Tipo de Documento *</label>
               <select
                 name="tipo_Doc"
                 value={formData.tipo_Doc}
                 onChange={handleChange}
-                className="form-control"
+                className="admin-form-input"
                 required
               >
                 <option value="CC">Cédula de Ciudadanía</option>
                 <option value="CE">Cédula de Extranjería</option>
                 <option value="PA">Pasaporte</option>
               </select>
-              {errors.tipo_Doc && <span className="error-text">{errors.tipo_Doc}</span>}
+              {errors.tipo_Doc && <span className="admin-field-error">{errors.tipo_Doc}</span>}
             </div>
 
-            <div className={`form-group ${errors.doc ? "has-error" : ""}`}>
+            <div className={`admin-form-field ${errors.doc ? "has-error" : ""}`}>
               <label>Número de Documento *</label>
               <input
                 type="text"
                 name="doc"
                 value={formData.doc}
                 onChange={handleChange}
-                className="form-control"
+                className="admin-form-input"
                 placeholder="Ej: 1234567890"
                 maxLength="15"
                 required
               />
-              {errors.doc && <span className="error-text">{errors.doc}</span>}
+              {errors.doc && <span className="admin-field-error">{errors.doc}</span>}
             </div>
           </div>
 
-          <div className={`form-group ${errors.nombre ? "has-error" : ""}`}>
+          <div className={`admin-form-field ${errors.nombre ? "has-error" : ""}`}>
             <label>Nombre Completo *</label>
             <input
               type="text"
               name="nombre"
               value={formData.nombre}
               onChange={handleChange}
-              className="form-control"
+              className="admin-form-input"
               placeholder="Ej: JUAN PÉREZ GARCÍA"
               required
             />
-            {errors.nombre && <span className="error-text">{errors.nombre}</span>}
+            {errors.nombre && <span className="admin-field-error">{errors.nombre}</span>}
           </div>
 
-          <div className="form-row">
-            <div className={`form-group ${errors.fecha_Nac ? "has-error" : ""}`}>
+          <div className="admin-form-row">
+            <div className={`admin-form-field ${errors.fecha_Nac ? "has-error" : ""}`}>
               <label>Fecha de Nacimiento *</label>
-              <div className="input-with-icon">
+              <div className="admin-input-with-icon">
                 <input
                   type="date"
                   name="fecha_Nac"
                   value={formData.fecha_Nac}
                   onChange={handleChange}
-                  className="form-control"
+                  className="admin-form-input"
                   max={new Date(new Date().setFullYear(new Date().getFullYear() - 18)).toISOString().split("T")[0]}
                   required
                 />
-                <FontAwesomeIcon icon={faCalendarAlt} className="input-icon" />
+                <FontAwesomeIcon icon={faCalendarAlt} className="admin-input-icon" />
               </div>
-              {errors.fecha_Nac && <span className="error-text">{errors.fecha_Nac}</span>}
+              {errors.fecha_Nac && <span className="admin-field-error">{errors.fecha_Nac}</span>}
             </div>
 
-            <div className={`form-group ${errors.tel ? "has-error" : ""}`}>
+            <div className={`admin-form-field ${errors.tel ? "has-error" : ""}`}>
               <label>Teléfono *</label>
               <input
                 type="tel"
                 name="tel"
                 value={formData.tel}
                 onChange={handleChange}
-                className="form-control"
+                className="admin-form-input"
                 placeholder="Ej: 3001234567"
                 maxLength="15"
                 required
               />
-              {errors.tel && <span className="error-text">{errors.tel}</span>}
+              {errors.tel && <span className="admin-field-error">{errors.tel}</span>}
             </div>
           </div>
 
-          <div className={`form-group ${errors.email ? "has-error" : ""}`}>
+          <div className={`admin-form-field ${errors.email ? "has-error" : ""}`}>
             <label>Correo Electrónico *</label>
             <input
               type="email"
               name="email"
               value={formData.email}
               onChange={handleChange}
-              className="form-control"
+              className="admin-form-input"
               placeholder="Ej: ejemplo@dominio.com"
               required
             />
-            {errors.email && <span className="error-text">{errors.email}</span>}
+            {errors.email && <span className="admin-field-error">{errors.email}</span>}
           </div>
 
-          <div className={`form-group ${errors.direccion ? "has-error" : ""}`}>
+          <div className={`admin-form-field ${errors.direccion ? "has-error" : ""}`}>
             <label>Dirección de residencia *</label>
             <input
               type="text"
               name="direccion"
               value={formData.direccion}
               onChange={handleChange}
-              className="form-control"
+              className="admin-form-input"
               placeholder="Ej: CALLE 100 # 10-20"
               required
             />
-            {errors.direccion && <span className="error-text">{errors.direccion}</span>}
+            {errors.direccion && <span className="admin-field-error">{errors.direccion}</span>}
           </div>
 
-          <div className={`form-group ${errors.password ? "has-error" : ""}`}>
+          <div className={`admin-form-field ${errors.password ? "has-error" : ""}`}>
             <label>Contraseña *</label>
-            <div className="password-input-container">
+            <div className="admin-password-field">
               <input
                 type={formData.showPassword ? "text" : "password"}
                 name="password"
                 value={formData.password}
                 onChange={handleChange}
-                className="form-control"
+                className="admin-form-input"
                 placeholder="Mínimo 8 caracteres"
                 required
               />
               <FontAwesomeIcon
                 icon={formData.showPassword ? faEyeSlash : faEye}
-                className="password-toggle-icon"
+                className="admin-password-toggle"
                 onClick={togglePasswordVisibility}
               />
             </div>
-            {errors.password && <span className="error-text">{errors.password}</span>}
+            {errors.password && <span className="admin-field-error">{errors.password}</span>}
           </div>
 
-          <div className="form-actions">
-            <button type="submit" className="btn btn-primary" disabled={isSubmitting}>
+          <div className="admin-form-actions">
+            <button type="submit" className="admin-form-button admin-primary-button" disabled={isSubmitting}>
               <FontAwesomeIcon icon={faSave} />
               {isSubmitting ? "Registrando..." : "Registrar Usuario"}
             </button>
 
-            <button type="button" className="btn btn-secondary" onClick={() => navigate("/InicioAdmin")}>
+            <button type="button" className="admin-form-button admin-secondary-button" onClick={() => navigate("/InicioAdmin")}>
               <FontAwesomeIcon icon={faTimes} /> Cancelar
             </button>
           </div>

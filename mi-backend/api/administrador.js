@@ -187,64 +187,104 @@ module.exports = function (db) {
         }
     });
 
+    
     //**************************************************************************/
     //***************************ASIRNAR ROL A USUARIO************************ */
     //**************************************************************************/
 
-    router.post('/asignar_roles/:usuarioId', async (req, res) => {
-    const { rolesSeleccionados, asignado_por } = req.body;
-    const usuarioId = req.params.usuarioId;
-
-            if (!rolesSeleccionados || rolesSeleccionados.length === 0) {
-                return res.status(400).json({ error: 'Debe seleccionar al menos un rol' });
+        router.post('/asignar_roles/:usuarioId', async (req, res) => {
+            const { rolesSeleccionados, asignado_por, especialidad, nivel_acceso } = req.body;
+            const usuarioDoc = req.params.usuarioId; 
+            if (!rolesSeleccionados || !Array.isArray(rolesSeleccionados) || rolesSeleccionados.length === 0) {
+                return res.status(400).json({ error: 'Debes seleccionar al menos un rol.' });
             }
+            if (!asignado_por) {
+                return res.status(400).json({ error: 'Falta información de quién asigna los roles.' });
+            }
+            let connection;
             try {
-                // Verificar si el usuario existe
-                const [usuario] = await db.promise().query('SELECT * FROM usuarios WHERE doc = ?', [usuarioId]);
-                if (!usuario.length) {
-                    return res.status(404).json({ error: 'Usuario no encontrado' });
+                connection = await db.promise().getConnection();
+                await connection.beginTransaction();
+                const [usuarioRows] = await connection.query('SELECT id, doc FROM usuarios WHERE doc = ?', [usuarioDoc]);
+                if (!usuarioRows.length) {
+                    await connection.rollback(); // Si no se encuentra, revertimos y respondemos
+                    return res.status(404).json({ error: `Usuario con documento ${usuarioDoc} no encontrado en la tabla de usuarios.` });
                 }
-                // Asignar roles y registrar en tablas específicas
+                const usuarioRealId = usuarioRows[0].id; // El ID numérico (INT) de la tabla usuarios
+                const usuarioDocFromDB = usuarioRows[0].doc; // El DOCUMENTO (VARCHAR) de la tabla usuarios
+                const rolesAsignadosDetalle = []; // Para llevar un registro de los roles que realmente se asignaron
+                // Iteramos sobre cada rol seleccionado para asignarlo
                 for (const rol_id of rolesSeleccionados) {
-                    // 1. Insertar en asignacion_rol (evitando duplicados)
-                    await db.promise().query(
-                        `INSERT IGNORE INTO asignacion_rol (doc_usu, rol_id, asignado_por) VALUES (?, ?, ?)`,
-                        [usuarioId, rol_id, asignado_por]
+                    const [rol] = await connection.query('SELECT id, nom_rol FROM roles WHERE id = ?', [rol_id]);
+                    if (!rol.length) {
+                        await connection.rollback(); 
+                        return res.status(400).json({ error: `Rol con ID ${rol_id} no encontrado en la tabla de roles.` });
+                    }
+                    const rolNombre = rol[0].nom_rol.toLowerCase(); // Convertimos a minúsculas para el switch
+                    await connection.query(
+                        `INSERT INTO asignacion_rol (doc_usu, rol_id, asignado_por, fecha_asignacion)
+                         VALUES (?, ?, ?, NOW())
+                         ON DUPLICATE KEY UPDATE
+                            asignado_por = VALUES(asignado_por),
+                            fecha_asignacion = NOW()`,
+                        [usuarioDocFromDB, rol_id, asignado_por]
                     );
-                    // 2. Obtener nombre del rol
-                    const [rol] = await db.promise().query('SELECT nom_rol FROM roles WHERE id = ?', [rol_id]);
-                    const rolNombre = rol[0].nom_rol.toLowerCase();
-                
-                    // 3. Registrar en tabla específica según el rol
+                    let insertedIntoSpecificTable = false;
                     switch (rolNombre) {
                         case 'cliente':
-                            await db.promise().query(
-                                'INSERT INTO propietarios (id_prop) VALUES (?)',
-                                [usuarioId]
+                            await connection.query(
+                                'INSERT INTO propietarios (id_prop) VALUES (?) ON DUPLICATE KEY UPDATE id_prop = id_prop',
+                                [usuarioDocFromDB]
                             );
+                            insertedIntoSpecificTable = true;
                             break;
+                        
                         case 'veterinario':
-                            const { especialidad } = req.body;
-                            await db.promise().query(
-                                'INSERT IGNORE INTO veterinarios (vet_id, especialidad) VALUES (?, ?)',
-                                [usuarioId, especialidad || 'General']
+                            await connection.query(
+                                'INSERT INTO veterinarios (vet_id, especialidad) VALUES (?, ?) ON DUPLICATE KEY UPDATE especialidad = VALUES(especialidad)',
+                                [usuarioRealId, especialidad || 'General'] // Usamos el ID numérico
                             );
+                            insertedIntoSpecificTable = true;
                             break;
+                        
                         case 'administrador':
-                            const { nivel_acceso } = req.body;
-                            await db.promise().query(
-                                'INSERT IGNORE INTO administradores (admin_id, nivel_acceso) VALUES (?, ?)',
-                                [usuarioId, nivel_acceso || 'alto']
+                            await connection.query(
+                                'INSERT INTO administradores (admin_id, nivel_acceso) VALUES (?, ?) ON DUPLICATE KEY UPDATE nivel_acceso = VALUES(nivel_acceso)',
+                                [usuarioRealId, nivel_acceso || 'alto'] // Usamos el ID numérico
                             );
+                            insertedIntoSpecificTable = true;
                             break;
                     }
+                    if (insertedIntoSpecificTable) {
+                        rolesAsignadosDetalle.push({ id: rol_id, nombre: rolNombre });
+                    }
                 }
-                res.status(200).json({ message: 'Roles asignados y registros actualizados correctamente' });
+                await connection.commit(); // Si todo sale bien, confirmamos la transacción
+                res.status(200).json({
+                    success: true,
+                    message: `Roles asignados y registros actualizados correctamente. Roles en tablas específicas: ${rolesAsignadosDetalle.map(r => r.nombre).join(', ')}`,
+                    rolesAsignados: rolesAsignadosDetalle
+                });
             } catch (error) {
-                console.error('Error:', error);
-                res.status(500).json({ error: 'Error en el servidor al asignar roles' });
+                if (connection) {
+                    try {
+                        await connection.rollback();
+                    } catch (rollbackError) {
+                        console.error('Error al intentar revertir la transacción:', rollbackError);
+                    }
+                }
+                console.error('Error en asignación de roles:', error);
+                res.status(500).json({
+                    success: false,
+                    error: 'Error en el servidor al asignar roles.',
+                    details: error.message
+                });
+            } finally {
+                if (connection) {
+                    connection.release();
+                }
             }
-    });
+        });
 
 
       //**************************************************************************/
@@ -274,9 +314,8 @@ module.exports = function (db) {
             const [veterinarios] = await db.promise().query(`
                 SELECT u.*, v.especialidad
                 FROM usuarios u
-                JOIN veterinarios v ON u.doc = v.vet_id
+                JOIN veterinarios v ON u.id = v.vet_id
             `);
-    
             res.status(200).json(veterinarios);
         } catch (error) {
             console.error('Error al obtener veterinarios:', error);
@@ -287,22 +326,34 @@ module.exports = function (db) {
     //**************************************************************************/
      //******************Odtener a todos los administradores********************/
     //**************************************************************************/
+       router.get('/obtener_administradores', async (req, res) => {
+            try {
+                const [administradores] = await db.promise().query(`
+                    SELECT u.*, a.nivel_acceso
+                    FROM usuarios u
+                    JOIN administradores a ON u.id = a.admin_id;
+                `);
+                res.status(200).json(administradores);
+            } catch (error) {
+                console.error('❌ Error al obtener administradores:', error);
+                res.status(500).json({ error: 'Error en el servidor al obtener los administradores' });
+            }
+        });
 
-
-    router.get('/obtener_administradores', async (req, res) => {
-        try {
-            const [administradores] = await db.promise().query(`
-                SELECT u.*, a.nivel_acceso 
-                FROM usuarios u
-                JOIN administradores a ON u.doc = a.admin_id
-            `)
-
-            res.status(200).json(administradores)
-        } catch (error) {
-            console.error('❌ Error al obtener administradores:', error)
-            res.status(500).json({ error: 'Error en el servidor al obtener los administradores' })
-        }
-    })
+    //**************************************************************************/
+     //*********************Odtener cuantos clientes hay************************/
+    //**************************************************************************/
+        router.get("/clientes_registrados", (req, res) => {
+            const query = "SELECT COUNT(*) AS total_clientes FROM propietarios;";
+                
+            db.query(query, (err, results) => {
+                if (err) {
+                    console.error("Error al obtener la cantidad de clientes:", err);
+                    return res.status(500).json({ message: "Hubo un problema al obtener los clientes" });
+                }
+                res.status(200).json(results);
+            });
+        });
 
     //**************************************************************************/
      //******************Odtener cuantos administradores hay********************/
@@ -333,6 +384,86 @@ module.exports = function (db) {
                 res.status(200).json(results);
             });
         });
+
+
+
+         //**************************************************************************/
+     //******************Odtener cuantos veterinarios  hay*********************/
+    //**************************************************************************/
+
+router.post('/login_rol', async (req, res) => {
+    const { email, password } = req.body;
+
+    if (!email || !password) {
+        return res.status(400).json({ message: 'Correo electrónico y contraseña son requeridos.' });
+    }
+    try {
+        const [users] = await db.promise().query(
+            `SELECT id, email, password FROM usuarios WHERE email = ?`,
+            [email]
+        );
+        if (users.length === 0) {
+            return res.status(401).json({ message: 'Credenciales inválidas. Usuario no encontrado.' });
+        }
+        const user = users[0];
+        const isPasswordValid = (password === user.password);
+
+        if (!isPasswordValid) {
+            return res.status(401).json({ message: 'Credenciales inválidas. Contraseña incorrecta.' });
+        }
+        let role = null;
+        let redirectPath = '/'; 
+
+        const [admins] = await db.promise().query(
+            `SELECT nivel_acceso FROM administradores WHERE admin_id = ?`,
+            [user.id]
+        );
+        if (admins.length > 0) {
+            role = 'administrador';
+            redirectPath = '/InicioAdmin'; // Ejemplo de ruta para admin
+            return res.status(200).json({
+                message: 'Inicio de sesión exitoso',
+                role: role,
+                userId: user.id,
+                accessLevel: admins[0].nivel_acceso,
+                redirect: redirectPath
+            });
+        }
+        const [vets] = await db.promise().query(
+            `SELECT especialidad FROM veterinarios WHERE vet_id = ?`,
+            [user.id]
+        );
+        if (vets.length > 0) {
+            role = 'veterinario';
+            redirectPath = '/VeterinarioPer'; // Ejemplo de ruta para veterinario
+            return res.status(200).json({
+                message: 'Inicio de sesión exitoso',
+                role: role,
+                userId: user.id,
+                specialty: vets[0].especialidad,
+                redirect: redirectPath
+            });
+        }
+        const [owners] = await db.promise().query(
+            `SELECT id_prop FROM propietarios WHERE id_prop = ?`,
+            [user.id] // Aquí asumo que id_prop en propietarios se relaciona con user.id
+        );
+        if (owners.length > 0) {
+            role = 'propietario';
+            redirectPath = '/UserWelcome'; // Ejemplo de ruta para propietario
+            return res.status(200).json({
+                message: 'Inicio de sesión exitoso',
+                role: role,
+                userId: user.id,
+                redirect: redirectPath
+            });
+        }
+        res.status(403).json({ message: 'Usuario no tiene un rol asignado o su rol no está activo.' });
+    } catch (error) {
+        console.error('❌ Error en el login:', error);
+        res.status(500).json({ message: 'Error interno del servidor durante el inicio de sesión.' });
+    }
+});
 
     return router;
 }

@@ -19,6 +19,24 @@ CREATE TABLE usuarios (
     fecha_Regis TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
+CREATE TABLE propietarios (
+    id_prop VARCHAR(15) PRIMARY KEY,
+    FOREIGN KEY (id_prop) REFERENCES usuarios(doc) ON DELETE CASCADE
+);
+
+CREATE TABLE veterinarios (
+    vet_id INT PRIMARY KEY,
+    especialidad VARCHAR(50) NOT NULL,
+    FOREIGN KEY (vet_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+CREATE TABLE administradores (
+    admin_id INT PRIMARY KEY,
+    nivel_acceso ENUM('basico', 'medio', 'alto') DEFAULT 'medio',
+    FOREIGN KEY (admin_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+insert into administradores values (1,'alto'); 
+
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -27,23 +45,15 @@ CREATE TABLE roles (
 );
 
 
-CREATE TABLE asignacion_roles (
+CREATE TABLE asignacion_rol (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    usu_id INT NOT NULL,
+    doc_usu VARCHAR(15) NOT NULL UNIQUE,
     rol_id INT NOT NULL,
-    asignado_por INT,
+    asignado_por INT COMMENT 'ID del admin que asignó el rol',
     fecha_asignacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usu_id) REFERENCES usuarios(id) ON DELETE CASCADE,
+    FOREIGN KEY (doc_usu) REFERENCES usuarios(doc) ON DELETE CASCADE,
     FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE,
-    FOREIGN KEY (asignado_por) REFERENCES usuarios(id) ON DELETE SET NULL,
-    UNIQUE (usu_id, rol_id)
-);
-
-
-CREATE TABLE veterinarios (
-    vet_id INT PRIMARY KEY,
-    especialidad VARCHAR(50) NOT NULL,
-    FOREIGN KEY (vet_id) REFERENCES usuarios(id) ON DELETE CASCADE
+    FOREIGN KEY (asignado_por) REFERENCES administradores(admin_id) ON DELETE SET NULL
 );
 
 

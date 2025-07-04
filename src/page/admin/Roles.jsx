@@ -140,30 +140,53 @@ function Roles() {
   };
 
   const handleAsignarRoles = async () => {
-    if (!usuarioSeleccionado || rolesSeleccionados.length === 0) {
-      mostrarNotificacion("Selecciona un usuario y al menos un rol", "error");
-      return;
-    }
+  if (!usuarioSeleccionado || rolesSeleccionados.length === 0) {
+    mostrarNotificacion("Selecciona un usuario y al menos un rol", "error");
+    return;
+  }
 
-    try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/asignar_roles/${usuarioSeleccionado.doc}`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          rolesSeleccionados, // ✅ nombre correcto
-          asignado_por: 1      // ✅ reemplaza con el ID real del administrador autenticado
-        })
-      });
+  try {
+    // Verificar qué roles estamos asignando para debug
+    const rolesParaAsignar = roles.filter(rol => rolesSeleccionados.includes(rol.id));
+    console.log("Roles a asignar:", rolesParaAsignar.map(r => r.nom_rol));
 
-      if (!response.ok) throw new Error("No se pudieron asignar los roles.");
-      mostrarNotificacion("Roles asignados correctamente", "exito");
-    } catch (error) {
-      console.error("Error al asignar roles:", error);
-      mostrarNotificacion(error.message, "error");
-    }
-  };
+    const response = await fetch(`${API_BASE_URL}/api/admin/asignar_roles/${usuarioSeleccionado.doc}`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({
+        rolesSeleccionados,
+        asignado_por: 1, // ID del admin autenticado
+        especialidad: "General", // Valor por defecto para veterinarios
+        nivel_acceso: "alto" // Valor por defecto para administradores
+      })
+    });
+
+    // Verificar si la respuesta es JSON
+    const contentType = response.headers.get('content-type');
+        if (!contentType || !contentType.includes('application/json')) {
+          const text = await response.text();
+          throw new Error(`El servidor respondió con: ${text.substring(0, 100)}...`);
+        }
+      
+        const data = await response.json();
+      
+        if (!response.ok) {
+          throw new Error(data.error || "No se pudieron asignar los roles.");
+        }
+      
+        mostrarNotificacion("Roles asignados correctamente", "exito");
+        setRolesSeleccionados([]);
+        setUsuarioSeleccionado(null);
+      } catch (error) {
+        console.error("Error al asignar roles:", error);
+        mostrarNotificacion(error.message.includes('<!DOCTYPE') 
+          ? "Error en el servidor. Verifica la consola." 
+          : error.message, 
+        "error");
+      }
+    };
 
   const handleMostrarAsignar = async () => {
     await cargarUsuarios();
@@ -328,5 +351,3 @@ function Roles() {
 }
 
 export default Roles;
-
-
