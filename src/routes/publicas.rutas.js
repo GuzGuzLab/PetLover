@@ -15,7 +15,6 @@ import Ubicacion from '../page/Ubicacion';
 import RecuperarContraseña from '../page/Recuperarcontraseña';
 import Pacientes from '../page/Pacientes';
 import Consultas from '../page/Consultas';
-import HistorialMedico from '../page/HistorialMedico';
 import Veterinarios from '../page/admin/Veterinarios';
 import AyudaU from '../page/AyudaU';
 
@@ -33,7 +32,6 @@ const PublicRoutes = () => (
     <Route path="/Recuperarcontraseña" element={<RecuperarContraseña />} />
     <Route path="/Pacientes" element={<Pacientes />} />
     <Route path="/Consultas" element={<Consultas />} />
-    <Route path="/HistorialMedico" element={<HistorialMedico />} />
     <Route path="/AyudaU" element={<AyudaU />} />
   </>
 );

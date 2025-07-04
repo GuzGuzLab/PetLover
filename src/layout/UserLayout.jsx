@@ -74,7 +74,7 @@ const UserLayout = () => {
       icon: <FaCalendarAlt />,
       subItems: [
         { label: "Agendar Nueva Cita", path: "/AgendarCita", icon: <FaCalendarPlus /> },
-        { label: "Próximas citas", path: "/citas-proximas" },
+        { label: "Próximas citas", path: "CitasProximas" },
         { label: "Historial", path: "/historial-citas", icon: <FaClipboard /> },
       ],
     },

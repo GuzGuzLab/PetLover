@@ -5,10 +5,7 @@ const router = express.Router();
 
 module.exports = function(db) {
     
-    /**
-     * @route GET /api/mascotas
-     * @description Obtiene un listado de TODAS las mascotas con datos básicos de su propietario.
-     */
+    // ✅ GET todas las mascotas con info básica del propietario
     router.get('/', (req, res) => {
         console.log("📢 [GET /api/mascotas] Petición de lista completa de mascotas recibida.");
         
@@ -44,10 +41,43 @@ module.exports = function(db) {
         });
     });
 
-    /**
-     * @route PUT /api/mascotas/:id
-     * @description Actualiza los datos de una mascota específica.
-     */
+    // ✅ GET mascotas por documento del propietario
+    router.get('/propietario/:doc', (req, res) => {
+        const { doc } = req.params;
+
+        const query = `
+            SELECT 
+                m.id,
+                m.nombre,
+                m.especie,
+                m.raza,
+                m.genero,
+                m.fecha_nac,
+                CONCAT(TIMESTAMPDIFF(YEAR, m.fecha_nac, CURDATE()), ' años') AS edad,
+                m.peso,
+                m.color,
+                m.estado_reproductivo AS estadoReproductivo,
+                m.vacunado,
+                m.observaciones,
+                m.estado,
+                m.tamano,
+                m.fecha_registro
+            FROM mascotas m
+            WHERE m.doc_pro = ?
+            ORDER BY m.fecha_registro DESC;
+        `;
+
+        db.query(query, [doc], (err, results) => {
+            if (err) {
+                console.error("❌ Error al obtener mascotas por propietario:", err);
+                return res.status(500).json({ error: 'Error interno al obtener mascotas por propietario.' });
+            }
+
+            res.json(results);
+        });
+    });
+
+    // ✅ PUT: Actualizar mascota
     router.put('/:id', (req, res) => {
         const { id } = req.params;
         const { nombre, raza, fecha_nac, peso, observaciones } = req.body;
@@ -77,10 +107,7 @@ module.exports = function(db) {
         });
     });
 
-    /**
-     * @route PATCH /api/mascotas/:id/status
-     * @description Cambia el estado de una mascota (Activo/Inactivo).
-     */
+    // ✅ PATCH: Cambiar estado de mascota (Activo/Inactivo)
     router.patch('/:id/status', (req, res) => {
         const { id } = req.params;
         const { estado } = req.body;
@@ -102,19 +129,27 @@ module.exports = function(db) {
         });
     });
 
-    /**
-     * @route POST /api/mascotas/registro
-     * @description Registra una nueva mascota.
-     */
+    // ✅ POST: Registro de nueva mascota
     router.post('/registro', (req, res) => {
-        const { doc_pro, nombre, especie, raza, genero, color, fecha_nac, peso, tamano, estado_reproductivo, vacunado, observaciones } = req.body;
+        const {
+            doc_pro, nombre, especie, raza, genero, color,
+            fecha_nac, peso, tamano, estado_reproductivo, vacunado, observaciones
+        } = req.body;
 
         if (!doc_pro || !nombre || !especie || !raza || !genero || !fecha_nac || !tamano || !estado_reproductivo) {
             return res.status(400).json({ error: 'Faltan campos obligatorios.' });
         }
 
-        const query = `INSERT INTO mascotas (doc_pro, nombre, especie, raza, genero, color, fecha_nac, peso, tamano, estado_reproductivo, vacunado, observaciones) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`;
-        const params = [ doc_pro, nombre, especie, raza, genero, color, fecha_nac, peso, tamano, estado_reproductivo, vacunado === true ? 1 : 0, observaciones ];
+        const query = `
+            INSERT INTO mascotas (
+                doc_pro, nombre, especie, raza, genero, color, fecha_nac,
+                peso, tamano, estado_reproductivo, vacunado, observaciones
+            ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+        `;
+        const params = [
+            doc_pro, nombre, especie, raza, genero, color,
+            fecha_nac, peso, tamano, estado_reproductivo, vacunado === true ? 1 : 0, observaciones
+        ];
 
         db.query(query, params, (err, result) => {
             if (err) {
