@@ -388,82 +388,82 @@ module.exports = function (db) {
 
 
          //**************************************************************************/
-     //******************Odtener cuantos veterinarios  hay*********************/
-    //**************************************************************************/
+        //******************inicio de sesion por roles*********************/
+        //**************************************************************************/
 
-router.post('/login_rol', async (req, res) => {
-    const { email, password } = req.body;
-
-    if (!email || !password) {
-        return res.status(400).json({ message: 'Correo electrónico y contraseña son requeridos.' });
-    }
-    try {
-        const [users] = await db.promise().query(
-            `SELECT id, email, password FROM usuarios WHERE email = ?`,
-            [email]
-        );
-        if (users.length === 0) {
-            return res.status(401).json({ message: 'Credenciales inválidas. Usuario no encontrado.' });
-        }
-        const user = users[0];
-        const isPasswordValid = (password === user.password);
-
-        if (!isPasswordValid) {
-            return res.status(401).json({ message: 'Credenciales inválidas. Contraseña incorrecta.' });
-        }
-        let role = null;
-        let redirectPath = '/'; 
-
-        const [admins] = await db.promise().query(
-            `SELECT nivel_acceso FROM administradores WHERE admin_id = ?`,
-            [user.id]
-        );
-        if (admins.length > 0) {
-            role = 'administrador';
-            redirectPath = '/InicioAdmin'; // Ejemplo de ruta para admin
-            return res.status(200).json({
-                message: 'Inicio de sesión exitoso',
-                role: role,
-                userId: user.id,
-                accessLevel: admins[0].nivel_acceso,
-                redirect: redirectPath
-            });
-        }
-        const [vets] = await db.promise().query(
-            `SELECT especialidad FROM veterinarios WHERE vet_id = ?`,
-            [user.id]
-        );
-        if (vets.length > 0) {
-            role = 'veterinario';
-            redirectPath = '/VeterinarioPer'; // Ejemplo de ruta para veterinario
-            return res.status(200).json({
-                message: 'Inicio de sesión exitoso',
-                role: role,
-                userId: user.id,
-                specialty: vets[0].especialidad,
-                redirect: redirectPath
-            });
-        }
-        const [owners] = await db.promise().query(
-            `SELECT id_prop FROM propietarios WHERE id_prop = ?`,
-            [user.id] // Aquí asumo que id_prop en propietarios se relaciona con user.id
-        );
-        if (owners.length > 0) {
-            role = 'propietario';
-            redirectPath = '/UserWelcome'; // Ejemplo de ruta para propietario
-            return res.status(200).json({
-                message: 'Inicio de sesión exitoso',
-                role: role,
-                userId: user.id,
-                redirect: redirectPath
-            });
-        }
-        res.status(403).json({ message: 'Usuario no tiene un rol asignado o su rol no está activo.' });
-    } catch (error) {
-        console.error('❌ Error en el login:', error);
-        res.status(500).json({ message: 'Error interno del servidor durante el inicio de sesión.' });
-    }
-});
+        router.post('/login_rol', async (req, res) => {
+            const { email, password } = req.body;
+        
+            if (!email || !password) {
+                return res.status(400).json({ message: 'Correo electrónico y contraseña son requeridos.' });
+            }
+            try {
+                const [users] = await db.promise().query(
+                    `SELECT id, email, password FROM usuarios WHERE email = ?`,
+                    [email]
+                );
+                if (users.length === 0) {
+                    return res.status(401).json({ message: 'Credenciales inválidas. Usuario no encontrado.' });
+                }
+                const user = users[0];
+                const isPasswordValid = (password === user.password);
+            
+                if (!isPasswordValid) {
+                    return res.status(401).json({ message: 'Credenciales inválidas. Contraseña incorrecta.' });
+                }
+                let role = null;
+                let redirectPath = '/'; 
+            
+                const [admins] = await db.promise().query(
+                    `SELECT nivel_acceso FROM administradores WHERE admin_id = ?`,
+                    [user.id]
+                );
+                if (admins.length > 0) {
+                    role = 'administrador';
+                    redirectPath = '/InicioAdmin'; // Ejemplo de ruta para admin
+                    return res.status(200).json({
+                        message: 'Inicio de sesión exitoso',
+                        role: role,
+                        userId: user.id,
+                        accessLevel: admins[0].nivel_acceso,
+                        redirect: redirectPath
+                    });
+                }
+                const [vets] = await db.promise().query(
+                    `SELECT especialidad FROM veterinarios WHERE vet_id = ?`,
+                    [user.id]
+                );
+                if (vets.length > 0) {
+                    role = 'veterinario';
+                    redirectPath = '/VeterinarioPer'; // Ejemplo de ruta para veterinario
+                    return res.status(200).json({
+                        message: 'Inicio de sesión exitoso',
+                        role: role,
+                        userId: user.id,
+                        specialty: vets[0].especialidad,
+                        redirect: redirectPath
+                    });
+                }
+                const [owners] = await db.promise().query(
+                    `SELECT id_prop FROM propietarios WHERE id_prop = ?`,
+                    [user.id] // Aquí asumo que id_prop en propietarios se relaciona con user.id
+                );
+                if (owners.length > 0) {
+                    role = 'propietario';
+                    redirectPath = '/UserWelcome'; // Ejemplo de ruta para propietario
+                    return res.status(200).json({
+                        message: 'Inicio de sesión exitoso',
+                        role: role,
+                        userId: user.id,
+                        redirect: redirectPath
+                    });
+                }
+                res.status(403).json({ message: 'Usuario no tiene un rol asignado o su rol no está activo.' });
+            } catch (error) {
+                console.error('❌ Error en el login:', error);
+                res.status(500).json({ message: 'Error interno del servidor durante el inicio de sesión.' });
+            }
+        });
 
     return router;
 }

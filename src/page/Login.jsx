@@ -96,7 +96,7 @@ export const Login = () => {
     setErrorGeneral('');
 
     try {
-      // 1. Primero intentamos con la API original, la que valida los datos del registro del pro
+      // 1. Primero intentamos con la API original
       try {
         const response = await axios.post('/api/auth/login', {
           email,
@@ -110,7 +110,7 @@ export const Login = () => {
       }
 
        // ✅ 2. Intento con la nueva API que sí valida el rol
-        const response = await axios.post(`${API_BASE_URL}/api/administrador/login_rol`, {
+        const response = await axios.post(`${API_BASE_URL}/api/auth/login_con_roles`, {
           email,
           password,
         });
