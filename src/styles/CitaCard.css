@@ -1,0 +1,78 @@
+.citas-tarjetas-container {
+  padding: 20px;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+.mensaje {
+  margin: 10px 0;
+  padding: 10px;
+  background-color: #d1ecf1;
+  color: #0c5460;
+  border-radius: 8px;
+  border: 1px solid #bee5eb;
+}
+
+.tarjetas-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.tarjeta-cita {
+  background-color: #f9feff;
+  border: 1px solid #ccefff;
+  border-radius: 16px;
+  padding: 16px;
+  width: 320px;
+  box-shadow: 0 4px 10px rgba(0, 170, 255, 0.08);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.tarjeta-header {
+  font-size: 16px;
+  color: #0088cc;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+.tarjeta-body p {
+  font-size: 14px;
+  margin: 6px 0;
+  color: #333;
+}
+
+.tarjeta-body strong {
+  color: #222;
+}
+
+.btn-cancelar {
+  margin-top: 12px;
+  background-color: #ffdddd;
+  border: none;
+  color: #d8000c;
+  padding: 8px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.btn-cancelar:hover {
+  background-color: #fbb;
+}
+
+.estado-completada {
+  margin-top: 10px;
+  background-color: #dff0d8;
+  color: #2e7d32;
+  padding: 6px 12px;
+  border-radius: 12px;
+  font-weight: bold;
+  display: inline-block;
+  text-align: center;
+}

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
-import "../styles/User.css";
+import "../styles/CitaCard.css"; // 👉 nuevo archivo de estilos
 import { FaClock, FaCalendarPlus, FaStethoscope, FaPaw, FaTimes } from "react-icons/fa";
 
 const CitasProximas = () => {
@@ -76,15 +76,24 @@ const CitasProximas = () => {
           citas.map((cita) => (
             <div className="tarjeta-cita" key={cita.id}>
               <div className="tarjeta-header">
-                <FaStethoscope /> <strong>{cita.servicio}</strong>
+                <FaStethoscope /> {cita.servicio}
               </div>
               <div className="tarjeta-body">
                 <p><FaPaw /> <strong>Mascota:</strong> {obtenerNombreMascota(cita.mascota_id)}</p>
                 <p><FaStethoscope /> <strong>Veterinario:</strong> {obtenerNombreVeterinario(cita.veterinario_id)}</p>
                 <p><FaCalendarPlus /> <strong>Fecha:</strong> {formatearFecha(cita.fecha)}</p>
                 <p><FaClock /> <strong>Hora:</strong> {formatearHora(cita.hora)}</p>
-                <p><strong>Estado:</strong> {cita.estado}</p>
+
+                {cita.estado === "completada" && (
+                  <div className="estado-completada">✅ Completada</div>
+                )}
+                {cita.estado === "cancelada" && (
+                  <div className="estado-completada" style={{ backgroundColor: "#ffe6e6", color: "#c0392b" }}>
+                    ❌ Cancelada
+                  </div>
+                )}
               </div>
+
               {cita.estado === "programada" && (
                 <button
                   className="btn-cancelar"

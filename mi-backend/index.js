@@ -43,18 +43,22 @@ const consultasvetRoutes = require('./api/consultasvet');
 const veterinarioRoutes = require('./api/veterinario'); 
 const citasvetRoutes = require('./api/citasvet');
 const citasRoutes =require('./api/citas');
+const historialRoutes = require('./api/historial');
+
 
 
 // Montaje de todos los routers en la aplicación
 app.use('/api/admin', adminRoutes(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/mascotas', mascotaRoutes(db));
-app.use('/api/propietarios', propietarioRoutes(db)); // ✅ usamos /propietarios (plural)
+app.use('/api/propietarios', propietarioRoutes(db)); 
 app.use('/api/servicios', servicioRoutes(db));
 app.use('/api/consultas', consultasvetRoutes(db));
 app.use('/api/veterinarios', veterinarioRoutes(db));
 app.use('/api/citasvet', citasvetRoutes(db));
 app.use('/api/citas', citasRoutes(db));
+app.use('/api/historial', historialRoutes(db));
+
 
 console.log("✅ Todas las rutas han sido cargadas.");
 

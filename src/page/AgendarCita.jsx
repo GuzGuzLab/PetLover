@@ -161,7 +161,7 @@ const AgendarCita = () => {
           </div>
           <div className="confirmation-actions">
             <button className="btn-primary" onClick={() => setMostrarConfirmacion(false)}>Agendar Nueva Cita</button>
-            <button className="btn-secondary" onClick={() => (window.location.href = "/citas-proximas")}>Ver Mis Citas</button>
+            <button className="btn-secondary" onClick={() => (window.location.href = "/CitasProximas")}>Ver Mis Citas</button>
           </div>
         </div>
       </div>

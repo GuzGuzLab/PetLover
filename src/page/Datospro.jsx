@@ -11,7 +11,7 @@ const Datospro = () => {
   useEffect(() => {
     const email = localStorage.getItem('email');
     if (email) {
-      axios.get(`/api/propietarios/email/${email}`)
+      axios.get(`/api/propietarios/email/${encodeURIComponent(email)}`)
         .then(response => setDatos(response.data))
         .catch(error => {
           console.error('Error al obtener datos del propietario:', error);
