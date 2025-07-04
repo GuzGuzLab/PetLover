@@ -55,17 +55,31 @@ module.exports = function (db) {
 
   // ✅ Listar todos los propietarios
   router.get('/', (req, res) => {
-    const sql = `
-      SELECT u.id, u.nombre, u.doc
-      FROM propietarios p
-      JOIN usuarios u ON p.id_prop = u.doc
-      ORDER BY u.nombre ASC
-    `;
-    db.query(sql, (err, results) => {
-      if (err) return res.status(500).json({ error: 'Error interno del servidor.' });
-      res.status(200).json(results);
+  const doc = req.query.doc || null;
+
+  const sql = 'CALL GetOwnersWithDetails(?)';
+
+  db.query(sql, [doc], (err, results) => {
+    if (err) {
+      console.error("Error al llamar al procedimiento almacenado:", err);
+      return res.status(500).json({ error: 'Error interno del servidor.' });
+    }
+    let owners = results[0];
+
+    owners = owners.map(owner => {
+        try {
+            owner.pets = JSON.parse(owner.pets);
+        } catch (e) {
+            // Si hay un error o el campo es nulo, asignamos un array vacío.
+            owner.pets = [];
+        }
+        return owner;
     });
+
+    res.status(200).json(owners);
   });
+});
+
 
   // ✅ Obtener mascotas por documento del propietario
   router.get('/:doc/mascotas', (req, res) => {
