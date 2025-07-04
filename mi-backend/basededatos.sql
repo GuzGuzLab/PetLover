@@ -35,15 +35,12 @@ CREATE TABLE administradores (
     nivel_acceso ENUM('basico', 'medio', 'alto') DEFAULT 'medio',
     FOREIGN KEY (admin_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
-insert into administradores values (1,'alto'); 
-
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nom_rol VARCHAR(50) NOT NULL UNIQUE,
     descripcion VARCHAR(255)
 );
-
 
 CREATE TABLE asignacion_rol (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -55,7 +52,6 @@ CREATE TABLE asignacion_rol (
     FOREIGN KEY (rol_id) REFERENCES roles(id) ON DELETE CASCADE,
     FOREIGN KEY (asignado_por) REFERENCES administradores(admin_id) ON DELETE SET NULL
 );
-
 
 CREATE TABLE mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -76,7 +72,6 @@ CREATE TABLE mascotas (
     FOREIGN KEY (doc_pro) REFERENCES usuarios(doc) ON DELETE CASCADE
 );
 
-
 CREATE TABLE servicios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     nombre VARCHAR(100) NOT NULL,
@@ -86,23 +81,21 @@ CREATE TABLE servicios (
     estado ENUM('Activo', 'Inactivo') DEFAULT 'Activo'
 );
 
-
 CREATE TABLE citas (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    propietario_doc VARCHAR(50) NOT NULL,          
-    mascota_id INT NOT NULL,                        
-    servicio VARCHAR(100) NOT NULL,                
-    veterinario_id INT NOT NULL,                    
-    fecha DATE NOT NULL,                            
-    hora TIME NOT NULL,                             
-    notas TEXT,                                    
+    propietario_doc VARCHAR(50) NOT NULL,
+    mascota_id INT NOT NULL,
+    servicio VARCHAR(100) NOT NULL,
+    veterinario_id INT NOT NULL,
+    fecha DATE NOT NULL,
+    hora TIME NOT NULL,
+    notas TEXT,
     estado ENUM('programada', 'confirmada', 'cancelada', 'completada') DEFAULT 'programada',
     fecha_registro TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (propietario_doc) REFERENCES usuarios(doc) ON DELETE CASCADE,
     FOREIGN KEY (mascota_id) REFERENCES mascotas(id) ON DELETE CASCADE,
     FOREIGN KEY (veterinario_id) REFERENCES veterinarios(vet_id) ON DELETE CASCADE
 );
-
 
 CREATE TABLE historias_clinicas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -126,30 +119,31 @@ CREATE TABLE historias_clinicas (
     FOREIGN KEY (vet_id) REFERENCES veterinarios(vet_id) ON DELETE CASCADE
 );
 
-
 -- -----------------------------------------------------
 -- Datos de Ejemplo
 -- -----------------------------------------------------
 
-INSERT INTO roles (id, nom_rol, descripcion) VALUES (1, 'propietario', 'Dueño de mascota'), (2, 'veterinario', 'Médico veterinario'), (3, 'administrador', 'Admin del sistema');
-
-INSERT INTO servicios (id, nombre, descripcion, precio, duracion_estimada, estado) VALUES 
-(1, 'Consulta General', 'Revisión completa', 50000, 30, 'Activo'),
-(2, 'Vacunación Anual', 'Plan anual de vacunas', 80000, 20, 'Activo'), 
-(3, 'Limpieza Dental', 'Profilaxis dental', 150000, 60, 'Activo'), 
-(4, 'Corte de Pelo y Baño', 'Servicio de grooming', 70000, 90, 'Activo');
-
+-- Primero insertamos los usuarios
 INSERT INTO usuarios (id, tipo_Doc, doc, nombre, fecha_Nac, tel, email, direccion, password) VALUES 
 (1, 'CC', '10101010', 'Ana García', '1990-05-15', '3001112233', 'ana.garcia@email.com', 'Calle Falsa 123', 'pass_hashed'), 
 (2, 'CC', '20202020', 'Carlos Martinez', '1985-11-20', '3104445566', 'carlos.martinez@email.com', 'Avenida Siempre Viva 742', 'pass_hashed'), 
 (3, 'CC', '30303030', 'Dr. Ricardo Sanchez', '1988-02-10', '3207778899', 'ricardo.sanchez.vet@email.com', 'Consultorio 101', 'pass_hashed'), 
 (4, 'CC', '40404040', 'Dra. Laura Torres', '1992-09-01', '3019998877', 'laura.torres.vet@email.com', 'Consultorio 102', 'pass_hashed');
 
-INSERT INTO asignacion_roles (usu_id, rol_id) VALUES 
-(1, 1), 
-(2, 1), 
-(3, 2), 
-(4, 2);
+-- Insertamos administrador (usuario con id 1)
+INSERT INTO administradores VALUES (1, 'alto');  -- ✅ CORREGIDO: después de usuarios
+
+INSERT INTO roles (id, nom_rol, descripcion) VALUES 
+(1, 'propietario', 'Dueño de mascota'), 
+(2, 'veterinario', 'Médico veterinario'), 
+(3, 'administrador', 'Admin del sistema');
+
+-- ✅ CORREGIDO: nombre de tabla y campos correctos
+INSERT INTO asignacion_rol (doc_usu, rol_id, asignado_por) VALUES 
+('10101010', 1, 1), 
+('20202020', 1, 1), 
+('30303030', 2, 1), 
+('40404040', 2, 1);
 
 INSERT INTO veterinarios (vet_id, especialidad) VALUES 
 (3, 'Cirugía General'), 
@@ -160,6 +154,12 @@ INSERT INTO mascotas (id, doc_pro, nombre, especie, raza, genero, color, fecha_n
 (2, '10101010', 'Luna', 'Gato', 'Siamés', 'Hembra', 'Crema', '2022-01-20', 4.2, 'Pequeño', 'Esterilizado', 1), 
 (3, '20202020', 'Rocky', 'Perro', 'Bulldog Francés', 'Macho', 'Negro', '2020-07-30', 12.0, 'Mediano', 'Intacto', 1);
 
+INSERT INTO servicios (id, nombre, descripcion, precio, duracion_estimada, estado) VALUES 
+(1, 'Consulta General', 'Revisión completa', 50000, 30, 'Activo'),
+(2, 'Vacunación Anual', 'Plan anual de vacunas', 80000, 20, 'Activo'), 
+(3, 'Limpieza Dental', 'Profilaxis dental', 150000, 60, 'Activo'), 
+(4, 'Corte de Pelo y Baño', 'Servicio de grooming', 70000, 90, 'Activo');
+
 INSERT INTO citas (id, propietario_doc, mascota_id, servicio, veterinario_id, fecha, hora, notas, estado) VALUES 
 (1, '10101010', 1, 'Consulta General', 3, DATE_ADD(CURDATE(), INTERVAL 5 DAY), '10:00:00', 'Revisión anual', 'programada'), 
 (2, '20202020', 3, 'Vacunación Anual', 4, DATE_ADD(CURDATE(), INTERVAL 2 DAY), '14:00:00', 'Refuerzo', 'confirmada');
@@ -167,22 +167,19 @@ INSERT INTO citas (id, propietario_doc, mascota_id, servicio, veterinario_id, fe
 INSERT INTO historias_clinicas (mascota_id, cita_id, vet_id, fecha_consulta, motivo_consulta, diagnostico) VALUES 
 (1, 1, 3, '2024-05-20 10:30:00', 'Control anual', 'Dermatitis alérgica');
 
-
 -- -----------------------------------------------------
--- Procedimientos Almacenados
+-- Procedimiento almacenado
 -- -----------------------------------------------------
 
--- Borramos el procedimiento si ya existe para evitar errores
 DROP PROCEDURE IF EXISTS GetOwnersWithDetails;
 
--- Creamos la nueva versión corregida
 DELIMITER $$
 CREATE PROCEDURE `GetOwnersWithDetails`(IN p_doc VARCHAR(15))
 BEGIN
     SELECT
         u.id,
-        u.doc,             -- <-- CORRECCIÓN 1: Se añade el campo 'doc'
-        u.nombre,          -- <-- CORRECCIÓN 2: Se devuelve como 'nombre' (sin alias)
+        u.doc,
+        u.nombre,
         u.tel AS phone,
         u.email,
         u.direccion AS address,
@@ -218,7 +215,7 @@ BEGIN
     FROM
         usuarios u
     JOIN
-        asignacion_roles ar ON u.id = ar.usu_id
+        asignacion_rol ar ON u.doc = ar.doc_usu
     JOIN
         roles r ON ar.rol_id = r.id
     LEFT JOIN
