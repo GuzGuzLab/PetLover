@@ -514,3 +514,177 @@ select:focus {
   outline: none;
   border-color: #007bff;
 }
+
+
+
+
+/* New: Container for logo and title */
+.form-header {
+    display: flex; /* Use flexbox for horizontal alignment */
+    align-items: center; /* Vertically align items in the middle */
+    justify-content: center; /* Center horizontally */
+    margin-bottom: 25px; /* Space below the header section */
+    gap: 15px; /* Space between the logo and the title */
+}
+
+/* New: Logo styling */
+.veterinaria-logo {
+    width: 60px; /* Adjust as needed for your logo size */
+    height: 60px; /* Ensure aspect ratio is maintained, or set auto */
+    object-fit: contain; /* Ensures the entire image fits within the bounds */
+    margin-right: 10px; /* Space between logo and text */
+}
+
+/* Updated: Heading inside the form (adjust as needed if you want it aligned with logo) */
+.formulario-veterinario h2 {
+    text-align: center; /* Still center text within its own space */
+    color: #333;
+    margin: 0; /* Remove default margin to let flexbox handle spacing */
+    font-size: 1.8em;
+}
+/* Overlay for the blurred background */
+.overlay {
+    position: fixed; /* Fixes it to the viewport */
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.4); /* Semi-transparent black background */
+    backdrop-filter: blur(8px); /* Blurs the content behind it */
+    z-index: 999; /* Ensures it's above other content but below the form */
+    display: flex; /* Use flexbox to center the form */
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+}
+
+/* Styling for the form itself */
+.formulario-veterinario {
+    background-color: #ffffff; /* White background for the form */
+    padding: 30px; /* Padding inside the form */
+    border-radius: 12px; /* Rounded corners */
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2); /* Soft shadow for depth */
+    width: 90%; /* Max width for responsiveness */
+    max-width: 500px; /* Maximum width */
+    position: relative; /* Needed for z-index and potential internal positioning */
+    z-index: 1000; /* Ensures the form is above the overlay */
+    transform: translateY(-20px); /* Slightly move it up for a "floating in" effect */
+    animation: fadeIn 0.3s ease-out forwards; /* Simple fade-in animation */
+}
+
+/* Keyframe animation for the fade-in effect */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-40px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Heading inside the form */
+.formulario-veterinario h2 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 25px;
+    font-size: 1.8em;
+}
+
+/* Row for form groups (like name and specialty) */
+.form-row {
+    display: flex;
+    gap: 20px; /* Space between form groups */
+    margin-bottom: 15px;
+}
+
+/* Individual form group styling */
+.form-group {
+    flex: 1; /* Allows form groups to take equal space */
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 8px;
+    font-weight: bold;
+    color: #555;
+    font-size: 0.95em;
+}
+
+.form-group input[type="text"],
+.form-group input[type="email"],
+.form-group input[type="tel"] {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 1em;
+    box-sizing: border-box; /* Include padding in the element's total width and height */
+    transition: border-color 0.2s ease-in-out;
+}
+
+.form-group input[type="text"]:focus,
+.form-group input[type="email"]:focus,
+.form-group input[type="tel"]:focus {
+    border-color: #007bff; /* Highlight on focus */
+    outline: none; /* Remove default outline */
+    box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.2); /* Subtle glow on focus */
+}
+
+/* Form buttons container */
+.form-buttons {
+    display: flex;
+    justify-content: space-around; /* Distribute buttons evenly */
+    margin-top: 30px;
+    gap: 15px;
+}
+
+/* Base button styles */
+.btn-guardar,
+.boton-cancelarr {
+    padding: 12px 25px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease-in-out;
+    flex: 1; /* Make buttons take equal space */
+}
+
+/* Specific button styles */
+.btn-guardar {
+    background-color: #28a745; /* Green for save */
+    color: white;
+}
+
+.btn-guardar:hover {
+    background-color: #218838;
+    transform: translateY(-2px);
+}
+
+.boton-cancelarr {
+    background-color: #dc3545; /* Red for cancel */
+    color: white;
+}
+
+.boton-cancelarr:hover {
+    background-color: #c82333;
+    transform: translateY(-2px);
+}
+
+/* Responsive adjustments for smaller screens */
+@media (max-width: 600px) {
+    .form-row {
+        flex-direction: column; /* Stack form groups vertically */
+        gap: 15px;
+    }
+    .form-buttons {
+        flex-direction: column; /* Stack buttons vertically */
+        gap: 10px;
+    }
+    .formulario-veterinario {
+        width: 95%; /* Wider on smaller screens */
+        padding: 20px;
+    }
+}

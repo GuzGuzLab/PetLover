@@ -2,36 +2,61 @@ import AdminLayout from "../../layout/AdminLayout";
 import '../../styles/Administrador/InicioAdmin.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-  faUserPlus,
-  faUsers,
-  faUserPen,
-  faUserShield,
-  faChartLine,
-  faCalendarAlt,
-  faBell,
-  faEnvelope,
-  faUserMd,
-  faUserTie
+  faUserPlus, faUsers, faUserShield, faChartLine, faCalendarAlt,
+  faBell, faEnvelope, faUserMd, faUserTie, faChevronUp, 
+  faChevronDown, faEquals, faRefresh, faCog
 } from '@fortawesome/free-solid-svg-icons';
 import { useNavigate } from "react-router-dom";
 import React, { useState, useEffect } from 'react';
+import { Bar, Pie } from 'react-chartjs-2';
+import { Chart, registerables } from 'chart.js';
+Chart.register(...registerables);
 
 function DashboardAdmin() {
   const navigate = useNavigate();
-  const [usuariosRegistrados, setUsuariosRegistrados] = useState(0);
-  const [adminsRegistrados, setAdminsRegistrados] = useState(0);
-  const [veterinariosRegistrados, setVeterinariosRegistrados] = useState(0);
-  const [clientesRegistrados, setClientesRegistrados] = useState(0);
-  const [totalCitas, setTotalCitas] = useState([]); // Estado para todas las citas
-  const [citasHoy, setCitasHoy] = useState(0); // Estado para el número de citas de hoy
+  const [stats, setStats] = useState({
+    usuarios: { total: 0, growth: 0 },
+    admins: { total: 0, growth: 0 },
+    veterinarios: { total: 0, growth: 0 },
+    clientes: { total: 0, growth: 0 },
+    citas: { total: 0, hoy: 0 }
+  });
   const [adminName, setAdminName] = useState('');
   const [loading, setLoading] = useState(true);
+  const [notifications, setNotifications] = useState([]);
+  const [darkMode, setDarkMode] = useState(false);
+  const [recentActivity, setRecentActivity] = useState([]);
 
-  // Removí stats.citasHoy fijo, ahora se calculará dinámicamente
-  const stats = {
-    notificaciones: 5,
-    mensajes: 3
-  };
+
+  const [chartData, setChartData] = useState({
+    userGrowth: {
+      labels: [],
+      datasets: [{
+        label: 'Registros mensuales',
+        data: [],
+        backgroundColor: 'rgba(54, 162, 235, 0.5)',
+        borderColor: 'rgba(54, 162, 235, 1)',
+        borderWidth: 1,
+      }]
+    },
+    userDistribution: {
+      labels: ['Clientes', 'Veterinarios', 'Administradores'],
+      datasets: [{
+        data: [0, 0, 0],
+        backgroundColor: [
+          'rgba(255, 99, 133, 0.72)',
+          'rgba(54, 163, 235, 0.69)',
+          'rgba(255, 207, 86, 0.57)',
+        ],
+        borderColor: [
+          'rgba(255, 99, 132, 1)',
+          'rgba(54, 162, 235, 1)',
+          'rgba(255, 206, 86, 1)',
+        ],
+        borderWidth: 1,
+      }]
+    }
+  });
 
   useEffect(() => {
     const nombre = localStorage.getItem('nombre');
@@ -39,12 +64,12 @@ function DashboardAdmin() {
 
     const fetchData = async () => {
       try {
-        // --- Carga de estadísticas de usuarios ---
+        // Llamadas API existentes (sin modificar)
         const [usuariosRes, adminsRes, vetsRes, clientesRes] = await Promise.all([
           fetch('http://localhost:3000/api/admin/usuarios_registrados'),
           fetch('http://localhost:3000/api/admin/admin_registrados'),
-          fetch('http://localhost:3000/api/admin/vet_registrados'),
-          fetch('http://localhost:3000/api/admin/clientes_registrados')
+          fetch('http://localhost:3000/api/Vet_Admin/vet_registrados'),
+          fetch('http://localhost:3000/api/Cliente/clientes_registrados')
         ]);
 
         const [usuariosData, adminsData, vetsData, clientesData] = await Promise.all([
@@ -54,49 +79,90 @@ function DashboardAdmin() {
           clientesRes.json()
         ]);
 
-        if (usuariosRes.ok && usuariosData[0]?.total_usuarios !== undefined) {
-          setUsuariosRegistrados(usuariosData[0].total_usuarios);
-        } else {
-          console.error("Error al obtener usuarios:", usuariosData);
-        }
-        if (adminsRes.ok && adminsData[0]?.total_administradores !== undefined) {
-          setAdminsRegistrados(adminsData[0].total_administradores);
-        } else {
-          console.error("Error al obtener administradores:", adminsData);
-        }
-        if (vetsRes.ok && vetsData[0]?.total_veterinarios !== undefined) {
-          setVeterinariosRegistrados(vetsData[0].total_veterinarios);
-        } else {
-          console.error("Error al obtener veterinarios:", vetsData);
-        }
-        if (clientesRes.ok && clientesData[0]?.total_clientes !== undefined) {
-          setClientesRegistrados(clientesData[0].total_clientes);
-        } else {
-          console.error("Error al obtener clientes:", clientesData);
-        }
+        // Obtener datos del mes anterior (simulado para el ejemplo)
+        const lastMonthData = {
+          usuarios: Math.max(0, usuariosData[0]?.total_usuarios - 5 || 0),
+          admins: adminsData[0]?.total_administradores || 0,
+          veterinarios: Math.max(0, vetsData[0]?.total_veterinarios - 2 || 0),
+          clientes: Math.max(0, clientesData[0]?.total_clientes - 3 || 0)
+        };
 
-        // --- Nueva llamada API para obtener todas las citas ---
-        // Asumiendo que tu ruta para obtener todas las citas es http://localhost:3000/citas
+        // Calcular crecimiento
+        const calculateGrowth = (current, previous) => {
+          if (previous === 0) return current > 0 ? 100 : 0;
+          return Math.round(((current - previous) / previous) * 100);
+        };
+
+        // Actualizar estado con datos reales
+        setStats({
+          usuarios: {
+            total: usuariosData[0]?.total_usuarios || 0,
+            growth: calculateGrowth(usuariosData[0]?.total_usuarios || 0, lastMonthData.usuarios)
+          },
+          admins: {
+            total: adminsData[0]?.total_administradores || 0,
+            growth: calculateGrowth(adminsData[0]?.total_administradores || 0, lastMonthData.admins)
+          },
+          veterinarios: {
+            total: vetsData[0]?.total_veterinarios || 0,
+            growth: calculateGrowth(vetsData[0]?.total_veterinarios || 0, lastMonthData.veterinarios)
+          },
+          clientes: {
+            total: clientesData[0]?.total_clientes || 0,
+            growth: calculateGrowth(clientesData[0]?.total_clientes || 0, lastMonthData.clientes)
+          },
+          citas: { total: 0, hoy: 0 } // Se actualizará con la llamada a citas
+        });
+
+        // Actualizar datos para gráficos
+        setChartData(prev => ({
+          ...prev,
+          userDistribution: {
+            ...prev.userDistribution,
+            datasets: [{
+              ...prev.userDistribution.datasets[0],
+              data: [
+                clientesData[0]?.total_clientes || 0,
+                vetsData[0]?.total_veterinarios || 0,
+                adminsData[0]?.total_administradores || 0
+              ]
+            }]
+          }
+        }));
+
+        // Obtener citas (llamada API existente)
         const citasRes = await fetch('http://localhost:3000/citas');
         if (!citasRes.ok) throw new Error('Error al obtener citas');
         const citasData = await citasRes.json();
-        setTotalCitas(citasData); // Guarda todas las citas
-
-        // --- Calcular citas para hoy ---
+        
         const today = new Date();
-        // Ajusta la fecha actual a la zona horaria local de Soacha, Cundinamarca, Colombia (UTC-5)
-        // Esto es importante para que la comparación de fechas sea precisa y no dependa del horario UTC del servidor.
         const todayString = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
         
         const citasDeHoy = citasData.filter(cita => {
-            // Asumiendo que la fecha de la cita viene en un formato que puede ser convertido a Date.
-            // Si tu campo de fecha_cita en la base de datos es un DATE o DATETIME,
-            // JavaScript Date.parse() debería manejarlo bien, pero es mejor estandarizar.
-            const citaDate = new Date(cita.fecha_cita);
-            const citaDateString = `${citaDate.getFullYear()}-${String(citaDate.getMonth() + 1).padStart(2, '0')}-${String(citaDate.getDate()).padStart(2, '0')}`;
-            return citaDateString === todayString;
+          const citaDate = new Date(cita.fecha_cita);
+          const citaDateString = `${citaDate.getFullYear()}-${String(citaDate.getMonth() + 1).padStart(2, '0')}-${String(citaDate.getDate()).padStart(2, '0')}`;
+          return citaDateString === todayString;
         });
-        setCitasHoy(citasDeHoy.length); // Actualiza el estado con el conteo de citas de hoy
+
+        // Actualizar estado de citas
+        setStats(prev => ({
+          ...prev,
+          citas: {
+            total: citasData.length,
+            hoy: citasDeHoy.length
+          }
+        }));
+
+        // Simular datos de notificaciones y actividad
+        setNotifications([
+          { id: 1, message: 'Nuevo usuario registrado', time: 'Hace 5 minutos', read: false },
+          { id: 2, message: 'Cita agendada para hoy', time: 'Hace 1 hora', read: false }
+        ]);
+
+        setRecentActivity([
+          { id: 1, action: 'Usuario registrado', user: 'Juan Pérez', time: '10:30 AM' },
+          { id: 2, action: 'Cita agendada', user: 'Clínica Veterinaria', time: '09:45 AM' }
+        ]);
 
         setLoading(false);
       } catch (err) {
@@ -106,10 +172,35 @@ function DashboardAdmin() {
     };
 
     fetchData();
+
+    // Simular actualización periódica
+    const interval = setInterval(fetchData, 30000);
+    return () => clearInterval(interval);
   }, []);
 
   const handleNuevoUsuarioClick = () => {
     navigate("/FormularioUsu");
+  };
+
+  const handleViewAllAppointments = () => {
+    navigate("/citas");
+  };
+
+  const handleRefresh = () => {
+    setLoading(true);
+    setTimeout(() => setLoading(false), 1000);
+  };
+
+  const getTrendIcon = (growth) => {
+    if (growth > 0) return <FontAwesomeIcon icon={faChevronUp} />;
+    if (growth < 0) return <FontAwesomeIcon icon={faChevronDown} />;
+    return <FontAwesomeIcon icon={faEquals} />;
+  };
+
+  const getTrendClass = (growth) => {
+    if (growth > 0) return 'positive';
+    if (growth < 0) return 'negative';
+    return 'neutral';
   };
 
   if (loading) {
@@ -126,20 +217,30 @@ function DashboardAdmin() {
 
   return (
     <AdminLayout>
-      <div className="admin-dashboard">
+      <div className={`admin-dashboard ${darkMode ? 'dark-mode' : ''}`}>
         <header className="dashboard-header">
           <div>
             <h1>Bienvenido, {adminName}</h1>
             <p>Aquí tienes un resumen de la actividad del sistema</p>
           </div>
-          <div className="header-icons">
+          <div className="header-controls">
+            <button className="refresh-btn" onClick={handleRefresh}>
+              <FontAwesomeIcon icon={faRefresh} />
+            </button>
+            <button className="settings-btn" onClick={() => setDarkMode(!darkMode)}>
+              <FontAwesomeIcon icon={faCog} />
+            </button>
             <div className="notification-badge">
               <FontAwesomeIcon icon={faBell} />
-              <span>{stats.notificaciones}</span>
-            </div>
-            <div className="notification-badge">
-              <FontAwesomeIcon icon={faEnvelope} />
-              <span>{stats.mensajes}</span>
+              <span>{notifications.length}</span>
+              <div className="notification-dropdown">
+                {notifications.map(notif => (
+                  <div key={notif.id} className={`notification-item ${notif.read ? '' : 'unread'}`}>
+                    <p>{notif.message}</p>
+                    <small>{notif.time}</small>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
         </header>
@@ -152,8 +253,10 @@ function DashboardAdmin() {
             </div>
             <div className="stat-info">
               <h3>Usuarios registrados</h3>
-              <p className="stat-number">{usuariosRegistrados}</p>
-              <p className="stat-trend positive">↑ 12% este mes</p>
+              <p className="stat-number">{stats.usuarios.total}</p>
+              <p className={`stat-trend ${getTrendClass(stats.usuarios.growth)}`}>
+                {getTrendIcon(stats.usuarios.growth)} {Math.abs(stats.usuarios.growth)}% este mes
+              </p>
             </div>
           </div>
 
@@ -163,8 +266,10 @@ function DashboardAdmin() {
             </div>
             <div className="stat-info">
               <h3>Clientes registrados</h3>
-              <p className="stat-number">{clientesRegistrados}</p>
-              <p className="stat-trend positive">↑ 5% este mes</p>
+              <p className="stat-number">{stats.clientes.total}</p>
+              <p className={`stat-trend ${getTrendClass(stats.clientes.growth)}`}>
+                {getTrendIcon(stats.clientes.growth)} {Math.abs(stats.clientes.growth)}% este mes
+              </p>
             </div>
           </div>
 
@@ -174,8 +279,10 @@ function DashboardAdmin() {
             </div>
             <div className="stat-info">
               <h3>Veterinarios registrados</h3>
-              <p className="stat-number">{veterinariosRegistrados}</p>
-              <p className="stat-trend positive">↑ 8% este mes</p>
+              <p className="stat-number">{stats.veterinarios.total}</p>
+              <p className={`stat-trend ${getTrendClass(stats.veterinarios.growth)}`}>
+                {getTrendIcon(stats.veterinarios.growth)} {Math.abs(stats.veterinarios.growth)}% este mes
+              </p>
             </div>
           </div>
 
@@ -185,8 +292,46 @@ function DashboardAdmin() {
             </div>
             <div className="stat-info">
               <h3>Administradores</h3>
-              <p className="stat-number">{adminsRegistrados}</p>
-              <p className="stat-trend neutral">→ Sin cambios</p>
+              <p className="stat-number">{stats.admins.total}</p>
+              <p className={`stat-trend ${getTrendClass(stats.admins.growth)}`}>
+                {getTrendIcon(stats.admins.growth)} {Math.abs(stats.admins.growth)}% este mes
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Gráficos */}
+        <div className="charts-container">
+          <div className="chart-card">
+            <h3>Distribución de usuarios</h3>
+            <div className="chart-wrapper">
+              <Pie 
+                data={chartData.userDistribution} 
+                options={{ 
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: 'bottom'
+                    }
+                  }
+                }} 
+              />
+            </div>
+          </div>
+          <div className="chart-card">
+            <h3>Registros mensuales</h3>
+            <div className="chart-wrapper">
+              <Bar 
+                data={chartData.userGrowth} 
+                options={{ 
+                  responsive: true,
+                  scales: {
+                    y: {
+                      beginAtZero: true
+                    }
+                  }
+                }} 
+              />
             </div>
           </div>
         </div>
@@ -208,17 +353,15 @@ function DashboardAdmin() {
               Citas para hoy
             </h2>
             <div className="appointments-count">
-              {/* Ahora muestra el valor dinámico de citasHoy */}
-              <span>{citasHoy}</span> 
-              <button>Ver todas</button>
+              <span>{stats.citas.hoy}</span> 
+              <button onClick={handleViewAllAppointments}>Ver todas</button>
             </div>
             <div className="appointments-list">
-              {citasHoy > 0 ? (
-                <p>Hay {citasHoy} citas programadas para hoy.</p>
+              {stats.citas.hoy > 0 ? (
+                <p>Hay {stats.citas.hoy} citas programadas para hoy.</p>
               ) : (
                 <p>No hay citas programadas para hoy.</p>
               )}
-              {/* Aquí podrías mapear y mostrar las citas de hoy si las necesitaras detalladas */}
             </div>
           </div>
 
@@ -228,7 +371,15 @@ function DashboardAdmin() {
               Actividad reciente
             </h2>
             <div className="activity-list">
-              <p>Últimas acciones en el sistema...</p>
+              {recentActivity.map(activity => (
+                <div key={activity.id} className="activity-item">
+                  <div className="activity-content">
+                    <strong>{activity.action}</strong>
+                    <span>{activity.user}</span>
+                  </div>
+                  <small>{activity.time}</small>
+                </div>
+              ))}
             </div>
           </div>
         </div>

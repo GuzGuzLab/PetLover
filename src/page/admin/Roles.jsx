@@ -28,7 +28,7 @@ function Roles() {
   const cargarRoles = async () => {
     setIsLoading(true);
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/roles`);
+      const response = await fetch(`${API_BASE_URL}/api/roles/roles`);
       if (!response.ok) throw new Error("No se pudieron cargar los roles.");
       const data = await response.json();
       setRoles(data);
@@ -61,8 +61,8 @@ function Roles() {
     setIsSaving(true);
 
     const url = modoEdicion
-      ? `${API_BASE_URL}/api/admin/roles/${rolEditando.id}`
-      : `${API_BASE_URL}/api/admin/roles`;
+      ? `${API_BASE_URL}/api/roles/roles/${rolEditando.id}`
+      : `${API_BASE_URL}/api/roles/roles`;
     const method = modoEdicion ? "PUT" : "POST";
 
     try {
@@ -92,7 +92,7 @@ function Roles() {
   const handleEliminarRol = async (id) => {
     if (!window.confirm("¿Estás seguro de que quieres eliminar este rol?")) return;
     try {
-      const response = await fetch(`${API_BASE_URL}/api/admin/roles/${id}`, { method: "DELETE" });
+      const response = await fetch(`${API_BASE_URL}/api/roles/roles/${id}`, { method: "DELETE" });
       if (!response.ok) {
         const errorData = await response.json();
         throw new Error(errorData.error || "Error al eliminar el rol");
@@ -150,7 +150,7 @@ function Roles() {
     const rolesParaAsignar = roles.filter(rol => rolesSeleccionados.includes(rol.id));
     console.log("Roles a asignar:", rolesParaAsignar.map(r => r.nom_rol));
 
-    const response = await fetch(`${API_BASE_URL}/api/admin/asignar_roles/${usuarioSeleccionado.doc}`, {
+    const response = await fetch(`${API_BASE_URL}/api/roles/asignar_roles/${usuarioSeleccionado.doc}`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json"

@@ -35,6 +35,10 @@ console.log("Cargando rutas...");
 
 // Importaciones de todos los módulos de rutas
 const adminRoutes = require('./api/administrador');
+const clienteRoutes = require('./api/Cliente');
+const vet_adminRoutes = require('./api/Vet_Admin');
+const rolesRoutes = require('./api/Roles');
+const estadisticasRoutes = require('./api/estadisticas');
 const authRoutes = require('./api/auth');
 const mascotaRoutes = require('./api/mascotas');
 const propietarioRoutes = require('./api/propietario'); 
@@ -49,6 +53,10 @@ const historialRoutes = require('./api/historial');
 
 // Montaje de todos los routers en la aplicación
 app.use('/api/admin', adminRoutes(db));
+app.use('/api/Cliente', clienteRoutes(db));
+app.use('/api/vet_Admin', vet_adminRoutes(db));
+app.use('/api/roles', rolesRoutes(db));
+app.use('/api/estadisticas', estadisticasRoutes(db));
 app.use('/api/auth', authRoutes(db));
 app.use('/api/mascotas', mascotaRoutes(db));
 app.use('/api/propietarios', propietarioRoutes(db)); 
