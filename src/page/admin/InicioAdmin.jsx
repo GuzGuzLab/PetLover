@@ -153,11 +153,10 @@ function DashboardAdmin() {
           }
         }));
 
-        // Simular datos de notificaciones y actividad
-        setNotifications([
-          { id: 1, message: 'Nuevo usuario registrado', time: 'Hace 5 minutos', read: false },
-          { id: 2, message: 'Cita agendada para hoy', time: 'Hace 1 hora', read: false }
-        ]);
+        const notificacionesRes = await fetch('http://localhost:3000/notificaciones');
+        const notificacionesData = await notificacionesRes.json();
+        setNotifications(notificacionesData);
+
 
         setRecentActivity([
           { id: 1, action: 'Usuario registrado', user: 'Juan Pérez', time: '10:30 AM' },
@@ -170,6 +169,21 @@ function DashboardAdmin() {
         setLoading(false);
       }
     };
+
+    const marcarComoLeida = async (id) => {
+      try {
+        await fetch(`http://localhost:3000/notificaciones/${id}/leer`, {
+          method: 'PUT'
+        });
+        // Actualiza el estado para reflejar el cambio
+        setNotifications(prev =>
+          prev.map(n => n.id === id ? { ...n, leida: true } : n)
+        );
+      } catch (error) {
+        console.error('Error al marcar notificación como leída:', error);
+      }
+    };
+    
 
     fetchData();
 
