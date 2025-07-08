@@ -68,10 +68,6 @@ function MenuAdmin({ children }) {
                   <User size={16} />
                   <span>Mi Perfil</span>
                 </a>
-                <a href="/configuracion" className="admin-dashboard-dropdown-item">
-                  <ShieldCheck size={16} />
-                  <span>Configuración</span>
-                </a>
                 <div className="admin-dashboard-dropdown-divider"></div>
                 <button onClick={handleLogout} className="admin-dashboard-dropdown-item admin-dashboard-logout-btn">
                   <LogOut size={16} />

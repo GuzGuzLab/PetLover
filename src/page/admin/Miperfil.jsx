@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import '../../styles/Administrador/Miperfil.css';
+import AdminLayout from "../../layout/AdminLayout";
 import { FaArrowLeft, FaUserEdit, FaSave, FaTimes, FaLock, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa';
 
 function PerfilAdministrador() {
@@ -51,25 +52,26 @@ function PerfilAdministrador() {
   };
 
   return (
-    <div className="perfil-admin-container">
-      <div className="perfil-header">
-        <button onClick={volverAlMenu} className="btn-volver">
+    <AdminLayout>
+    <div className="perfil-administrador">
+      <div className="cuerpo-perfil">
+        <button onClick={volverAlMenu} className="volver-boton">
           <FaArrowLeft /> Volver al Menú
         </button>
         <h2>Mi Perfil de Administrador</h2>
       </div>
       
-      <div className="perfil-content">
-        <div className="perfil-avatar">
-          <div className="avatar-placeholder">
+      <div className="perfil">
+        <div className="foto-perfil">
+          <div className="avatar">
             {adminData.nombre.charAt(0).toUpperCase()}
           </div>
           <h3>{adminData.nombre}</h3>
           <p>Administrador del Sistema</p>
         </div>
 
-        <div className="perfil-form">
-          <div className="form-group">
+        <div className="formulario-perfil">
+          <div className="casillas">
             <label><FaUserEdit /> Nombre:</label>
             <input
               name="nombre"
@@ -80,7 +82,7 @@ function PerfilAdministrador() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="casillas">
             <label><FaEnvelope /> Correo electrónico:</label>
             <input
               name="email"
@@ -91,7 +93,7 @@ function PerfilAdministrador() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="casillas">
             <label><FaPhone /> Teléfono:</label>
             <input
               name="telefono"
@@ -102,7 +104,7 @@ function PerfilAdministrador() {
             />
           </div>
 
-          <div className="form-group">
+          <div className="casillas">
             <label><FaMapMarkerAlt /> Dirección:</label>
             <input
               name="direccion"
@@ -115,7 +117,7 @@ function PerfilAdministrador() {
 
           {modoEdicion && (
             <>
-              <div className="form-group">
+              <div className="casillas">
                 <label><FaLock /> Nueva Contraseña:</label>
                 <input
                   name="nuevaContrasena"
@@ -126,7 +128,7 @@ function PerfilAdministrador() {
                 />
               </div>
 
-              <div className="form-group">
+              <div className="casillas">
                 <label><FaLock /> Confirmar Contraseña:</label>
                 <input
                   name="confirmarContrasena"
@@ -142,10 +144,10 @@ function PerfilAdministrador() {
           <div className="perfil-botones">
             {modoEdicion ? (
               <>
-                <button onClick={handleGuardar} className="btn-guardar">
+                <button onClick={handleGuardar} className="boton-guardar">
                   <FaSave /> Guardar Cambios
                 </button>
-                <button className="btn-cancelar" onClick={() => setModoEdicion(false)}>
+                <button className="boton-cancelar" onClick={() => setModoEdicion(false)}>
                   <FaTimes /> Cancelar
                 </button>
               </>
@@ -158,6 +160,7 @@ function PerfilAdministrador() {
         </div>
       </div>
     </div>
+    </AdminLayout>
   );
 }
 

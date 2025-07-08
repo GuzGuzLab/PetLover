@@ -23,10 +23,13 @@ function DashboardAdmin() {
   });
   const [adminName, setAdminName] = useState('');
   const [loading, setLoading] = useState(true);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState({
+    unread: [],
+    all: [],
+    count: 0
+  });
   const [darkMode, setDarkMode] = useState(false);
   const [recentActivity, setRecentActivity] = useState([]);
-
 
   const [chartData, setChartData] = useState({
     userGrowth: {
@@ -58,13 +61,40 @@ function DashboardAdmin() {
     }
   });
 
+  // Función para marcar notificación como leída
+  const markAsRead = async (id) => {
+    try {
+      const response = await fetch(`http://localhost:3000/api/notificaciones/${id}/leer`, {
+        method: 'PUT'
+      });
+      
+      if (!response.ok) throw new Error('Error al actualizar notificación');
+      
+      // Actualizar el estado local
+      setNotifications(prev => {
+        const updatedAll = prev.all.map(n => 
+          n.id === id ? { ...n, leida: true } : n
+        );
+        
+        return {
+          all: updatedAll,
+          unread: updatedAll.filter(n => !n.leida),
+          count: updatedAll.filter(n => !n.leida).length
+        };
+      });
+      
+    } catch (error) {
+      console.error('Error al marcar notificación como leída:', error);
+    }
+  };
+
   useEffect(() => {
     const nombre = localStorage.getItem('nombre');
     if (nombre) setAdminName(nombre);
 
     const fetchData = async () => {
       try {
-        // Llamadas API existentes (sin modificar)
+        // Llamadas API existentes
         const [usuariosRes, adminsRes, vetsRes, clientesRes] = await Promise.all([
           fetch('http://localhost:3000/api/admin/usuarios_registrados'),
           fetch('http://localhost:3000/api/admin/admin_registrados'),
@@ -111,7 +141,7 @@ function DashboardAdmin() {
             total: clientesData[0]?.total_clientes || 0,
             growth: calculateGrowth(clientesData[0]?.total_clientes || 0, lastMonthData.clientes)
           },
-          citas: { total: 0, hoy: 0 } // Se actualizará con la llamada a citas
+          citas: { total: 0, hoy: 0 }
         });
 
         // Actualizar datos para gráficos
@@ -130,7 +160,7 @@ function DashboardAdmin() {
           }
         }));
 
-        // Obtener citas (llamada API existente)
+        // Obtener citas
         const citasRes = await fetch('http://localhost:3000/citas');
         if (!citasRes.ok) throw new Error('Error al obtener citas');
         const citasData = await citasRes.json();
@@ -153,10 +183,16 @@ function DashboardAdmin() {
           }
         }));
 
-        const notificacionesRes = await fetch('http://localhost:3000/notificaciones');
+        // Obtener notificaciones
+        const notificacionesRes = await fetch('http://localhost:3000/api/notificaciones');
+        if (!notificacionesRes.ok) throw new Error('Error al obtener notificaciones');
         const notificacionesData = await notificacionesRes.json();
-        setNotifications(notificacionesData);
-
+        
+        setNotifications({
+          unread: notificacionesData.filter(n => !n.leida),
+          all: notificacionesData,
+          count: notificacionesData.filter(n => !n.leida).length
+        });
 
         setRecentActivity([
           { id: 1, action: 'Usuario registrado', user: 'Juan Pérez', time: '10:30 AM' },
@@ -169,21 +205,6 @@ function DashboardAdmin() {
         setLoading(false);
       }
     };
-
-    const marcarComoLeida = async (id) => {
-      try {
-        await fetch(`http://localhost:3000/notificaciones/${id}/leer`, {
-          method: 'PUT'
-        });
-        // Actualiza el estado para reflejar el cambio
-        setNotifications(prev =>
-          prev.map(n => n.id === id ? { ...n, leida: true } : n)
-        );
-      } catch (error) {
-        console.error('Error al marcar notificación como leída:', error);
-      }
-    };
-    
 
     fetchData();
 
@@ -246,20 +267,39 @@ function DashboardAdmin() {
             </button>
             <div className="notification-badge">
               <FontAwesomeIcon icon={faBell} />
-              <span>{notifications.length}</span>
+              {notifications.count > 0 && <span>{notifications.count}</span>}
               <div className="notification-dropdown">
-                {notifications.map(notif => (
-                  <div key={notif.id} className={`notification-item ${notif.read ? '' : 'unread'}`}>
-                    <p>{notif.message}</p>
-                    <small>{notif.time}</small>
+                {notifications.all.length === 0 ? (
+                  <div className="notification-item">
+                    <p>No hay notificaciones</p>
                   </div>
-                ))}
+                ) : (
+                  notifications.all.slice(0, 5).map(notif => (
+                    <div 
+                      key={notif.id} 
+                      className={`notification-item ${notif.leida ? '' : 'unread'}`}
+                      onClick={() => !notif.leida && markAsRead(notif.id)}
+                    >
+                      <p>{notif.mensaje || notif.titulo}</p>
+                      <small>
+                        {new Date(notif.fecha_creacion).toLocaleString()}
+                      </small>
+                    </div>
+                  ))
+                )}
+                {notifications.all.length > 5 && (
+                  <div className="notification-view-all">
+                    <button onClick={() => navigate('/notificaciones')}>
+                      Ver todas las notificaciones
+                    </button>
+                  </div>
+                )}
               </div>
             </div>
           </div>
         </header>
 
-        {/* Estadísticas principales */}
+        {/* Resto del código permanece igual */}
         <div className="stats-grid">
           <div className="stat-card">
             <div className="stat-icon users">
@@ -314,7 +354,6 @@ function DashboardAdmin() {
           </div>
         </div>
 
-        {/* Gráficos */}
         <div className="charts-container">
           <div className="chart-card">
             <h3>Distribución de usuarios</h3>

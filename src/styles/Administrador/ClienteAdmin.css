@@ -556,3 +556,10 @@
     opacity: 1;
   }
 }
+
+.no-clientes {
+  text-align: center;
+  font-style: italic;
+  color: #777;
+  padding: 1rem;
+}

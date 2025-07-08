@@ -204,60 +204,69 @@ function RegistroClientes() {
                 <th>Acciones</th>
               </tr>
             </thead>
-            <tbody>
-              {filteredClientes.map(cliente => (
-                <tr key={cliente.id}>
-                  <td>{cliente.id}</td>
-                  <td>
-                    <div className="documento-cell">
-                      <span className="tipo-doc">{cliente.tipoDocumento}</span>
-                      {cliente.documento}
-                    </div>
-                  </td>
-                  <td>{cliente.nombreCompleto}</td>
-                  <td>{cliente.fechaNacimiento ? new Date(cliente.fechaNacimiento).toLocaleDateString() : 'No especificada'}</td>
-                  <td>
-                    <div className="telefono-cell">
-                      <Phone size={16} />
-                      {cliente.telefono || 'N/A'}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="email-cell">
-                      <AtSign size={16} />
-                      {cliente.email}
-                    </div>
-                  </td>
-                  <td>
-                    <div className="direccion-cell">
-                      <MapPin size={16} />
-                      {cliente.direccion || 'N/A'}
-                    </div>
-                  </td>
-                  <td>
-                    <button 
-                      onClick={() => toggleEstado(cliente.id)}
-                      disabled={loadingStates[cliente.id]}
-                      className={`status-btn ${cliente.activo ? 'active' : 'inactive'}`}
-                    >
-                      {loadingStates[cliente.id] ? (
-                        <span className="spinner"></span>
-                      ) : cliente.activo ? (
-                        <ToggleRight size={20} />
-                      ) : (
-                        <ToggleLeft size={20} />
-                      )}
-                      {loadingStates[cliente.id] ? 'Procesando...' : cliente.activo ? 'Activo' : 'Inactivo'}
-                    </button>
-                  </td>
-                  <td className="actions-cell">
-                    <button className="btn-edit" onClick={() => handleEdit(cliente)}>
-                      <Edit size={18} />
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
+              <tbody>
+                {filteredClientes.length === 0 ? (
+                  <tr>
+                    <td colSpan="9" className="no-clientes">
+                      No hay clientes registrados
+                    </td>
+                  </tr>
+                ) : (
+                  filteredClientes.map(cliente => (
+                    <tr key={cliente.id}>
+                      <td>{cliente.id}</td>
+                      <td>
+                        <div className="documento-cell">
+                          <span className="tipo-doc">{cliente.tipoDocumento}</span>
+                          {cliente.documento}
+                        </div>
+                      </td>
+                      <td>{cliente.nombreCompleto}</td>
+                      <td>{cliente.fechaNacimiento ? new Date(cliente.fechaNacimiento).toLocaleDateString() : 'No especificada'}</td>
+                      <td>
+                        <div className="telefono-cell">
+                          <Phone size={16} />
+                          {cliente.telefono || 'N/A'}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="email-cell">
+                          <AtSign size={16} />
+                          {cliente.email}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="direccion-cell">
+                          <MapPin size={16} />
+                          {cliente.direccion || 'N/A'}
+                        </div>
+                      </td>
+                      <td>
+                        <button 
+                          onClick={() => toggleEstado(cliente.id)}
+                          disabled={loadingStates[cliente.id]}
+                          className={`status-btn ${cliente.activo ? 'active' : 'inactive'}`}
+                        >
+                          {loadingStates[cliente.id] ? (
+                            <span className="spinner"></span>
+                          ) : cliente.activo ? (
+                            <ToggleRight size={20} />
+                          ) : (
+                            <ToggleLeft size={20} />
+                          )}
+                          {loadingStates[cliente.id] ? 'Procesando...' : cliente.activo ? 'Activo' : 'Inactivo'}
+                        </button>
+                      </td>
+                      <td className="actions-cell">
+                        <button className="btn-edit" onClick={() => handleEdit(cliente)}>
+                          <Edit size={18} />
+                        </button>
+                      </td>
+                    </tr>
+                  ))
+                )}
+              </tbody>
+
           </table>
         </div>
 

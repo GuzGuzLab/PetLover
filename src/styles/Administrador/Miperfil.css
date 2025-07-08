@@ -1,239 +1,265 @@
-.perfil-admin-container {
-  max-width: 600px;
+/* styles/Administrador/Miperfil.css */
+
+.perfil-administrador {
+  max-width: 1200px;
   margin: 2rem auto;
-  background: #fff;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  padding: 0 2rem;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  color: #1a202c;
 }
 
-.perfil-admin-container h2 {
-  text-align: center;
-  margin-bottom: 1.5rem;
-  color: #2c3e50;
-}
-
-.perfil-form label {
-  display: block;
-  margin-top: 1rem;
-  font-weight: 600;
-  color: #34495e;
-}
-
-.perfil-form input {
-  width: 100%;
-  padding: 0.5rem;
-  margin-top: 0.3rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.perfil-botones {
-  margin-top: 1.5rem;
-  display: flex;
-  justify-content: space-between;
-}
-
-.perfil-botones button {
-  padding: 0.6rem 1.2rem;
-  border: none;
-  border-radius: 6px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: background 0.3s;
-}
-
-.perfil-botones button:hover {
-  opacity: 0.9;
-}
-
-.perfil-botones button:first-child {
-  background-color: #27ae60;
-  color: white;
-}
-
-.perfil-botones .cancelar {
-  background-color: #e74c3c;
-  color: white;
-}
-
-/* Estilos generales */
-.perfil-admin-container {
-  max-width: 900px;
-  margin: 2rem auto;
-  padding: 1rem;
-  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-}
-
-.perfil-header {
+.cuerpo-perfil {
   display: flex;
   align-items: center;
-  margin-bottom: 2rem;
-  position: relative;
+  margin-bottom: 3rem;
 }
 
-.perfil-header h2 {
-  margin: 0 auto;
-  color: #2c3e50;
-  font-size: 1.8rem;
+.cuerpo-perfil h2 {
+  flex: 1;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #2d3748;
+  text-align: center;
+  letter-spacing: -0.5px;
 }
 
-.btn-volver {
-  background-color: #3498db;
-  color: white;
-  border: none;
-  padding: 0.6rem 1.2rem;
-  border-radius: 5px;
-  cursor: pointer;
+.volver-boton {
+  background: none;
+  border: 1px solid #e2e8f0;
+  color: #4a5568;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
   display: flex;
   align-items: center;
   gap: 0.5rem;
+  cursor: pointer;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   font-weight: 500;
-  transition: background-color 0.3s;
+  font-size: 0.95rem;
 }
 
-.btn-volver:hover {
-  background-color: #2980b9;
+.volver-boton:hover {
+  background-color: #f7fafc;
+  border-color: #cbd5e0;
+  transform: translateY(-1px);
 }
 
-.perfil-content {
-  display: flex;
-  gap: 2rem;
+.perfil {
+  display: grid;
+  grid-template-columns: 280px 1fr;
+  gap: 2.5rem;
   background: white;
-  padding: 2rem;
-  border-radius: 10px;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03), 
+              0 4px 20px rgba(0, 0, 0, 0.04);
+  padding: 2.5rem;
+  border: 1px solid #edf2f7;
 }
 
-.perfil-avatar {
-  flex: 1;
+.foto-perfil {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 1rem;
+  padding: 1.5rem;
+  background-color: #f8fafc;
+  border-radius: 10px;
+  border: 1px solid #e2e8f0;
 }
 
-.avatar-placeholder {
+.avatar {
   width: 120px;
   height: 120px;
-  background-color: #3498db;
-  color: white;
   border-radius: 50%;
+  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  color: white;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 3rem;
-  font-weight: bold;
-  margin-bottom: 1rem;
+  font-weight: 600;
+  margin-bottom: 1.5rem;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 
+              0 2px 4px -1px rgba(0, 0, 0, 0.06);
 }
 
-.perfil-avatar h3 {
-  margin: 0.5rem 0 0;
-  color: #2c3e50;
+.foto-perfil h3 {
+  margin: 1rem 0 0.25rem;
+  font-size: 1.25rem;
+  color: #1a202c;
+  font-weight: 600;
+  text-align: center;
 }
 
-.perfil-avatar p {
-  color: #7f8c8d;
+.foto-perfil p {
   margin: 0;
-}
-
-.perfil-form {
-  flex: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-}
-
-.form-group {
-  display: flex;
-  flex-direction: column;
-  gap: 0.5rem;
-}
-
-.form-group label {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  color: #2c3e50;
+  color: #718096;
+  font-size: 0.875rem;
   font-weight: 500;
 }
 
-.form-group input {
-  padding: 0.8rem;
-  border: 1px solid #ddd;
-  border-radius: 5px;
-  font-size: 1rem;
-  transition: border-color 0.3s;
+.formulario-perfil {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  align-content: start;
 }
 
-.form-group input:disabled {
-  background-color: #f5f5f5;
-  color: #555;
+.casillas {
+  margin-bottom: 0;
 }
 
-.form-group input:focus {
+.casillas label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #4a5568;
+  font-weight: 500;
+  font-size: 0.875rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.casillas input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  font-size: 0.9375rem;
+  transition: all 0.2s;
+  background-color: #f8fafc;
+  color: #1a202c;
+}
+
+.casillas input:focus {
   outline: none;
-  border-color: #3498db;
+  border-color: #a5b4fc;
+  box-shadow: 0 0 0 3px rgba(165, 180, 252, 0.3);
+  background-color: white;
+}
+
+.casillas input:disabled {
+  background-color: #f8fafc;
+  color: #718096;
+  cursor: not-allowed;
+}
+
+.casillas input::placeholder {
+  color: #a0aec0;
+  opacity: 1;
+}
+
+/* Campos de contraseña ocupan ancho completo */
+.casillas:nth-last-child(-n+2) {
+  grid-column: span 2;
 }
 
 .perfil-botones {
+  grid-column: span 2;
   display: flex;
+  justify-content: flex-end;
   gap: 1rem;
   margin-top: 1rem;
+  padding-top: 1rem;
+  border-top: 1px solid #edf2f7;
 }
 
-.btn-editar, .btn-guardar, .btn-cancelar {
-  padding: 0.8rem 1.5rem;
-  border: none;
-  border-radius: 5px;
+.btn-editar, .boton-guardar, .boton-cancelar {
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 0.9375rem;
   font-weight: 500;
   cursor: pointer;
+  transition: all 0.2s;
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  transition: all 0.3s;
+  border: 1px solid transparent;
 }
 
 .btn-editar {
-  background-color: #3498db;
+  background-color: #4f46e5;
   color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
 .btn-editar:hover {
-  background-color: #2980b9;
+  background-color: #4338ca;
+  transform: translateY(-1px);
 }
 
-.btn-guardar {
-  background-color: #2ecc71;
+.boton-guardar {
+  background-color: #10b981;
   color: white;
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
 }
 
-.btn-guardar:hover {
-  background-color: #27ae60;
+.boton-guardar:hover {
+  background-color: #0d9f6e;
+  transform: translateY(-1px);
 }
 
-.btn-cancelar {
-  background-color: #e74c3c;
-  color: white;
+.boton-cancelar {
+  background-color: white;
+  color: #4a5568;
+  border-color: #e2e8f0;
 }
 
-.btn-cancelar:hover {
-  background-color: #c0392b;
+.boton-cancelar:hover {
+  background-color: #f7fafc;
+  border-color: #cbd5e0;
 }
 
-/* Responsive */
+/* Responsive design */
+@media (max-width: 1024px) {
+  .perfil {
+    grid-template-columns: 1fr;
+  }
+  
+  .foto-perfil {
+    flex-direction: row;
+    gap: 1.5rem;
+    align-items: center;
+    padding: 1.5rem;
+  }
+  
+  .avatar {
+    width: 80px;
+    height: 80px;
+    font-size: 2rem;
+    margin-bottom: 0;
+  }
+  
+  .foto-perfil h3 {
+    margin-top: 0;
+    text-align: left;
+  }
+}
+
 @media (max-width: 768px) {
-  .perfil-content {
+  .formulario-perfil {
+    grid-template-columns: 1fr;
+  }
+  
+  .casillas:nth-last-child(-n+2) {
+    grid-column: span 1;
+  }
+  
+  .perfil-botones {
+    grid-column: span 1;
     flex-direction: column;
   }
   
-  .perfil-header {
+  .perfil {
+    padding: 1.5rem;
+  }
+  
+  .cuerpo-perfil {
     flex-direction: column;
     gap: 1rem;
-    text-align: center;
+    margin-bottom: 2rem;
   }
   
-  .btn-volver {
+  .volver-boton {
     align-self: flex-start;
   }
 }
