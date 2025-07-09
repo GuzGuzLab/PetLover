@@ -89,93 +89,109 @@ export const Login = () => {
 
     navigate(redirectPath);
   };
+const handleSubmit = async (e) => {
+  e.preventDefault();
 
-  const handleSubmit = async (e) => {
-      e.preventDefault();
+  if (isBlocked) return;
+  if (!email || !password) {
+    setErrorGeneral('Por favor completa ambos campos');
+    return;
+  }
+  if (emailError) {
+    setErrorGeneral('Por favor corrige el correo electrónico');
+    return;
+  }
 
-      if (isBlocked) return;
-      if (!email || !password) {
-        setErrorGeneral('Por favor completa ambos campos');
-        return;
+  setIsLoading(true);
+  setErrorGeneral('');
+
+  try {
+    let response;
+    let loginSuccessful = false;
+  
+    // 1. Intentar con la API original (propietario)
+    try {
+      console.log('Intentando login con la API original: /api/auth/login');
+      response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
+      if (response.data && response.data.usuario) {
+        handleLoginSuccess(response.data, false);
+        loginSuccessful = true;
       }
-      if (emailError) {
-        setErrorGeneral('Por favor corrige el correo electrónico');
-        return;
-      }
-    
-      setIsLoading(true);
-      setErrorGeneral('');
-    
+    } catch (oldApiError) {
+      console.warn('Error con la API antigua:', oldApiError.response?.data?.mensaje || oldApiError.message);
+    }
+  
+    // 2. Intentar con la nueva API de propietarios
+    if (!loginSuccessful) {
       try {
-        let response;
-        let loginSuccessful = false;
-      
-        // 1. Intentar con la API original (propietario)
-        try {
-          console.log('Intentando login con la API original: /api/auth/login');
-          response = await axios.post(`${API_BASE_URL}/api/auth/login`, { email, password });
-          if (response.data && response.data.usuario) {
-            handleLoginSuccess(response.data, false);
-            loginSuccessful = true;
-          }
-        } catch (oldApiError) {
-          console.warn('Error con la API antigua:', oldApiError.response?.data?.mensaje || oldApiError.message);
+        console.log('Intentando login con la nueva API de propietarios: /api/autenticacion/login-propietario');
+        response = await axios.post(`${API_BASE_URL}/api/autenticacion/login-propietario`, { email, password });
+        if (response.data && response.data.usuario) {
+          handleLoginSuccess(response.data, false);
+          loginSuccessful = true;
         }
-      
-        // 2. Intentar con la API de veterinarios
-        if (!loginSuccessful) {
-          try {
-            console.log('Intentando login como veterinario:/api/autenticacion/login-veterinario');
-            response = await axios.post(`${API_BASE_URL}/api/autenticacion/login-veterinario`, { email, password });
-            const { veterinario, usuario, redirect } = response.data;
-          
-            if (veterinario) {
-              localStorage.setItem('vet_id', veterinario.vet_id);
-              localStorage.setItem('especialidad', veterinario.especialidad);
-              localStorage.setItem('registro_profesional', veterinario.registro_profesional);
-            }
-          
-            handleLoginSuccess({ usuario, redirect }, true);
-            loginSuccessful = true;
-          } catch (vetApiError) {
-            console.warn('Error con la API veterinaria:', vetApiError.response?.data?.message || vetApiError.message);
-          }
-        }
-        if (!loginSuccessful) {
-          try {
-            console.log('Intentando login como administrador:/api/autenticacion/login-admin');
-            response = await axios.post(`${API_BASE_URL}/api/autenticacion/login-admin`, { email, password });
-            const { administrador, usuario, redirect } = response.data;
-          
-            if (administrador) {
-              localStorage.setItem('admin_id', administrador.admin_id);
-              localStorage.setItem('nivel_acceso', administrador.nivel_acceso);
-              localStorage.setItem('departamento', administrador.departamento);
-            }
-            handleLoginSuccess({ usuario, redirect }, true);
-            loginSuccessful = true;
-          } catch (adminApiError) {
-            console.warn('Error con la API de administradores:', adminApiError.response?.data?.message || adminApiError.message);
-          }
-        }
-        if (!loginSuccessful) {
-          const attempts = failedAttempts + 1;
-          setFailedAttempts(attempts);
-          if (attempts >= 3) {
-            setIsBlocked(true);
-            setCountdown(60);
-            setErrorGeneral('Demasiados intentos fallidos. Cuenta bloqueada temporalmente.');
-          } else {
-            setErrorGeneral(`Credenciales incorrectas. Intentos restantes: ${3 - attempts}`);
-          }
-        }
-      } catch (error) {
-        console.error('Error inesperado durante el login:', error.message);
-        setErrorGeneral('Error inesperado durante el inicio de sesión');
-      } finally {
-        setIsLoading(false);
+      } catch (propietarioError) {
+        console.warn('Error con la API de propietarios:', propietarioError.response?.data?.message || propietarioError.message);
       }
-  };
+    }
+  
+    // 3. Intentar con la API de veterinarios
+    if (!loginSuccessful) {
+      try {
+        console.log('Intentando login como veterinario:/api/autenticacion/login-veterinario');
+        response = await axios.post(`${API_BASE_URL}/api/autenticacion/login-veterinario`, { email, password });
+        const { veterinario, usuario, redirect } = response.data;
+      
+        if (veterinario) {
+          localStorage.setItem('vet_id', veterinario.vet_id);
+          localStorage.setItem('especialidad', veterinario.especialidad);
+          localStorage.setItem('registro_profesional', veterinario.registro_profesional);
+        }
+      
+        handleLoginSuccess({ usuario, redirect }, true);
+        loginSuccessful = true;
+      } catch (vetApiError) {
+        console.warn('Error con la API veterinaria:', vetApiError.response?.data?.message || vetApiError.message);
+      }
+    }
+
+    // 4. Intentar con la API de administradores
+    if (!loginSuccessful) {
+      try {
+        console.log('Intentando login como administrador:/api/autenticacion/login-admin');
+        response = await axios.post(`${API_BASE_URL}/api/autenticacion/login-admin`, { email, password });
+        const { administrador, usuario, redirect } = response.data;
+      
+        if (administrador) {
+          localStorage.setItem('admin_id', administrador.admin_id);
+          localStorage.setItem('nivel_acceso', administrador.nivel_acceso);
+          localStorage.setItem('departamento', administrador.departamento);
+        }
+        handleLoginSuccess({ usuario, redirect }, true);
+        loginSuccessful = true;
+      } catch (adminApiError) {
+        console.warn('Error con la API de administradores:', adminApiError.response?.data?.message || adminApiError.message);
+      }
+    }
+
+    if (!loginSuccessful) {
+      const attempts = failedAttempts + 1;
+      setFailedAttempts(attempts);
+      if (attempts >= 3) {
+        setIsBlocked(true);
+        setCountdown(60);
+        setErrorGeneral('Demasiados intentos fallidos. Cuenta bloqueada temporalmente.');
+      } else {
+        setErrorGeneral(`Credenciales incorrectas. Intentos restantes: ${3 - attempts}`);
+      }
+    }
+  } catch (error) {
+    console.error('Error inesperado durante el login:', error.message);
+    setErrorGeneral('Error inesperado durante el inicio de sesión');
+  } finally {
+    setIsLoading(false);
+  }
+};
 
   return (
     <div className={`login-container ${isBlocked ? 'blurred-background' : ''}`}>

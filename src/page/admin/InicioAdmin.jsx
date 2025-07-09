@@ -64,25 +64,33 @@ function DashboardAdmin() {
   // Función para marcar notificación como leída
   const markAsRead = async (id) => {
     try {
-      const response = await fetch(`http://localhost:3000/api/notificaciones/${id}/leer`, {
-        method: 'PUT'
+      const userId = localStorage.getItem('userId'); // Obtener el ID del admin del localStorage
+
+      const response = await fetch(`http://localhost:3000/api/admin/notificaciones/marcar-leida/${id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ usuarioId: userId })
       });
-      
+
       if (!response.ok) throw new Error('Error al actualizar notificación');
-      
-      // Actualizar el estado local
-      setNotifications(prev => {
-        const updatedAll = prev.all.map(n => 
-          n.id === id ? { ...n, leida: true } : n
-        );
-        
-        return {
-          all: updatedAll,
-          unread: updatedAll.filter(n => !n.leida),
-          count: updatedAll.filter(n => !n.leida).length
-        };
-      });
-      
+
+      const data = await response.json();
+
+      if (data.success) {
+        // Actualizar el estado local
+        setNotifications(prev => {
+          const updatedAll = prev.all.map(n => 
+            n.id === id ? { ...n, leida: true } : n
+          );
+          return {
+            all: updatedAll,
+            unread: updatedAll.filter(n => !n.leida),
+            count: updatedAll.filter(n => !n.leida).length
+          };
+        });
+      }
     } catch (error) {
       console.error('Error al marcar notificación como leída:', error);
     }
