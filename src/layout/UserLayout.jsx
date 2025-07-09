@@ -98,84 +98,85 @@ const UserLayout = () => {
   ]
 
   return (
-    <>
-      <div className="topbar">
-        <div className="topbar-left">
-          <span>{userData.nombre}</span>
-        </div>
-        <div className="topbar-right">
-          <button className="btn-logout-top" onClick={handleLogout}>
-            <FaSignOutAlt className="icon-logout-top" /> Cerrar sesión
-          </button>
-        </div>
-      </div>
-
-      <div className="user-dashboard">
-        <div
-          className={`sidebar ${expanded ? "expanded" : ""}`}
-          onMouseEnter={() => setExpanded(true)}
-          onMouseLeave={() => setExpanded(false)}
-        >
-          <div className="user-profile">
-            {expanded && (
-              <div className="user-info">
-                <h3>{userData.nombre}</h3>
-                <p>{userData.email}</p>
-              </div>
-            )}
-          </div>
-
-          <nav className="side-menu">
-            {menuItems.map((item, index) => (
-              <div key={index} className="menu-item">
-                {item.path ? (
-                  <Link to={item.path} className="menu-link" title={item.title}>
-                    <span className="menu-icon">{item.icon}</span>
-                    {expanded && <span className="menu-text">{item.title}</span>}
-                  </Link>
-                ) : (
-                  <>
-                    <div className="menu-header" title={item.title}>
-                      <span className="menu-icon">{item.icon}</span>
-                      {expanded && (
-                        <>
-                          <span className="menu-text">{item.title}</span>
-                          <FaChevronRight className="menu-arrow" />
-                        </>
-                      )}
-                    </div>
-                    {expanded && item.subItems && (
-                      <div className="submenu">
-                        {item.subItems.map((subItem, subIndex) => (
-                          <Link key={subIndex} to={subItem.path} className="submenu-item">
-                            {subItem.icon && <span className="submenu-icon">{subItem.icon}</span>}
-                            {subItem.label}
-                          </Link>
-                        ))}
-                      </div>
-                    )}
-                  </>
-                )}
-              </div>
-            ))}
-
-            <div className="menu-item logout-item" onClick={handleLogout} style={{ cursor: "pointer" }}>
-              <span className="menu-link" title="Cerrar sesión">
-                <span className="menu-icon">
-                  <FaUser />
-                </span>
-                {expanded && <span className="menu-text">Cerrar sesión</span>}
-              </span>
+    <div className="user-dashboard">
+      {/* Sidebar siempre al lado izquierdo */}
+      <div
+        className={`sidebar ${expanded ? "expanded" : ""}`}
+        onMouseEnter={() => setExpanded(true)}
+        onMouseLeave={() => setExpanded(false)}
+      >
+        <div className="user-profile">
+          {expanded && (
+            <div className="user-info">
+              <h3>{userData.nombre}</h3>
+              <p>{userData.email}</p>
             </div>
-          </nav>
+          )}
         </div>
 
-        <div className="main-content">
-          <Outlet />
-        </div>
+        <nav className="side-menu">
+          {menuItems.map((item, index) => (
+            <div key={index} className="menu-item">
+              {item.path ? (
+                <Link to={item.path} className="menu-link" title={item.title}>
+                  <span className="menu-icon">{item.icon}</span>
+                  {expanded && <span className="menu-text">{item.title}</span>}
+                </Link>
+              ) : (
+                <>
+                  <div className="menu-header" title={item.title}>
+                    <span className="menu-icon">{item.icon}</span>
+                    {expanded && (
+                      <>
+                        <span className="menu-text">{item.title}</span>
+                        <FaChevronRight className="menu-arrow" />
+                      </>
+                    )}
+                  </div>
+                  {expanded && item.subItems && (
+                    <div className="submenu">
+                      {item.subItems.map((subItem, subIndex) => (
+                        <Link key={subIndex} to={subItem.path} className="submenu-item">
+                          {subItem.icon && <span className="submenu-icon">{subItem.icon}</span>}
+                          {subItem.label}
+                        </Link>
+                      ))}
+                    </div>
+                  )}
+                </>
+              )}
+            </div>
+          ))}
+
+          <div className="menu-item logout-item" onClick={handleLogout} style={{ cursor: "pointer" }}>
+            <span className="menu-link" title="Cerrar sesión">
+              <span className="menu-icon">
+                <FaUser />
+              </span>
+              {expanded && <span className="menu-text">Cerrar sesión</span>}
+            </span>
+          </div>
+        </nav>
       </div>
-    </>
+
+      {/* Contenido principal con barra superior adentro */}
+      <div className="main-content">
+        <div className="topbar">
+          <div className="topbar-left">
+            <span>Hola, {userData.nombre}</span>
+          </div>
+          <div className="topbar-right">
+            <button className="btn-logout-top" onClick={handleLogout}>
+              <FaSignOutAlt className="icon-logout-top" /> Cerrar sesión
+            </button>
+          </div>
+        </div>
+
+        <Outlet />
+      </div>
+    </div>
   )
 }
 
 export default UserLayout
+

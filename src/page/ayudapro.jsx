@@ -22,11 +22,9 @@ function Ayudapro() {
               <ChevronRight className="icono" /> Preguntas Frecuentes
             </h2>
             <ul>
-              <li><Link to="/citas">¿Cómo agendar una cita?</Link></li>
-              <li><Link to="#">¿Cuáles son los métodos de pago aceptados?</Link></li>
-              <li><Link to="/servicios">¿Qué servicios veterinarios ofrecen?</Link></li>
-              <li><Link to="#">¿Cómo cancelar o reprogramar una cita?</Link></li>
-              <li><Link to="#">¿Ofrecen servicios de emergencia?</Link></li>
+              <li><Link to="/AgendarCita">¿Cómo agendar una cita?</Link></li>
+              <li><Link to="/serviciopro">¿Qué servicios veterinarios ofrecen?</Link></li>
+              <li><Link to="/CitasProximas">¿Cómo cancelar o reprogramar una cita?</Link></li>
             </ul>
           </div>
         </div>

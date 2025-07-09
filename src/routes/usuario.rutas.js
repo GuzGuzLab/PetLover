@@ -9,7 +9,9 @@ import Actualizarpro from '../page/Actualizarpro';
 import MisMascotas from '../page/MisMascotas';
 import AgendarCita from "../page/AgendarCita";
 import CitasProximas from '../page/CitasProximas';
-import HistorialMedico from '../page/HistorialMedico'; 
+import HistorialMedico from '../page/HistorialMedico';
+import Serviciopro from '../page/serviciopro';
+
 
 const UserSpecificRoutes = () => (
   <>
@@ -22,6 +24,7 @@ const UserSpecificRoutes = () => (
     <Route path="/AgendarCita" element={<AgendarCita />} />
     <Route path="/CitasProximas" element={<CitasProximas />} /> 
     <Route path="/HistorialMedico" element={<HistorialMedico />} />
+     <Route path="/serviciopro" element={<Serviciopro />} />
   </>
 );
 

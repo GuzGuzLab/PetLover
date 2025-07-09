@@ -57,7 +57,7 @@
 .sidebar {
   width: 60px;
   height: calc(100vh - 60px);
-  background: #73acf3;
+  background:rgb(59, 125, 206);
   color: white;
   transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
@@ -158,7 +158,7 @@
 }
 
 .submenu {
-  background: #73acf3;
+  background:rgb(59, 125, 206);
   max-height: 0;
   overflow: hidden;
   transition: max-height 0.3s ease;
