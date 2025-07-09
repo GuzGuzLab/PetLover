@@ -53,6 +53,31 @@ CREATE TABLE asignacion_rol (
     FOREIGN KEY (asignado_por) REFERENCES administradores(admin_id) ON DELETE SET NULL
 );
 
+CREATE TABLE notificaciones (
+  id INT AUTO_INCREMENT PRIMARY KEY,
+  tipo VARCHAR(30) NOT NULL COMMENT 'Tipo de notificación',
+  mensaje VARCHAR(150) NOT NULL,
+  usuario_id INT COMMENT 'ID del usuario relacionado',
+  leida BOOLEAN DEFAULT FALSE,
+  fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+  FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
+);
+
+
+DELIMITER //
+CREATE TRIGGER notificar_nuevo_usuario
+AFTER INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+  INSERT INTO notificaciones (tipo, mensaje, usuario_id)
+  VALUES (
+    'nuevo_usuario', 
+    CONCAT('Se registró el usuario: ', NEW.nombre),
+    NEW.id
+  );
+END //
+DELIMITER ;
+
 CREATE TABLE mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     doc_pro VARCHAR(15) NOT NULL,
