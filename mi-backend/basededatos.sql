@@ -22,7 +22,7 @@ CREATE TABLE usuarios (
 );
  SELECT*FROM usuarios;
 
-sCREATE TABLE propietarios (
+CREATE TABLE propietarios (
     id_prop VARCHAR(15) PRIMARY KEY,
     FOREIGN KEY (id_prop) REFERENCES usuarios(doc) ON DELETE CASCADE
 );

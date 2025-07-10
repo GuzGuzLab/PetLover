@@ -49,6 +49,7 @@ const veterinarioRoutes = require('./api/veterinario');
 const citasvetRoutes = require('./api/citasvet');
 const citasRoutes =require('./api/citas');
 const historialRoutes = require('./api/historial');
+const dashboardRoutes = require('./api/dashboard')(db);
 
 
 
@@ -68,6 +69,7 @@ app.use('/api/veterinarios', veterinarioRoutes(db));
 app.use('/api/citasvet', citasvetRoutes(db));
 app.use('/api/citas', citasRoutes(db));
 app.use('/api/historial', historialRoutes(db));
+app.use('/api/dashboard', dashboardRoutes);
 
 
 console.log("✅ Todas las rutas han sido cargadas.");
