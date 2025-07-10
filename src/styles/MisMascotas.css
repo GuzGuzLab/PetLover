@@ -1,0 +1,53 @@
+.contenedor-mascotas {
+  padding: 2rem;
+  background-color: #faf8ff;
+  min-height: 100vh;
+}
+
+h2 {
+  color: #6c4fc0;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 2rem;
+}
+
+.tarjetas-mascotas {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  max-width: 800px;
+  margin: 0 auto;
+  gap: 2rem;
+}
+
+.tarjeta {
+  background-color: #ffffff;
+  border: 1.5px solid #e2d8f7;
+  border-radius: 20px;
+  box-shadow: 0 4px 12px rgba(108, 79, 192, 0.15);
+  padding: 1.5rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.tarjeta:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 16px rgba(108, 79, 192, 0.25);
+}
+
+.tarjeta h3 {
+  color: #7a5edc;
+  margin-bottom: 0.3rem;
+  font-size: 1.4rem;
+}
+
+.tarjeta p {
+  margin: 0;
+  color: #444;
+  font-size: 0.95rem;
+}
+
+.tarjeta p strong {
+  color: #a083f5;
+}

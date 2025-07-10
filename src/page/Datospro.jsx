@@ -43,7 +43,7 @@ const Datospro = () => {
 
   return (
     <div className="datospro-container">
-      <h2>Mi cuenta</h2>
+      <h2>Mi Perfil</h2>
       <form className="datospro-form">
         <label>Tipo de Documento:</label>
         <input type="text" value={datos.tipo_Doc} readOnly />

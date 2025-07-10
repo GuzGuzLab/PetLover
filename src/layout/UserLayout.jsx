@@ -82,10 +82,11 @@ const UserLayout = () => {
       title: "Mis Mascotas",
       icon: <FaPaw />,
       subItems: mascotas.map((m) => ({
-        label: m.nombre,
-        path: `/mascota/${m.nombre.toLowerCase()}`,
-      })),
-    },
+      label: m.nombre,
+      path: `/MisMascotas`
+    })),
+     },
+
     {
       title: "Configuración",
       icon: <FaCog />,

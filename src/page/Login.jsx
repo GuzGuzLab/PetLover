@@ -76,7 +76,6 @@ export const Login = () => {
         throw new Error('Datos incompletos o sin rol.');
       }
 
-      // Guardar datos en localStorage
       localStorage.setItem('userId', user.id);
       localStorage.setItem('nombre', user.nombre);
       localStorage.setItem('email', user.email);
@@ -98,7 +97,6 @@ export const Login = () => {
       setErrorGeneral('');
       setFailedAttempts(0);
 
-      // Redirigir según el backend
       navigate(data.redirect || '/UserWelcome');
 
     } catch (error) {

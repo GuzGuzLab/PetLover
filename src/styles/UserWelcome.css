@@ -1,77 +1,138 @@
 .dashboard-page {
   padding: 2rem;
-  background: #f4f7fb;
+  background-color: #f0f6ff;
+  color: #355e91;
   font-family: 'Segoe UI', sans-serif;
-  min-height: 100vh;
-  color: #333;
 }
 
 .welcome-title {
+  font-size: 2rem;
+  margin-bottom: 1.5rem;
+  color: #355e91;
   text-align: center;
-  font-size: 2.5rem;
+}
+
+.summary-cards {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
   margin-bottom: 2rem;
-  color: #1e3a8a;
+}
+
+.summary-card {
+  flex: 1;
+  text-align: center;
+  padding: 1rem;
+  border-radius: 12px;
+  box-shadow: 0 4px 10px rgba(50, 100, 150, 0.1);
+  background-color: #d9ecff;
+}
+
+.card-blue {
+  background-color: #cce6ff;
+}
+
+.card-green {
+  background-color: #e0f4ff;
+}
+
+.card-yellow {
+  background-color: #e6f2ff;
+}
+
+.quick-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.action-btn {
+  padding: 0.8rem;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  background: linear-gradient(to right, #dceeff, #bfe2ff);
+  color: #355e91;
+  transition: background 0.3s ease;
+}
+
+.action-btn:hover {
+  background: linear-gradient(to right, #bfe2ff, #a6d4ff);
 }
 
 .dashboard-section {
-  margin-bottom: 3rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
-  font-size: 1.8rem;
-  margin-bottom: 1.5rem;
-  color: #1d3557;
-  border-left: 6px solid #1976d2;
-  padding-left: 12px;
+  font-size: 1.4rem;
+  margin-bottom: 1rem;
+  color: #355e91;
+  text-align: center;
 }
 
 .card-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  gap: 1.5rem;
+  gap: 1rem;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
 }
 
-.card {
-  background: #ffffff;
-  padding: 1.2rem;
-  border-radius: 12px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.08);
-  transition: transform 0.2s ease;
+.card,
+.info-card {
+  background-color: #ffffff;
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 10px rgba(50, 100, 150, 0.05);
+  color: #355e91;
 }
 
-.card:hover {
-  transform: translateY(-4px);
-}
-
-.card h3 {
+.tip-card h4,
+.service-card h4 {
   margin-bottom: 0.5rem;
-  color: #2c3e50;
-}
-
-.card p {
-  margin: 4px 0;
-  font-size: 0.95rem;
-  display: flex;
-  align-items: center;
-  gap: 6px;
-}
-
-.btn-link {
-  margin-top: 10px;
-  display: inline-block;
-  background-color: #1976d2;
-  color: white;
-  padding: 6px 12px;
-  border-radius: 6px;
-  text-decoration: none;
-  font-size: 0.9rem;
-}
-
-.btn-link:hover {
-  background-color: #1257a3;
+  font-size: 1.1rem;
 }
 
 .empty {
+  text-align: center;
+  color: #7d94b8;
+}
+
+.quote-card {
+  background-color: #e1f1ff;
+  border-left: 5px solid #a6d4ff;
+  padding: 1rem;
+  border-radius: 8px;
   font-style: italic;
-  color: #777;
+  text-align: center;
+  color: #355e91;
+}
+
+.reminder-card {
+  background-color: #d1eaff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(50, 100, 150, 0.08);
+  color: #355e91;
+  text-align: center;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+.fade-in-slow {
+  animation: fadeIn 2s ease-in;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }

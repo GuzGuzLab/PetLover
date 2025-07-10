@@ -1,134 +1,58 @@
-/* Estilos para botón de activar/desactivar */
-.btn-toggle {
-    padding: 6px 12px;
-    border: none;
-    border-radius: var(--border-radius);
-    cursor: pointer;
-    font-weight: 500;
-    transition: var(--transition);
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: 0.85rem;
-  }
-  
-  .btn-toggle.active {
-    background-color: var(--success-color);
-    color: white;
-  }
-  
-  .btn-toggle.inactive {
-    background-color: #95a5a6;
-    color: white;
-  }
-  
-  .btn-toggle:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-  }
-  
-  /* Estilos para mensajes de confirmación */
-  .confirmation-message {
-    position: fixed;
-    top: 20px;
-    right: 20px;
-    padding: 15px 25px;
-    border-radius: var(--border-radius);
-    color: white;
-    font-weight: 500;
-    box-shadow: var(--box-shadow);
-    z-index: 1000;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    animation: slideIn 0.3s ease, fadeOut 0.5s ease 2.5s forwards;
-  }
-  
-  .confirmation-message.success {
-    background-color: var(--success-color);
-  }
-  
-  .confirmation-message.error {
-    background-color: var(--accent-color);
-  }
-  
-  .confirmation-message i {
-    font-size: 1.2rem;
-  }
-
-  .historial-container {
-  padding: 20px;
+.historial-container {
+  padding: 2rem;
+  background-color: #f0f6ff;
+  min-height: 100vh;
+  font-family: 'Segoe UI', sans-serif;
+  color: #355e91;
 }
 
-.historial-contenido {
-  display: flex;
-  gap: 20px;
+.historial-container h2 {
+  text-align: center;
+  font-size: 2rem;
+  margin-bottom: 2rem;
 }
 
-.panel-mascotas {
-  width: 200px;
-}
-
-.btn-mascota {
-  display: block;
-  width: 100%;
-  padding: 10px;
-  margin-bottom: 10px;
-  background-color: #e0f7fa;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
+.nombre-mascota {
+  font-size: 1.4rem;
+  color: #2c4a72;
+  margin-bottom: 1rem;
   text-align: left;
-  transition: background 0.2s;
+  border-left: 6px solid #4da3ff;
+  padding-left: 0.8rem;
 }
 
-.btn-mascota.activo {
-  background-color: #29b6f6;
-  color: white;
+.bloque-mascota {
+  margin-bottom: 2rem;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(53, 94, 145, 0.08);
 }
 
 .panel-historial {
-  flex: 1;
-  background-color: #f0f8ff;
-  padding: 15px;
-  border-radius: 8px;
+  display: grid;
+  gap: 1rem;
 }
 
 .historial-item {
-  background: #fff;
-  border-left: 5px solid #2196f3;
-  padding: 10px 15px;
-  margin-bottom: 15px;
-  border-radius: 5px;
+  background-color: #f9fbff;
+  border-left: 4px solid #4da3ff;
+  padding: 1rem;
+  border-radius: 10px;
 }
 
-  
-  @keyframes slideIn {
-    from {
-      transform: translateX(100%);
-      opacity: 0;
-    }
-    to {
-      transform: translateX(0);
-      opacity: 1;
-    }
-  }
-  
-  @keyframes fadeOut {
-    from {
-      opacity: 1;
-    }
-    to {
-      opacity: 0;
-    }
-  }
-  
-  /* Añadir al media query para responsive */
-  @media (max-width: 768px) {
-    .confirmation-message {
-      top: 10px;
-      right: 10px;
-      left: 10px;
-      max-width: calc(100% - 20px);
-    }
-  }
+.historial-item p {
+  margin: 0.4rem 0;
+  color: #2c4a72;
+  font-size: 0.95rem;
+}
+
+.historial-item p strong {
+  color: #1b3f68;
+}
+
+.vacio {
+  text-align: center;
+  font-style: italic;
+  color: #7a8ea5;
+}

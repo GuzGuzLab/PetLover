@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
+import '../styles//MisMascotas.css'; // Estilos aparte para mantener limpio el JSX
 
 const MisMascotas = () => {
   const [mascotas, setMascotas] = useState([]);
@@ -30,21 +31,34 @@ const MisMascotas = () => {
   if (loading) return <p>Cargando mascotas...</p>;
 
   return (
-    <div>
+    <div className="contenedor-mascotas">
       <h2>Mis Mascotas</h2>
       {mascotas.length === 0 ? (
         <p>No tienes mascotas registradas.</p>
       ) : (
-        <ul>
+        <div className="tarjetas-mascotas">
           {mascotas.map((mascota) => (
-            <li key={mascota.id}>
-              <strong>{mascota.nombre}</strong> - {mascota.especie}, {mascota.raza}
-            </li>
+            <div className="tarjeta" key={mascota.id}>
+              <h3>{mascota.nombre}</h3>
+              <p><strong>Especie:</strong> {mascota.especie}</p>
+              <p><strong>Raza:</strong> {mascota.raza}</p>
+              <p><strong>Color:</strong> {mascota.color}</p>
+              <p><strong>Género:</strong> {mascota.genero}</p>
+              <p><strong>Tamaño:</strong> {mascota.tamano}</p>
+              <p><strong>Peso:</strong> {mascota.peso} kg</p>
+              <p><strong>Vacunado:</strong> {mascota.vacunado ? 'Sí' : 'No'}</p>
+              {mascota.observaciones && (
+                <p><strong>Observaciones:</strong> {mascota.observaciones}</p>
+              )}
+              <p><strong>Fecha de Nacimiento:</strong> {new Date(mascota.fecha_nac).toLocaleDateString()}</p>
+              <p><strong>Estado:</strong> {mascota.estado}</p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
 };
 
 export default MisMascotas;
+

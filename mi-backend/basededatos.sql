@@ -255,3 +255,17 @@ BEGIN
         MIN(CONCAT(c.fecha, ' ', c.hora)) IS NULL, MIN(CONCAT(c.fecha, ' ', c.hora)) ASC;
 END$$
 DELIMITER ;
+
+DELIMITER $$
+
+CREATE PROCEDURE ModifyPassword (
+    IN p_doc VARCHAR(15),
+    IN p_new_password VARCHAR(255)
+)
+BEGIN
+    UPDATE usuarios
+    SET password = p_new_password
+    WHERE doc = p_doc;
+END $$
+
+DELIMITER ;
