@@ -58,13 +58,24 @@ const UserWelcome = () => {
           <h3>Citas</h3>
           <p>{citas.length}</p>
         </div>
+<<<<<<< HEAD
+=======
+        <div className="summary-card card-yellow">
+          <h3>Registros</h3>
+          <p>1</p>
+        </div>
+>>>>>>> e799c265f01b5607ab3582d82e3acf4cfa423ba3
       </div>
 
       <div className="quick-actions fade-in">
         <button onClick={() => navigate('/MisMascotas')} className="action-btn pastel-blue">🐶 Mis Mascotas</button>
         <button onClick={() => navigate('/AgendarCita')} className="action-btn pastel-green">📅 Agendar Cita</button>
         <button onClick={() => navigate('/HistorialMedico')} className="action-btn pastel-purple">📘 Historial</button>
+<<<<<<< HEAD
         <button onClick={() => navigate('/Datospro')} className="action-btn pastel-orange">👤 Mi Perfil</button>
+=======
+        <button onClick={() => navigate('/Perfil')} className="action-btn pastel-orange">👤 Mi Perfil</button>
+>>>>>>> e799c265f01b5607ab3582d82e3acf4cfa423ba3
       </div>
 
       <section className="dashboard-section fade-in-slow">

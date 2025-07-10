@@ -140,6 +140,7 @@ function RecuperarContraseña() {
 
   const handleResetPassword = async (data) => {
     try {
+      console.log(data.password);
       const response = await fetch('/api/auth/reset-password', {
         method: 'POST',
         headers: {

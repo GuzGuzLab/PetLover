@@ -121,7 +121,6 @@ module.exports = function(db) {
 
   router.post('/reset-password', async (req, res) => {
     const { email, newPassword } = req.body;
-
     if (!email || !newPassword) {
       return res.status(400).json({ success: false, message: 'Email y nueva contraseña son requeridos' });
     }
@@ -130,8 +129,8 @@ module.exports = function(db) {
       const hashedPassword = await bcrypt.hash(newPassword, 10);
 
       db.query("CALL ModifyPassword(?, ?)", [email, hashedPassword], (err) => {
+        console.log(err)
         if (err) return res.status(500).json({ success: false, message: 'Error al actualizar la contraseña' });
-
         res.status(200).json({ message: 'Tu contraseña fue cambiada correctamente' });
       });
     } catch (error) {

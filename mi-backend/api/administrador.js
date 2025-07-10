@@ -307,6 +307,45 @@ module.exports = function (db) {
         });
     }
 });
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    //+++++++ cambiar estado a administrador+++++++++++++++++++++++++
+    //++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+    
+ router.put('/toggle_estado/:doc', (req, res) => {
+          const { doc } = req.params;
+                
+          if (!doc) {
+            return res.status(400).json({ error: 'El documento del usuario es requerido.' });
+          }
+      
+          // Primero, necesitamos el ID del usuario, ya que el procedimiento almacenado usa el ID.
+          const findUserQuery = 'SELECT id FROM usuarios WHERE doc = ?';
+          
+          db.query(findUserQuery, [doc], (err, results) => {
+            if (err) {
+              console.error('Error al buscar usuario por documento:', err);
+              return res.status(500).json({ error: 'Error en el servidor al buscar el usuario.' });
+            }
+        
+            if (results.length === 0) {
+              return res.status(404).json({ error: 'Usuario no encontrado con el documento proporcionado.' });
+            }
+        
+            const userId = results[0].id;
+        
+            // Ahora sí, llamamos al procedimiento almacenado con el ID del usuario.
+            const callProcedureQuery = 'CALL ToggleUserStatus(?)';
+        
+            db.query(callProcedureQuery, [userId], (err2, result) => {
+              if (err2) {
+                console.error('Error al ejecutar el procedimiento ToggleUserStatus:', err2);
+                return res.status(500).json({ error: 'Error en el servidor al cambiar el estado del usuario.' });
+              }
+          
+              res.status(200).json({ message: 'El estado del usuario ha sido actualizado correctamente.' });
+            });
+          });
+        });
 
 
         

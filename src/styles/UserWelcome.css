@@ -1,3 +1,5 @@
+/* UserWelcome.css */
+
 .dashboard-page {
   padding: 2rem;
   background-color: #f0f6ff;
@@ -64,6 +66,7 @@
 
 .dashboard-section {
   margin-bottom: 2rem;
+  margin-bottom: 2rem;
 }
 
 .section-title {
@@ -106,6 +109,25 @@
   border-radius: 8px;
   font-style: italic;
   text-align: center;
+  color: #5c4b7d;
+}
+
+.reminder-card {
+  background-color: #e8d7ff;
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 6px rgba(90, 50, 100, 0.08);
+  color: #5c4b7d;
+  text-align: center;
+}
+
+.fade-in {
+  animation: fadeIn 1s ease-in;
+}
+
+.fade-in-slow {
+  animation: fadeIn 2s ease-in;
+  text-align: center;
   color: #355e91;
 }
 
@@ -135,4 +157,9 @@
     opacity: 1;
     transform: translateY(0);
   }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
 }

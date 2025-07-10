@@ -1,431 +1,326 @@
-/* ========== CONTENEDOR PRINCIPAL ========== */
+/* ===================================================================== */
+/* ========== PALETA DE COLORES - VERDE FRESCURA & ÁMBAR ========== */
+/* ===================================================================== */
+:root {
+  --verde-principal: #004643; /* Un verde esmeralda oscuro y elegante */
+  --verde-secundario: #006452;
+  --fondo-claro: #f8f9fa;     /* Un gris muy claro, casi blanco */
+  --fondo-tarjetas: #ffffff;  /* Blanco puro para contraste */
+  --texto-oscuro: #212529;    /* Negro suave para lectura */
+  --texto-claro: #e4e6eb;     /* Gris claro para el texto sobre verde */
+  --borde-sutil: #dee2e6;     /* Color de borde */
+  --sombra-suave: rgba(0, 0, 0, 0.05);
+  --transicion-rapida: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===================================================================== */
+/* ========== ESTRUCTURA GENERAL ========== */
+/* ===================================================================== */
 .veterinarios-container {
   height: 100vh;
   display: flex;
-  flex-direction: column;
-  font-family: "Segoe UI", sans-serif;
-  background: linear-gradient(135deg, #f0fdff 0%, #e0f7fa 100%);
-  overflow-x: hidden;
+  font-family: "Segoe UI", "Helvetica Neue", sans-serif;
+  background-color: var(--fondo-claro);
+  transition: padding-left 0.3s ease-in-out;
 }
 
+.main-content-wrapper {
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+  overflow: hidden;
+}
+
+/* ===================================================================== */
+/* ========== SIDEBAR (MENÚ LATERAL) ========== */
+/* ===================================================================== */
+.vet-sidebar {
+  width: 260px;
+  background: var(--verde-principal);
+  color: var(--texto-claro);
+  display: flex;
+  flex-direction: column;
+  padding: 1.5rem 0;
+  transition: var(--transicion-rapida);
+  flex-shrink: 0;
+}
+
+.sidebar-header {
+  padding: 0 1.5rem 1.5rem 1.5rem;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #ffffff;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.vet-sidebar ul {
+  list-style: none;
+  padding: 1.5rem 1rem;
+  margin: 0;
+  flex-grow: 1;
+}
+
+.vet-sidebar li a {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  border-radius: 8px;
+  text-decoration: none;
+  color: var(--texto-claro);
+  font-weight: 500;
+  margin-bottom: 0.5rem;
+  transition: var(--transicion-rapida);
+}
+
+.vet-sidebar li a:hover, .vet-sidebar li a.active {
+  background-color: var(--verde-secundario);
+  color: #ffffff;
+  transform: translateX(5px);
+}
+
+.menu-item-icon {
+  margin-right: 1rem;
+  stroke-width: 2;
+}
+
+.menu-item-text {
+  transition: opacity 0.2s ease-in-out;
+}
+
+/* --- ESTILOS DEL MENÚ COLAPSADO --- */
+.sidebar-collapsed .vet-sidebar {
+  width: 80px;
+}
+
+.sidebar-collapsed .sidebar-logo-text,
+.sidebar-collapsed .menu-item-text {
+  opacity: 0;
+  width: 0;
+  overflow: hidden;
+}
+
+.sidebar-collapsed .vet-sidebar li a {
+  justify-content: center;
+}
+.sidebar-collapsed .menu-item-icon {
+  margin-right: 0;
+}
+
+
+/* ===================================================================== */
 /* ========== HEADER SUPERIOR ========== */
+/* ===================================================================== */
 .vet-header {
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  padding: 16px 32px;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdff 100%);
-  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.1);
-  z-index: 100;
-  position: relative;
-  border-bottom: 1px solid rgba(6, 182, 212, 0.1);
+  justify-content: space-between;
+  padding: 1rem 2rem;
+  background: var(--fondo-tarjetas);
+  border-bottom: 1px solid var(--borde-sutil);
+  flex-shrink: 0;
 }
 
-.vet-header-logo {
-  font-size: 24px;
-  font-weight: bold;
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
+/* --- NUEVO BOTÓN DEL MENÚ --- */
+.sidebar-toggle-btn {
+  background: none;
+  border: 1px solid transparent;
+  padding: 0.5rem;
+  border-radius: 50%;
   cursor: pointer;
-  transition: all 0.3s ease;
+  color: var(--texto-oscuro);
+  transition: var(--transicion-rapida);
+}
+.sidebar-toggle-btn:hover {
+  background-color: var(--fondo-claro);
+  transform: scale(1.1) rotate(10deg);
 }
 
 .vet-header-right {
   display: flex;
   align-items: center;
-  gap: 24px;
+  gap: 1.5rem;
 }
 
 .vet-header-usuario {
   display: flex;
   align-items: center;
-  gap: 12px;
-  color: #0f766e;
-  font-size: 16px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.3s ease;
+  gap: 0.75rem;
+  font-weight: 600;
+  color: var(--texto- oscuro);
 }
 
 .vet-usuario-avatar {
-  width: 42px;
-  height: 42px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  background: var(--verde-principal);
   color: white;
-  font-weight: bold;
-  font-size: 18px;
-  transition: all 0.3s ease;
-  box-shadow: 0 2px 10px rgba(6, 182, 212, 0.2);
-}
-
-/* ========== BOTÓN CERRAR SESIÓN MEJORADO ========== */
-.vet-header-logout {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  background: linear-gradient(135deg, #f0fdff, #e0f7fa);
-  padding: 12px 20px;
-  border-radius: 50px;
-  font-weight: 600;
-  cursor: pointer;
-  color: #0f766e;
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 4px 15px rgba(6, 182, 212, 0.1);
-  position: relative;
-  overflow: hidden;
-  border: 2px solid transparent;
-}
-
-.vet-header-logout::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.1), transparent);
-  transition: left 0.5s;
-}
-
-.vet-header-logout:hover::before {
-  left: 100%;
-}
-
-.vet-header-logout:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
-  color: #ffffff;
-  transform: translateY(-3px) scale(1.05);
-  box-shadow: 0 8px 25px rgba(220, 38, 38, 0.3);
-  border-color: #dc2626;
-}
-
-.vet-header-logout .vet-icon {
-  stroke-width: 2.5;
-  transition: all 0.3s ease;
-}
-
-/* ========== ANIMACIONES MEJORADAS ========== */
-@keyframes fadeInRight {
-  from {
-    opacity: 0;
-    transform: translateX(30px) scale(0.9);
-  }
-  to {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-}
-
-@keyframes fadeOutRight {
-  from {
-    opacity: 1;
-    transform: translateX(0) scale(1);
-  }
-  to {
-    opacity: 0;
-    transform: translateX(30px) scale(0.9);
-  }
-}
-
-@keyframes pulse {
-  0%,
-  100% {
-    transform: scale(1);
-  }
-  50% {
-    transform: scale(1.05);
-  }
-}
-
-@keyframes slideInLeft {
-  from {
-    transform: translateX(-100%);
-    opacity: 0;
-  }
-  to {
-    transform: translateX(0);
-    opacity: 1;
-  }
-}
-
-/* ========== BODY PRINCIPAL ========== */
-.vet-body {
-  display: flex;
-  flex: 1;
-  position: relative;
-}
-
-/* ========== SIDEBAR MEJORADO ========== */
-.vet-sidebar {
-  width: 240px;
-  background: linear-gradient(180deg, #06b6d4 0%, #0891b2 100%);
-  padding: 24px;
-  box-shadow: 4px 0 20px rgba(6, 182, 212, 0.15);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
-  z-index: 50;
-}
-
-.vet-sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.vet-sidebar ul li {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  margin-bottom: 12px;
-  font-size: 16px;
-  padding: 12px 16px;
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-  position: relative;
-  overflow: hidden;
-}
-
-.vet-sidebar ul li::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.1), transparent);
-  transition: left 0.5s;
-}
-
-.vet-sidebar ul li:hover::before {
-  left: 100%;
-}
-
-.vet-sidebar ul li:hover {
-  background: rgba(255, 255, 255, 0.15);
-  transform: translateX(8px) scale(1.02);
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-
-.vet-sidebar ul li a {
-  text-decoration: none;
-  color: #ffffff;
-  font-weight: 500;
-  transition: all 0.3s ease;
-  flex: 1;
-}
-
-.vet-sidebar ul li:hover a {
-  color: #ffffff;
-  font-weight: 600;
-}
-
-.menu-item-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 32px;
-  height: 32px;
-  background: rgba(255, 255, 255, 0.1);
-  border-radius: 8px;
-  transition: all 0.3s ease;
-}
-
-.vet-sidebar ul li:hover .menu-item-icon {
-  background: rgba(255, 255, 255, 0.2);
-  transform: scale(1.1) rotate(10deg);
-}
-
-.vet-icon {
-  color: #ffffff;
-  stroke-width: 2;
-}
-
-/* ========== BOTÓN TOGGLE SIDEBAR ========== */
-.sidebar-toggle {
-  position: absolute;
-  top: 20px;
-  right: -15px;
-  background: #06b6d4;
-  border: none;
-  border-radius: 50%;
-  width: 30px;
-  height: 30px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: white;
-  cursor: pointer;
-  box-shadow: 0 2px 10px rgba(6, 182, 212, 0.3);
-  transition: all 0.3s ease;
-  z-index: 60;
-}
-
-.sidebar-toggle:hover {
-  background: #0891b2;
-  transform: scale(1.1);
-}
-
-/* ========== CONTENIDO PRINCIPAL MEJORADO ========== */
-.vet-content {
-  flex: 1;
-  padding: 40px;
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdff 100%);
-  position: relative;
-  overflow-y: auto;
-}
-
-.vet-content h1 {
-  font-size: 32px;
-  background: linear-gradient(135deg, #0f766e, #06b6d4);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  margin-bottom: 16px;
+  display: grid;
+  place-content: center;
   font-weight: 700;
 }
 
-.vet-content p {
-  font-size: 18px;
-  color: #0f766e;
-  margin-bottom: 32px;
-  line-height: 1.6;
+.vet-header-logout {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: none;
+  border: 1px solid var(--borde-sutil);
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  color: var(--texto-oscuro);
+  font-weight: 600;
+  cursor: pointer;
+  transition: var(--transicion-rapida);
+}
+.vet-header-logout:hover {
+  border-color: #dc3545;
+  background-color: #dc3545;
+  color: white;
+}
+.sidebar-collapsed .vet-header-logout span {
+    display: none;
 }
 
-/* ========== CARDS DE ACCESO RÁPIDO ========== */
+
+/* ===================================================================== */
+/* ========== CONTENIDO PRINCIPAL ========== */
+/* ===================================================================== */
+.vet-content {
+  flex-grow: 1;
+  padding: 2.5rem;
+  overflow-y: auto;
+}
+
+/* --- NUEVO DASHBOARD HEADER "LLAMATIVO" --- */
+.dashboard-header {
+  margin-bottom: 2.5rem;
+}
+
+.welcome-title {
+  font-size: 2.25rem;
+  font-weight: 700;
+  color: var(--verde-principal); /* <-- AQUÍ ESTÁ LA LÍNEA CORRECTA */
+  margin-bottom: 0.25rem;
+}
+
+.welcome-subtitle {
+  font-size: 1.1rem;
+  color: #6c757d;
+  margin-bottom: 2rem;
+}
+
+.stats-container {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+.stat-card {
+  background-color: var(--fondo-tarjetas);
+  border-radius: 12px;
+  padding: 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  border: 1px solid var(--borde-sutil);
+  border-left: 5px solid var(--accent-color, var(--verde-principal));
+  transition: var(--transicion-rapida);
+}
+.stat-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 25px var(--sombra-suave);
+}
+
+.stat-card-icon {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  display: grid;
+  place-content: center;
+  background-color: var(--fondo-claro);
+  color: var(--accent-color, var(--verde-principal));
+}
+.stat-card-info {
+  display: flex;
+  flex-direction: column;
+}
+.stat-card-value {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--texto-oscuro);
+}
+.stat-card-label {
+  font-size: 0.9rem;
+  color: #6c757d;
+  font-weight: 500;
+}
+
+/* --- SECCIÓN DE ACCESO RÁPIDO --- */
+.quick-access-container {
+    margin-top: 2.5rem;
+}
+
+.quick-access-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    margin-bottom: 1.5rem;
+    color: var(--texto-oscuro);
+}
+
 .quick-access-cards {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 24px;
-  margin-top: 32px;
+  gap: 1.5rem;
 }
 
 .quick-card {
-  background: linear-gradient(135deg, #ffffff 0%, #f0fdff 100%);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(6, 182, 212, 0.08);
-  border: 1px solid rgba(6, 182, 212, 0.1);
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  position: relative;
+  background: var(--fondo-tarjetas);
+  border-radius: 12px;
+  border: 1px solid var(--borde-sutil);
+  transition: var(--transicion-rapida);
   overflow: hidden;
 }
 
+.quick-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 25px var(--sombra-suave);
+  border-color: var(--verde-principal);
+}
+
 .quick-card-link {
-  display: block;
-  padding: 24px;
+  display: flex;
+  align-items: center;
+  padding: 1.5rem;
   text-decoration: none;
-  color: inherit;
-}
-
-.quick-card::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(6, 182, 212, 0.05), transparent);
-  transition: left 0.5s;
-}
-
-.quick-card:hover::before {
-  left: 100%;
+  gap: 1rem;
 }
 
 .quick-card-icon {
+  flex-shrink: 0;
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #06b6d4, #0891b2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  display: grid;
+  place-content: center;
+  border-radius: 10px;
+  background-color: var(--verde-principal);
   color: white;
-  margin-bottom: 16px;
-  transition: all 0.3s ease;
+  transition: var(--transicion-rapida);
+}
+.quick-card:hover .quick-card-icon {
+    transform: scale(1.1) rotate(-5deg);
 }
 
-.quick-card h3 {
-  font-size: 20px;
+.quick-card-text h3 {
+  font-size: 1.1rem;
   font-weight: 600;
-  color: #0f766e;
-  margin-bottom: 8px;
+  color: var(--texto-oscuro);
+  margin: 0 0 0.25rem 0;
 }
 
-.quick-card p {
-  font-size: 14px;
-  color: #0891b2;
+.quick-card-text p {
+  font-size: 0.9rem;
+  color: #6c757d;
   margin: 0;
-  line-height: 1.5;
-}
-
-/* ========== OVERLAY PARA MÓVIL ========== */
-.sidebar-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(6, 182, 212, 0.2);
-  z-index: 40;
-  backdrop-filter: blur(2px);
-}
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 768px) {
-  .vet-header {
-    padding: 12px 20px;
-  }
-
-  .vet-header-logo {
-    font-size: 20px;
-  }
-
-  .vet-sidebar {
-    position: fixed;
-    top: 0;
-    left: 0;
-    height: 100vh;
-    z-index: 50;
-    transform: translateX(-100%);
-  }
-
-  .vet-sidebar.open {
-    transform: translateX(0);
-  }
-
-  .vet-content {
-    padding: 20px;
-  }
-
-  .vet-content h1 {
-    font-size: 24px;
-  }
-
-  .quick-access-cards {
-    grid-template-columns: 1fr;
-    gap: 16px;
-  }
-}
-
-@media (max-width: 480px) {
-  .vet-header-right {
-    gap: 12px;
-  }
-
-  .vet-header-logout {
-    padding: 8px 12px;
-    font-size: 14px;
-  }
-
-  .vet-header-logout span {
-    display: none;
-  }
+  line-height: 1.4;
 }

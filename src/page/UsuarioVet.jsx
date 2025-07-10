@@ -1,227 +1,216 @@
 "use client"
 
-import { useState, useEffect, useCallback } from "react"
+import { useState, useEffect, useCallback, useMemo } from "react"
 import { motion, AnimatePresence } from "framer-motion"
-import {
-  User,
-  Phone,
-  Mail,
-  Dog,
-  Calendar,
-  Clock,
-  ChevronRight,
-  Search,
-  Filter,
-  AlertCircle,
-  CheckCircle,
-  Loader,
-} from "lucide-react"
-import "../styles/UsuarioVet.css" // Asegúrate de que la ruta a tu CSS es correcta
+import { Link } from "react-router-dom"
+import { User, Search, Dog, ChevronRight, ChevronLeft, Users, Loader, Phone, Mail, Calendar } from "lucide-react"
+import "../styles/UsuarioVet.css"
 
-const OwnersList = () => {
-  // --- ESTADOS DEL COMPONENTE ---
-  const [ownersData, setOwnersData] = useState([])
-  const [isLoading, setIsLoading] = useState(true)
-  const [searchTerm, setSearchTerm] = useState("")
-  const [filterStatus, setFilterStatus] = useState("all")
-  const [expandedOwners, setExpandedOwners] = useState(new Set())
+// --- SUB-COMPONENTES PARA MEJOR ORGANIZACIÓN ---
 
-  // --- FUNCIÓN PARA OBTENER DATOS DEL BACKEND (CORREGIDA) ---
-  const fetchOwners = useCallback(async (doc) => {
-    setIsLoading(true);
-    
-    // Usamos una ruta relativa que funcionará correctamente
-    let url = '/api/propietarios'; 
-    
-    // Si hay un término de búsqueda, lo añadimos como un parámetro de query
-    if (doc) {
-      url += `?doc=${doc}`;
-    }
-  
-    try {
-      const response = await fetch(url); // La URL ahora es correcta
-      if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
-      }
-      const data = await response.json();
-      setOwnersData(data);
-    } catch (error) {
-      console.error("No se pudieron obtener los datos de los propietarios:", error);
-      setOwnersData([]); // En caso de error, dejamos la lista vacía
-    } finally {
-      setIsLoading(false);
-    }
-  }, []); // El array de dependencias vacío asegura que la función no se recree innecesariamente
+const StatCard = ({ icon, value, label, color }) => (
+    <div className="stat-card">
+        <div className={`stat-icon ${color}`}>{icon}</div>
+        <div className="stat-info">
+            <div className="value">{value}</div>
+            <div className="label">{label}</div>
+        </div>
+    </div>
+);
 
-  // --- useEffect PARA BÚSQUEDA Y CARGA INICIAL ---
-  useEffect(() => {
-    // Debounce para no sobrecargar la API con cada letra tecleada
-    const debounceHandler = setTimeout(() => {
-      fetchOwners(searchTerm);
-    }, 500);
+const PetCard = ({ pet }) => {
+    const tieneCitaValida = pet.nextAppointment && pet.nextAppointment.date;
+    const fechaFormateada = tieneCitaValida
+      ? new Date(pet.nextAppointment.date + 'T00:00:00').toLocaleDateString('es-ES', { day: '2-digit', month: 'long', year: 'numeric' })
+      : "Sin citas programadas";
 
-    return () => {
-      clearTimeout(debounceHandler);
+    // --- Animación individual para cada tarjeta de mascota ---
+    const petCardVariants = {
+        hidden: { opacity: 0, y: -10 },
+        visible: { opacity: 1, y: 0 }
     };
-  }, [searchTerm, fetchOwners]);
 
-
-  // --- FUNCIONES AUXILIARES Y DE MANEJO DE UI ---
-  const toggleOwnerExpansion = (ownerId) => {
-    const newExpanded = new Set(expandedOwners);
-    if (newExpanded.has(ownerId)) {
-      newExpanded.delete(ownerId);
-    } else {
-      newExpanded.add(ownerId);
-    }
-    setExpandedOwners(newExpanded);
-  }
-
-  const getStatusClass = (status) => {
-    switch (status) {
-      case "confirmada": return "status-confirmed";
-      case "programada": return "status-pending";
-      case "completada": return "status-completed";
-      case "cancelada": return "status-cancelled";
-      default: return "status-default";
-    }
-  }
-
-  const getStatusIcon = (status) => {
-    switch (status) {
-      case "confirmada": return <CheckCircle className="status-icon" />;
-      case "programada": return <AlertCircle className="status-icon" />;
-      default: return <Calendar className="status-icon" />;
-    }
-  }
-
-  const filteredOwners = ownersData.filter((owner) => {
-    if (!owner.pets) return true; // Si por alguna razón no hay mascotas, no lo filtramos
-    const hasPendingAppointments = owner.pets.some(
-      (pet) => pet && pet.pendingAppointments > 0
-    );
-    if (filterStatus === "all") return true;
-    if (filterStatus === "with-appointments") return hasPendingAppointments;
-    if (filterStatus === "no-appointments") return !hasPendingAppointments;
-    return true;
-  });
-
-  // --- RENDERIZADO DEL COMPONENTE ---
-
-  if (isLoading) {
     return (
-      <div className="loading-state">
-        <Loader className="loading-icon" />
-        <p>Cargando propietarios...</p>
-      </div>
+        <motion.div className="pet-card" variants={petCardVariants}>
+            <div className="pet-card-info">
+                <h4>{pet.name}</h4>
+                <p>{pet.species} - {pet.breed}</p>
+            </div>
+            <div className={`pet-appointment ${!tieneCitaValida ? 'none' : ''}`}>
+                <Calendar size={16} />
+                <span>{fechaFormateada}</span>
+            </div>
+        </motion.div>
     );
-  }
+};
 
-  return (
-    <motion.div className="owners-container">
-      <motion.div className="owners-header">
-        <h1 className="owners-title">Propietarios y Mascotas</h1>
-        <p className="owners-subtitle">Gestiona la información de todos los propietarios y sus mascotas.</p>
-      </motion.div>
+// --- Componente OwnerCard con la animación mejorada ---
+const OwnerCard = ({ owner, isExpanded, onToggle }) => {
+    
+    // ===== INICIO DE LA SECCIÓN DE ANIMACIÓN MEJORADA =====
+    // Definimos las variantes para la animación del contenedor de mascotas
+    const petSectionVariants = {
+        collapsed: { 
+            opacity: 0, 
+            height: 0,
+            transition: { duration: 0.2, ease: "easeOut" } 
+        },
+        expanded: { 
+            opacity: 1, 
+            height: "auto",
+            transition: { 
+                duration: 0.4, 
+                ease: "easeInOut",
+                // Esta línea hace que las tarjetas de mascota aparezcan una tras otra
+                staggerChildren: 0.07 
+            } 
+        }
+    };
+    // ===== FIN DE LA SECCIÓN DE ANIMACIÓN MEJORADA =====
 
-      <motion.div className="owners-filters">
-        <div className="search-container">
-          <Search className="search-icon" />
-          <input
-            type="text"
-            placeholder="Buscar por documento del propietario..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="search-input"
-          />
-        </div>
-        <div className="filter-container">
-          <Filter className="filter-icon" />
-          <select value={filterStatus} onChange={(e) => setFilterStatus(e.target.value)} className="filter-select">
-            <option value="all">Todos los propietarios</option>
-            <option value="with-appointments">Con citas pendientes</option>
-            <option value="no-appointments">Sin citas pendientes</option>
-          </select>
-        </div>
-      </motion.div>
-
-      <AnimatePresence>
-        {filteredOwners.length > 0 ? (
-          filteredOwners.map((owner) => (
-            <motion.div key={owner.id} className="owner-card-container">
-              <div className="owner-card">
-                <div className="owner-header" onClick={() => toggleOwnerExpansion(owner.id)}>
-                    <div className="owner-info">
-                        <div className="owner-avatar"><User className="owner-avatar-icon" /></div>
-                        <div className="owner-details">
-                            <h3 className="owner-name">{owner.name}</h3>
-                            <p className="owner-summary">
-                                {owner.pets.length} mascota{owner.pets.length !== 1 ? 's' : ''}
-                            </p>
-                            <div className="owner-contact">
-                                <Phone className="contact-icon" /><span>{owner.phone}</span>
-                                <Mail className="contact-icon" /><span>{owner.email}</span>
-                            </div>
+    return (
+        <motion.div className="owner-card" layout>
+            <div className="owner-header" onClick={() => onToggle(owner.id)}>
+                <div className="owner-info-wrapper">
+                    <div className="owner-avatar"><User size={24} /></div>
+                    <div className="owner-main-details">
+                        <h3 className="owner-name">{owner.name}</h3>
+                        <div className="owner-contact-info">
+                            <div className="contact-item"><Phone size={14} /><span>{owner.phone}</span></div>
+                            <div className="contact-item"><Mail size={14} /><span>{owner.email}</span></div>
                         </div>
                     </div>
-                    <div className="owner-actions">
-                        <motion.div className="expand-button" animate={{ rotate: expandedOwners.has(owner.id) ? 90 : 0 }}>
-                            <ChevronRight className="expand-icon" />
-                        </motion.div>
+                </div>
+                <div className="owner-actions">
+                    <div className="pets-count">
+                        <Dog size={16} />
+                        <span>{owner.pets.length}</span>
+                    </div>
+                    <div className={`expand-icon ${isExpanded ? 'expanded' : ''}`}>
+                        <ChevronRight size={24} />
                     </div>
                 </div>
+            </div>
 
-                <AnimatePresence>
-                  {expandedOwners.has(owner.id) && (
+            <AnimatePresence initial={false}>
+                {isExpanded && (
                     <motion.div
-                      className="pets-section"
-                      initial={{ height: 0, opacity: 0 }}
-                      animate={{ height: "auto", opacity: 1 }}
-                      exit={{ height: 0, opacity: 0 }}
+                        key="content"
+                        className="pets-section"
+                        variants={petSectionVariants} // Usamos las variantes definidas arriba
+                        initial="collapsed"
+                        animate="expanded"
+                        exit="collapsed"
                     >
-                      <div className="pets-grid">
-                        {owner.pets.map((pet) => pet && (
-                          <motion.div key={pet.id} className="pet-card">
-                            <div className="pet-info">
-                              <h5 className="pet-name">{pet.name}</h5>
-                              <p className="pet-breed">{pet.breed} • {pet.age}</p>
-                              {pet.nextAppointment ? (
-                                <div className={`next-appointment ${getStatusClass(pet.nextAppointment.status)}`}>
-                                  <div className="appointment-info">
-                                    <span className="appointment-date">
-                                      {getStatusIcon(pet.nextAppointment.status)}
-                                      {pet.nextAppointment.service}
-                                    </span>
-                                    <span className="appointment-time">
-                                      {new Date(pet.nextAppointment.date + 'T00:00:00').toLocaleDateString('es-ES', {day: '2-digit', month: 'long'})}, {pet.nextAppointment.time}
-                                    </span>
-                                  </div>
-                                </div>
-                              ) : (
-                                <div className="no-appointment">
-                                  <span>Sin citas programadas</span>
-                                </div>
-                              )}
-                            </div>
-                          </motion.div>
-                        ))}
-                      </div>
+                        <div className="pets-grid">
+                            {owner.pets.length > 0 ? (
+                                owner.pets.map(pet => <PetCard key={pet.id} pet={pet} />)
+                            ) : (
+                                <p>Este propietario no tiene mascotas registradas.</p>
+                            )}
+                        </div>
                     </motion.div>
-                  )}
-                </AnimatePresence>
-              </div>
-            </motion.div>
-          ))
-        ) : (
-          <motion.div className="empty-state">
-            <User className="empty-icon" />
-            <h3 className="empty-title">No se encontraron propietarios</h3>
-            <p className="empty-message">Intenta con otro término de búsqueda o ajusta los filtros.</p>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </motion.div>
-  )
-}
+                )}
+            </AnimatePresence>
+        </motion.div>
+    );
+};
 
-export default OwnersList;
+
+// --- COMPONENTE PRINCIPAL ---
+const UsuarioVet = () => {
+    // ... (El resto del componente principal se mantiene exactamente igual)
+    const [owners, setOwners] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [searchTerm, setSearchTerm] = useState("");
+    const [expandedOwners, setExpandedOwners] = useState(new Set());
+
+    const fetchOwners = useCallback(async (doc) => {
+        setLoading(true);
+        let url = '/api/propietarios';
+        if (doc) {
+            url += `?doc=${doc}`;
+        }
+        try {
+            const response = await fetch(url);
+            if (!response.ok) throw new Error('Error al cargar propietarios');
+            const data = await response.json();
+            setOwners(Array.isArray(data) ? data : []);
+        } catch (error) {
+            console.error(error);
+            setOwners([]);
+        } finally {
+            setLoading(false);
+        }
+    }, []);
+
+    useEffect(() => {
+        const debounce = setTimeout(() => {
+            fetchOwners(searchTerm);
+        }, 500);
+        return () => clearTimeout(debounce);
+    }, [searchTerm, fetchOwners]);
+
+    const toggleOwnerExpansion = (ownerId) => {
+        const newSet = new Set(expandedOwners);
+        newSet.has(ownerId) ? newSet.delete(ownerId) : newSet.add(ownerId);
+        setExpandedOwners(newSet);
+    };
+
+    const totalPets = useMemo(() => 
+        owners.reduce((acc, owner) => acc + (owner.pets ? owner.pets.length : 0), 0)
+    , [owners]);
+
+    return (
+        <div className="usuarios-vet-container">
+            <header className="page-header">
+                <div className="title-section">
+                    <Link to="/VeterinarioPer" className="back-button" title="Volver al Inicio">
+                        <ChevronLeft size={20} />
+                    </Link>
+                    <div className="page-title">
+                        <h1>Propietarios y Mascotas</h1>
+                        <p>Gestiona la información de tus clientes y sus pacientes.</p>
+                    </div>
+                </div>
+            </header>
+            
+            <section className="stats-container">
+                <StatCard icon={<Users size={24}/>} value={owners.length} label="Total de Propietarios" color="propietarios" />
+                <StatCard icon={<Dog size={24}/>} value={totalPets} label="Total de Mascotas" color="mascotas" />
+            </section>
+            
+            <section className="filters-container">
+                <div className="filter-group">
+                    <Search size={18} className="input-icon" />
+                    <input
+                        type="text"
+                        placeholder="Buscar por documento del propietario..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="form-input"
+                    />
+                </div>
+            </section>
+
+            <main className="owner-list">
+                {loading ? (
+                    <div><Loader /> Cargando...</div>
+                ) : owners.length > 0 ? (
+                    owners.map(owner => (
+                        <OwnerCard
+                            key={owner.id}
+                            owner={owner}
+                            isExpanded={expandedOwners.has(owner.id)}
+                            onToggle={toggleOwnerExpansion}
+                        />
+                    ))
+                ) : (
+                    <div className="empty-state">No se encontraron propietarios.</div>
+                )}
+            </main>
+        </div>
+    );
+};
+
+export default UsuarioVet;

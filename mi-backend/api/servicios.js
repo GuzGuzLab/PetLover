@@ -68,5 +68,46 @@ module.exports = (db) => {
     });
   });
 
+
+
+  //actualiar servicios 
+router.put('/servicios/:id', (req, res) => {
+  const { id } = req.params;
+  const { nombre, descripcion, precio, duracion_estimada } = req.body;
+
+  // Validación básica de los datos recibidos
+  if (!nombre || !descripcion || !precio || !duracion_estimada) {
+    return res.status(400).json({ error: "Todos los campos son obligatorios." });
+  }
+
+  const query = `
+    UPDATE servicios 
+    SET 
+      nombre = ?, 
+      descripcion = ?, 
+      precio = ?, 
+      duracion_estimada = ?
+    WHERE id = ?;
+  `;
+
+  db.query(query, [nombre, descripcion, precio, duracion_estimada, id], (err, result) => {
+    if (err) {
+      console.error("Error al actualizar el servicio:", err);
+      return res.status(500).json({ error: "Error en la base de datos al actualizar el servicio." });
+    }
+
+    // Verificar si alguna fila fue afectada para saber si el servicio existía
+    if (result.affectedRows === 0) {
+      return res.status(404).json({ error: "Servicio no encontrado." });
+    }
+
+    res.status(200).json({ 
+      success: true,
+      message: "Servicio actualizado exitosamente."
+    });
+  });
+});
+
+
   return router;
 };
