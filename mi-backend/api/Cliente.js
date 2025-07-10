@@ -130,41 +130,40 @@ module.exports = function (db) {
         //*******************CAMBIAR ESTADO A LOS USUARIO CLIENTES******************/
         //**************************************************************************/
 
-        router.put('/estado_cliente/:doc', async (req, res) => {
-            const { doc } = req.params;
-            try {
-                const [cliente] = await db.promise().query(
-                    'SELECT id, motivo_inactivo FROM usuarios WHERE doc = ? AND tipo_usuario = "cliente"',
-                    [doc]
-                );
-                if (!cliente.length) {
-                    return res.status(404).json({ error: 'Cliente no encontrado' });
-                }
-                const estaActivo = cliente[0].motivo_inactivo === null;
-                const nuevoMotivo = estaActivo ? 'Desactivado por administrador' : null;
-                await db.promise().query(
-                    'UPDATE usuarios SET motivo_inactivo = ? WHERE doc = ?',
-                    [nuevoMotivo, doc]
-                );
-                const [clienteActualizado] = await db.promise().query(
-                    'SELECT id, doc, nombre, email, motivo_inactivo FROM usuarios WHERE doc = ?',
-                    [doc]
-                );
-                res.status(200).json({
-                    success: true,
-                    message: `Cliente ${estaActivo ? 'desactivado' : 'activado'}`,
-                    data: {
-                        ...clienteActualizado[0],
-                        activo: nuevoMotivo === null
-                    }
-                });
-            } catch (error) {
-                console.error('Error al cambiar estado:', error);
-                res.status(500).json({ 
-                    error: 'Error interno al cambiar estado',
-                    details: error.message 
-                });
+        router.put('/toggle_estado/:doc', (req, res) => {
+          const { doc } = req.params;
+                
+          if (!doc) {
+            return res.status(400).json({ error: 'El documento del usuario es requerido.' });
+          }
+      
+          // Primero, necesitamos el ID del usuario, ya que el procedimiento almacenado usa el ID.
+          const findUserQuery = 'SELECT id FROM usuarios WHERE doc = ?';
+          
+          db.query(findUserQuery, [doc], (err, results) => {
+            if (err) {
+              console.error('Error al buscar usuario por documento:', err);
+              return res.status(500).json({ error: 'Error en el servidor al buscar el usuario.' });
             }
+        
+            if (results.length === 0) {
+              return res.status(404).json({ error: 'Usuario no encontrado con el documento proporcionado.' });
+            }
+        
+            const userId = results[0].id;
+        
+            // Ahora sí, llamamos al procedimiento almacenado con el ID del usuario.
+            const callProcedureQuery = 'CALL ToggleUserStatus(?)';
+        
+            db.query(callProcedureQuery, [userId], (err2, result) => {
+              if (err2) {
+                console.error('Error al ejecutar el procedimiento ToggleUserStatus:', err2);
+                return res.status(500).json({ error: 'Error en el servidor al cambiar el estado del usuario.' });
+              }
+          
+              res.status(200).json({ message: 'El estado del usuario ha sido actualizado correctamente.' });
+            });
+          });
         });
 
 

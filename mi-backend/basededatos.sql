@@ -1,3 +1,4 @@
+-- Active: 1750373550338@@localhost@3306@veterinaria
 DROP DATABASE IF EXISTS veterinaria;
 CREATE DATABASE veterinaria;
 USE veterinaria;
@@ -16,10 +17,12 @@ CREATE TABLE usuarios (
     email VARCHAR(100) NOT NULL UNIQUE,
     direccion VARCHAR(255),
     password VARCHAR(255) NOT NULL,
+    estado ENUM('Activo', 'Inactivo') NOT NULL DEFAULT 'Activo', -- NUEVA COLUMNA PARA ESTADO
     fecha_Regis TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
+ SELECT*FROM usuarios;
 
-CREATE TABLE propietarios (
+sCREATE TABLE propietarios (
     id_prop VARCHAR(15) PRIMARY KEY,
     FOREIGN KEY (id_prop) REFERENCES usuarios(doc) ON DELETE CASCADE
 );
@@ -35,6 +38,7 @@ CREATE TABLE administradores (
     nivel_acceso ENUM('basico', 'medio', 'alto') DEFAULT 'medio',
     FOREIGN KEY (admin_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
+
 
 CREATE TABLE roles (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -62,21 +66,6 @@ CREATE TABLE notificaciones (
   fecha_creacion TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   FOREIGN KEY (usuario_id) REFERENCES usuarios(id) ON DELETE CASCADE
 );
-
-
-DELIMITER //
-CREATE TRIGGER notificar_nuevo_usuario
-AFTER INSERT ON usuarios
-FOR EACH ROW
-BEGIN
-  INSERT INTO notificaciones (tipo, mensaje, usuario_id)
-  VALUES (
-    'nuevo_usuario', 
-    CONCAT('Se registró el usuario: ', NEW.nombre),
-    NEW.id
-  );
-END //
-DELIMITER ;
 
 CREATE TABLE mascotas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -145,59 +134,168 @@ CREATE TABLE historias_clinicas (
 );
 
 -- -----------------------------------------------------
--- Datos de Ejemplo
+-- Trigger para notificaciones
 -- -----------------------------------------------------
 
--- Primero insertamos los usuarios
-INSERT INTO usuarios (id, tipo_Doc, doc, nombre, fecha_Nac, tel, email, direccion, password) VALUES 
-(1, 'CC', '10101010', 'Ana García', '1990-05-15', '3001112233', 'ana.garcia@email.com', 'Calle Falsa 123', 'pass_hashed'), 
-(2, 'CC', '20202020', 'Carlos Martinez', '1985-11-20', '3104445566', 'carlos.martinez@email.com', 'Avenida Siempre Viva 742', 'pass_hashed'), 
-(3, 'CC', '30303030', 'Dr. Ricardo Sanchez', '1988-02-10', '3207778899', 'ricardo.sanchez.vet@email.com', 'Consultorio 101', 'pass_hashed'), 
-(4, 'CC', '40404040', 'Dra. Laura Torres', '1992-09-01', '3019998877', 'laura.torres.vet@email.com', 'Consultorio 102', 'pass_hashed');
+DELIMITER //
+CREATE TRIGGER notificar_nuevo_usuario
+AFTER INSERT ON usuarios
+FOR EACH ROW
+BEGIN
+  INSERT INTO notificaciones (tipo, mensaje, usuario_id)
+  VALUES (
+    'nuevo_usuario', 
+    CONCAT('Se registró el usuario: ', NEW.nombre),
+    NEW.id
+  );
+END //
+DELIMITER ;
 
--- Insertamos administrador (usuario con id 1)
-INSERT INTO administradores VALUES (1, 'alto');  -- ✅ CORREGIDO: después de usuarios
+-- =================================================================
+-- INSERCIÓN DE DATOS MAESTROS (Tablas sin dependencias)
+-- =================================================================
 
+-- 1. Roles del sistema
 INSERT INTO roles (id, nom_rol, descripcion) VALUES 
-(1, 'propietario', 'Dueño de mascota'), 
-(2, 'veterinario', 'Médico veterinario'), 
-(3, 'administrador', 'Admin del sistema');
+(1, 'propietario', 'Dueño de mascota con acceso a la información de sus animales.'), 
+(2, 'veterinario', 'Médico veterinario con acceso a historias clínicas y citas.'), 
+(3, 'administrador', 'Administrador con acceso total al sistema.');
 
--- ✅ CORREGIDO: nombre de tabla y campos correctos
-INSERT INTO asignacion_rol (doc_usu, rol_id, asignado_por) VALUES 
-('10101010', 1, 1), 
-('20202020', 1, 1), 
-('30303030', 2, 1), 
-('40404040', 2, 1);
+-- 2. Servicios ofrecidos por la veterinaria
+INSERT INTO servicios (id, nombre, descripcion, precio, duracion_estimada, estado) VALUES
+(1, 'Consulta General', 'Revisión completa del estado de salud de la mascota.', 75000.00, 30, 'Activo'),
+(2, 'Vacunación Anual Canina', 'Paquete de vacunas anuales para perros.', 95000.00, 20, 'Activo'),
+(3, 'Esterilización Felina', 'Procedimiento quirúrgico para esterilizar gatas.', 250000.00, 90, 'Activo'),
+(4, 'Control y Seguimiento', 'Cita para revisar la evolución de un tratamiento.', 50000.00, 25, 'Activo');
 
-INSERT INTO veterinarios (vet_id, especialidad) VALUES 
-(3, 'Cirugía General'), 
-(4, 'Medicina Interna');
 
-INSERT INTO mascotas (id, doc_pro, nombre, especie, raza, genero, color, fecha_nac, peso, tamano, estado_reproductivo, vacunado) VALUES 
-(1, '10101010', 'Max', 'Perro', 'Golden Retriever', 'Macho', 'Dorado', '2021-03-10', 28.5, 'Grande', 'Intacto', 1), 
-(2, '10101010', 'Luna', 'Gato', 'Siamés', 'Hembra', 'Crema', '2022-01-20', 4.2, 'Pequeño', 'Esterilizado', 1), 
-(3, '20202020', 'Rocky', 'Perro', 'Bulldog Francés', 'Macho', 'Negro', '2020-07-30', 12.0, 'Mediano', 'Intacto', 1);
+-- =================================================================
+-- INSERCIÓN DE USUARIOS Y ASIGNACIÓN DE ROLES
+-- =================================================================
 
-INSERT INTO servicios (id, nombre, descripcion, precio, duracion_estimada, estado) VALUES 
-(1, 'Consulta General', 'Revisión completa', 50000, 30, 'Activo'),
-(2, 'Vacunación Anual', 'Plan anual de vacunas', 80000, 20, 'Activo'), 
-(3, 'Limpieza Dental', 'Profilaxis dental', 150000, 60, 'Activo'), 
-(4, 'Corte de Pelo y Baño', 'Servicio de grooming', 70000, 90, 'Activo');
+-- 3. Usuarios base
+INSERT INTO usuarios (id, tipo_Doc, doc, nombre, fecha_Nac, tel, email, direccion, password, estado) VALUES
+(1, 'CC', '1001', 'YENIFER NOREIDY', '1990-05-15', '3101234567', 'yenifer.noreidy@email.com', 'Calle Falsa 123', 'password_hashed', 'Activo'),
+(2, 'CC', '1002', 'DAVID GUZMAN', '1988-11-20', '3117654321', 'davidfernandoguzmanarias@gmail.com', 'Avenida Siempre Viva 742', 'guzVet@16', 'Activo'),
+(3, 'CC', '1003', 'FELIPE NIEVES', '1995-02-10', '3209876543', 'felipe.nieves@email.com', 'Carrera 45 # 67-89', 'password_hashed', 'Activo'),
+(4, 'CC', '1004', 'ALEJANDRA LINARES', '1998-07-25', '3002345678', 'alejandra.linares@email.com', 'Diagonal 12 # 34-56', 'password_hashed', 'Inactivo'); -- Usuario de ejemplo inactivo
 
-INSERT INTO citas (id, propietario_doc, mascota_id, servicio, veterinario_id, fecha, hora, notas, estado) VALUES 
-(1, '10101010', 1, 'Consulta General', 3, DATE_ADD(CURDATE(), INTERVAL 5 DAY), '10:00:00', 'Revisión anual', 'programada'), 
-(2, '20202020', 3, 'Vacunación Anual', 4, DATE_ADD(CURDATE(), INTERVAL 2 DAY), '14:00:00', 'Refuerzo', 'confirmada');
+-- 4. Creación de perfiles específicos (Administrador, Veterinario, Propietarios)
+INSERT INTO administradores (admin_id, nivel_acceso) VALUES
+(1, 'alto'); -- YENIFER NOREIDY (id=1) es administradora
 
-INSERT INTO historias_clinicas (mascota_id, cita_id, vet_id, fecha_consulta, motivo_consulta, diagnostico) VALUES 
-(1, 1, 3, '2024-05-20 10:30:00', 'Control anual', 'Dermatitis alérgica');
+INSERT INTO veterinarios (vet_id, especialidad) VALUES
+(2, 'Medicina Interna'); -- DAVID GUZMAN (id=2) es veterinario
+
+INSERT INTO propietarios (id_prop) VALUES
+('1003'), -- FELIPE NIEVES (doc='1003') es propietario
+('1004'); -- ALEJANDRA LINARES (doc='1004') es propietaria
+
+-- 5. Asignación de roles
+INSERT INTO asignacion_rol (doc_usu, rol_id, asignado_por) VALUES
+('1001', 3, 1), 
+('1002', 2, 1), 
+('1003', 1, 1), 
+('1004', 1, 1); 
+
+
+-- =================================================================
+-- INSERCIÓN DE DATOS RELACIONADOS (Mascotas, Citas, etc.)
+-- =================================================================
+
+-- 6. Mascotas
+INSERT INTO mascotas (doc_pro, nombre, especie, raza, genero, color, fecha_nac, peso, tamano, estado_reproductivo, vacunado) VALUES
+('1003', 'Thor', 'Perro', 'Golden Retriever', 'Macho', 'Dorado', '2022-01-20', 28.5, 'Grande', 'Intacto', TRUE),
+('1003', 'Luna', 'Gato', 'Siamés', 'Hembra', 'Crema y marrón', '2023-05-10', 4.2, 'Mediano', 'Esterilizado', TRUE),
+('1004', 'Rocky', 'Perro', 'Bulldog Francés', 'Macho', 'Negro', '2021-09-01', 12.0, 'Pequeño', 'Intacto', FALSE);
+
+-- 7. Citas
+INSERT INTO citas (propietario_doc, mascota_id, servicio, veterinario_id, fecha, hora, notas, estado) VALUES
+('1003', 1, 'Consulta General', 2, '2025-07-15', '10:30:00', 'La mascota ha estado estornudando mucho últimamente.', 'programada');
+
+-- 8. Historias Clínicas
+INSERT INTO historias_clinicas (mascota_id, cita_id, vet_id, fecha_consulta, motivo_consulta, signos_vitales, diagnostico, tratamiento, recomendaciones) VALUES
+(1, 1, 2, '2025-07-15 10:35:00', 'Estornudos frecuentes y secreción nasal.', 
+'{"temperatura_C": "38.5", "frecuencia_cardiaca_lpm": "90", "frecuencia_respiratoria_rpm": "25"}',
+'Posible rinitis alérgica.', 
+'Administrar antihistamínico durante 7 días.', 
+'Evitar exposición a polvo y polen. Volver a control en 10 días si no hay mejoría.');
+
+-- 9. Notificaciones
+INSERT INTO notificaciones (tipo, mensaje, usuario_id) VALUES
+('Recordatorio de Cita', 'Le recordamos su cita para Thor el día 2025-07-15 a las 10:30 AM.', 3);
+
 
 -- -----------------------------------------------------
--- Procedimiento almacenado
+-- Procedimientos Almacenados
 -- -----------------------------------------------------
 
+-- Procedimiento para verificar el login y el estado del usuario
+DROP PROCEDURE IF EXISTS VerifyLogin;
+DELIMITER $$
+CREATE PROCEDURE `VerifyLogin`(
+    IN p_email VARCHAR(100)
+)
+BEGIN
+    SELECT
+        u.id,
+        u.nombre,
+        u.email,
+        u.password,
+        u.estado, -- Devolvemos el estado para que el backend lo verifique
+        r.nom_rol AS rol
+    FROM
+        usuarios u
+    JOIN
+        asignacion_rol ar ON u.doc = ar.doc_usu
+    JOIN
+        roles r ON ar.rol_id = r.id
+    WHERE
+        u.email = p_email;
+END$$
+DELIMITER ;
+
+-- Procedimiento para cambiar el estado de un usuario (Activo/Inactivo)
+DROP PROCEDURE IF EXISTS ToggleUserStatus;
+DELIMITER $$
+CREATE PROCEDURE `ToggleUserStatus`(
+    IN p_user_id INT
+)
+BEGIN
+    DECLARE current_status ENUM('Activo', 'Inactivo');
+
+    -- Obtener el estado actual del usuario
+    SELECT estado INTO current_status FROM usuarios WHERE id = p_user_id;
+
+    -- Cambiar al estado opuesto
+    IF current_status = 'Activo' THEN
+        UPDATE usuarios SET estado = 'Inactivo' WHERE id = p_user_id;
+    ELSE
+        UPDATE usuarios SET estado = 'Activo' WHERE id = p_user_id;
+    END IF;
+END$$
+DELIMITER ;
+
+
+-- Procedimiento para modificar la contraseña de un usuario por email
+DROP PROCEDURE IF EXISTS ModifyPassword;
+DELIMITER $$
+CREATE PROCEDURE `ModifyPassword`(
+    IN p_email VARCHAR(100),
+    IN p_new_password VARCHAR(255)
+)
+BEGIN
+    UPDATE usuarios
+    SET 
+        password = p_new_password
+    WHERE 
+        email = p_email;
+END$$
+DELIMITER ;
+
+
+-- Procedimiento para obtener detalles de los propietarios y sus mascotas
 DROP PROCEDURE IF EXISTS GetOwnersWithDetails;
-
 DELIMITER $$
 CREATE PROCEDURE `GetOwnersWithDetails`(IN p_doc VARCHAR(15))
 BEGIN
@@ -208,6 +306,7 @@ BEGIN
         u.tel AS phone,
         u.email,
         u.direccion AS address,
+        u.estado, -- Devolvemos también el estado del propietario
         u.fecha_Regis AS registrationDate,
         MIN(CONCAT(c.fecha, ' ', c.hora)) as nextAppointmentDate,
         IFNULL(

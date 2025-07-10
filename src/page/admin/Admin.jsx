@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEdit, faTrash, faSearch, faCheck, faTimes, faToggleOn, faToggleOff } from "@fortawesome/free-solid-svg-icons";
+import { faEdit, faSearch, faCheck, faTimes, faToggleOn, faToggleOff } from "@fortawesome/free-solid-svg-icons";
 import "../../styles/Administrador/Administrador.css";
 import AdminLayout from "../../layout/AdminLayout";
 
@@ -12,6 +12,7 @@ function Administradores() {
   const [editingAdmin, setEditingAdmin] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [notification, setNotification] = useState({ show: false, message: "", type: "" });
+  const [loadingStates, setLoadingStates] = useState({}); // Para manejar el estado de carga por botón
 
   // 🚀 Función para cargar administradores
   const cargarAdministradores = async () => {
@@ -21,6 +22,7 @@ function Administradores() {
       
       const data = await response.json();
       
+      // Se formatea el estado correctamente desde la API
       const adminsFormateados = data.map(admin => ({
         id: admin.id,
         doc: admin.doc,
@@ -30,7 +32,7 @@ function Administradores() {
         telefono: admin.tel,
         direccion: admin.direccion,
         nivelAcceso: admin.nivel_acceso || "medio",
-        activo: true
+        activo: admin.estado === 'Activo' // Se usa el estado real de la API
       }));
 
       setAdministradores(adminsFormateados);
@@ -45,41 +47,40 @@ function Administradores() {
   }, []);
 
   // 🔄 Función para actualizar administrador
-    const actualizarAdministrador = async (doc, datosActualizados) => {
-      try {
-        const response = await fetch(`${API_BASE_URL}/api/admin/actualizar_admin/${doc}`, {
-          method: 'PUT',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            tipo_Doc: datosActualizados.tipoDocumento,
-            nombre: datosActualizados.nombre,
-            email: datosActualizados.email,
-            tel: datosActualizados.telefono,
-            direccion: datosActualizados.direccion,
-            nivel_acceso: datosActualizados.nivelAcceso
-          })
-        });
+  const actualizarAdministrador = async (doc, datosActualizados) => {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/admin/actualizar_admin/${doc}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          tipo_Doc: datosActualizados.tipoDocumento,
+          nombre: datosActualizados.nombre,
+          email: datosActualizados.email,
+          tel: datosActualizados.telefono,
+          direccion: datosActualizados.direccion,
+          nivel_acceso: datosActualizados.nivelAcceso
+        })
+      });
       
-        // Verifica primero si la respuesta es JSON
-        const contentType = response.headers.get('content-type');
-        if (!contentType || !contentType.includes('application/json')) {
-          const text = await response.text();
-          throw new Error(`La API respondió con: ${response.status} - ${text}`);
-        }
-      
-        if (!response.ok) {
-          const errorData = await response.json();
-          throw new Error(errorData.error || 'Error al actualizar administrador');
-        }
-      
-        return await response.json();
-      } catch (error) {
-        console.error('Error completo:', error);
-        throw new Error(`Error al actualizar: ${error.message}`);
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        const text = await response.text();
+        throw new Error(`La API respondió con: ${response.status} - ${text}`);
       }
-    };
+      
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || 'Error al actualizar administrador');
+      }
+      
+      return await response.json();
+    } catch (error) {
+      console.error('Error completo:', error);
+      throw new Error(`Error al actualizar: ${error.message}`);
+    }
+  };
 
   // ✏️ Manejar edición de administrador
   const handleEdit = (admin) => {
@@ -96,44 +97,49 @@ function Administradores() {
     e.preventDefault();
     try {
       await actualizarAdministrador(editingAdmin.doc, editingAdmin);
-      
-      // Actualizar lista local
       setAdministradores(administradores.map(a => 
         a.doc === editingAdmin.doc ? editingAdmin : a
       ));
-      
       showNotification("Administrador actualizado correctamente", "success");
       setShowEditModal(false);
       setEditingAdmin(null);
-      
-      // Recargar datos para asegurar consistencia
       cargarAdministradores();
     } catch (error) {
       showNotification(error.message, "error");
     }
   };
 
-  // 🗑️ Eliminar administrador
-  const handleEliminar = async (doc) => {
-    const confirmacion = window.confirm("¿Estás seguro de que quieres eliminar este administrador?");
-    if (confirmacion) {
-      try {
-        // Aquí deberías hacer la llamada a tu API para eliminar
-        // await fetch(`${API_BASE_URL}/api/admin/eliminar_admin/${doc}`, { method: 'DELETE' });
-        
-        setAdministradores(administradores.filter(a => a.doc !== doc));
-        showNotification("Administrador eliminado correctamente", "success");
-      } catch (error) {
-        showNotification("Error al eliminar administrador", "error");
-      }
-    }
-  };
+  // ✅ FUNCIÓN CORREGIDA: Cambiar estado (activo/inactivo) CON API
+  const toggleEstado = async (doc) => {
+    setLoadingStates(prev => ({ ...prev, [doc]: true }));
+    
+    try {
+      // URL CORREGIDA: Debe coincidir con la ruta definida en el backend (ej: /api/admin/toggle_estado/:doc)
+      const response = await fetch(`${API_BASE_URL}/api/admin/toggle_estado/${doc}`, {
+        method: 'PUT',
+      });
 
-  // 🔄 Cambiar estado (activo/inactivo)
-  const toggleEstado = (doc) => {
-    setAdministradores(administradores.map(admin =>
-      admin.doc === doc ? { ...admin, activo: !admin.activo } : admin
-    ));
+      if (!response.ok) {
+        // Esto captura errores como 404 (No Encontrado) si la URL está mal
+        throw new Error('Error en la respuesta de la API al actualizar el estado');
+      }
+
+      // Actualizar el estado local solo si la API responde con éxito
+      setAdministradores(administradores.map(admin => {
+        if (admin.doc === doc) {
+          const nuevoEstadoActivo = !admin.activo;
+          showNotification(`Admin ${nuevoEstadoActivo ? 'activado' : 'desactivado'} correctamente`, "success");
+          return { ...admin, activo: nuevoEstadoActivo };
+        }
+        return admin;
+      }));
+
+    } catch (error) {
+      console.error('Error al cambiar estado:', error);
+      showNotification('Error al cambiar el estado del administrador', 'error');
+    } finally {
+      setLoadingStates(prev => ({ ...prev, [doc]: false }));
+    }
   };
 
   // 🔍 Filtrar administradores
@@ -207,10 +213,15 @@ function Administradores() {
                   <td>
                     <button 
                       onClick={() => toggleEstado(admin.doc)}
+                      disabled={loadingStates[admin.doc]}
                       className={`status-btn ${admin.activo ? 'active' : 'inactive'}`}
                     >
-                      <FontAwesomeIcon icon={admin.activo ? faToggleOn : faToggleOff} />
-                      {admin.activo ? 'Activo' : 'Inactivo'}
+                      {loadingStates[admin.doc] ? (
+                        <span className="spinner-btn"></span>
+                      ) : (
+                        <FontAwesomeIcon icon={admin.activo ? faToggleOn : faToggleOff} />
+                      )}
+                      {loadingStates[admin.doc] ? '' : (admin.activo ? 'Activo' : 'Inactivo')}
                     </button>
                   </td>
                   <td className="actions-cell">
